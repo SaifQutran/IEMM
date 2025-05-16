@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IEMM - الفواتير</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="../views/css/styles.css">
+    <link rel="stylesheet" href="../views/css/malls-dashbboard/mall.css">
+    <link rel="stylesheet" href="../views/css/chat.css">
+    <script src="../views/js/script.js" defer></script>
+    <script src="../views/js/chat.js" defer></script>
+    <!-- إضافة مكتبة Font Awesome للأيقونات -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  </head>
+<body>
+    <!-- Header Section -->
+  <header>
+    <div class="container navbar">
+      <h1>IEMM</h1>
+      <nav>
+        <a href="mall-dashboard.html" id="dashboard-link">📊 لوحة التحكم</a>
+        <a href="stores-management.html" id="stores-link">🏪 إدارة المحلات</a>
+        <a href="bills.html" id="bills-link" class="active">💰 الفواتير</a>   
+      </nav>
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <button class="btn-dark" onclick="document.body.classList.toggle('dark')">الوضع الليلي</button>
+        <button id="chat-toggle" class="chat-toggle-btn" title="الدردشة مع أصحاب المحلات">
+          <i class="fas fa-comments"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- نافذة الدردشة الجانبية -->
+  <div id="chat-panel" class="chat-panel">
+    <!-- قائمة جهات الاتصال -->
+    <div id="contacts-view">
+      <div class="chat-header">
+        <h3>الدردشة مع أصحاب المحلات</h3>
+        <button id="chat-close" class="chat-close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div id="contact-list" class="contact-list">
+        <!-- سيتم إنشاء قائمة جهات الاتصال عبر JavaScript -->
+      </div>
+    </div>
+
+    <!-- نافذة المحادثة -->
+    <div id="chat-conversation" class="chat-conversation">
+      <div class="conversation-header">
+        <button id="back-to-contacts" class="back-to-contacts">
+          <i class="fas fa-arrow-right"></i>
+        </button>
+        <div class="conversation-contact">
+          <div id="conversation-avatar" class="conversation-avatar">أ</div>
+          <div class="conversation-info">
+            <h4 id="conversation-title">أحمد محمد</h4>
+            <p id="conversation-store">مطعم الأصالة</p>
+          </div>
+        </div>
+      </div>
+      <div id="messages-container" class="messages-container">
+        <!-- سيتم إنشاء الرسائل عبر JavaScript -->
+      </div>
+      <form id="message-form" class="message-form">
+        <textarea id="message-input" class="message-input" placeholder="اكتب رسالتك هنا..." rows="1"></textarea>
+        <button type="submit" class="send-message-btn">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+    <div class="main">    
+    <!-- Bills Section -->
+    <div class="section active" id="bills-section">
+      <div class="section-header">
+        <h2 class="section-title">💰 إدارة الفواتير</h2>
+        <div class="action-buttons">
+          <button class="btn-green" onclick="document.getElementById('newInvoiceFormContainer').style.display = document.getElementById('newInvoiceFormContainer').style.display === 'none' ? 'block' : 'none'">➕ إنشاء فاتورة جديدة</button>
+          <div class="form-container" id="newInvoiceFormContainer" style="display:none;">
+            <div class="form card">
+              <h3>إضافة فاتورة جديدة</h3>
+              <div class="form-grid">
+                <select required>
+                  <option value="">اختر المحل</option>
+                  <option value="A101">A101 - مطعم</option>
+                  <option value="B202">B202 - ملابس</option>
+                </select>
+    
+                <select required>
+                  <option value="">اختر نوع الفاتورة</option>
+                  <option value="rent">إيجار</option>
+                  <option value="electricity">كهرباء</option>
+                  <option value="water">ماء</option>
+                </select>
+    
+                <input type="number" placeholder="المبلغ" required>
+                <input type="date" placeholder="تاريخ الإصدار" required>
+                <input type="date" placeholder="تاريخ الاستحقاق" required>
+                <textarea placeholder="ملاحظات"></textarea>
+              </div>
+              <button class="btn-green">حفظ</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Invoices Table with Integrated Filters -->
+      <div class="table card">
+        <div class="table-header">
+          <div class="filter-controls">
+            <div class="filter-group">
+              <div class="search-box">
+                <input type="text" id="search-input" class="search-input" placeholder="بحث في اسم المحل أو صاحب المحل..." oninput="applyFilters()">
+              </div>
+              <select id="invoice-type-filter" class="filter-select" onchange="applyFilters()">
+                <option value="all">كل أنواع الفواتير</option>
+                <option value="rent">إيجار</option>
+                <option value="electricity">كهرباء</option>
+                <option value="water">ماء</option>
+              </select>
+
+              <select id="status-filter" class="filter-select" onchange="applyFilters()">
+                <option value="all">كل الحالات</option>
+                <option value="paid">مدفوعة</option>
+                <option value="unpaid">غير مدفوعة</option>
+                <option value="overdue">متأخرة</option>
+              </select>
+            </div>
+
+            <button class="btn-dark" onclick="openBulkMessageModal()">🔔 إرسال رسالة جماعية</button>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>🏪 اسم المحل</th>
+                <th>👤 اسم صاحب المحل</th>
+                <th>⚡ الكهرباء</th>
+                <th>💧 الماء</th>
+                <th>🏢 الإيجار</th>
+                <th>📅 الشهر</th>
+                <th>⏳ المتأخرات</th>
+                <th>💰 الإجمالي</th>
+                <th>⚙️ الإجراءات</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-invoice-id="1">
+                <td>محل A101</td>
+                <td>أحمد محمد</td>
+                <td>500 ريال</td>
+                <td>200 ريال</td>
+                <td>5,000 ريال</td>
+                <td>فبراير 2024</td>
+                <td>0 ريال</td>
+                <td>5,700 ريال</td>
+                <td>
+                  <button class="btn-icon" title="عرض التفاصيل" onclick="viewInvoice(1)">🔍</button>
+                  <button class="btn-icon" title="تعديل" onclick="editInvoice(1)">✏️</button>
+                  <button class="btn-icon" title="إرسال رسالة" onclick="sendMessage(1)">✉️</button>
+                </td>
+              </tr>
+              <tr data-invoice-id="2">
+                <td>محل B202</td>
+                <td>خالد عبدالله</td>
+                <td>750 ريال</td>
+                <td>300 ريال</td>
+                <td>4,000 ريال</td>
+                <td>فبراير 2024</td>
+                <td>1,500 ريال</td>
+                <td>6,550 ريال</td>
+                <td>
+                  <button class="btn-icon" title="عرض التفاصيل" onclick="viewInvoice(2)">🔍</button>
+                  <button class="btn-icon" title="تعديل" onclick="editInvoice(2)">✏️</button>
+                  <button class="btn-icon" title="إرسال رسالة" onclick="sendMessage(2)">✉️</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+     
+     
+
+      <!-- Bulk Message Modal -->
+      <div id="bulkMessageModal" class="modal">
+        <div class="modal-content">
+          <h3>إرسال رسالة جماعية</h3>
+          <form class="form">
+            <div class="form-group">
+              <label>نص الرسالة</label>
+              <textarea required></textarea>
+            </div>
+            <button type="submit" class="btn-green">إرسال</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Invoice Details Modal -->
+      <div id="invoiceDetailsModal" class="modal">
+        <div class="modal-content">
+          <h3>تفاصيل الفواتير</h3>
+          
+          <div class="bill-sections-container">
+            <div class="bill-section">
+              <h4>🏪 اسم المحل</h4>
+              <div class="bill-details">
+                <div class="detail-row">
+                  <span class="detail-label">اسم المحل</span>
+                  <span class="detail-value">محل A101</span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">اسم صاحب المحل</span>
+                  <span class="detail-value">أحمد محمد</span>
+                </div>
+              </div>
+            </div>
+            <!-- قسم الكهرباء -->
+            <div class="bill-section">
+              <h4>⚡ الكهرباء</h4>
+              <div class="bill-details">
+                <div class="detail-row">
+                  <span class="detail-label">مبلغ الشهر الحالي</span>
+                  <span class="detail-value">500 ريال</span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">المتأخرات</span>
+                  <span class="detail-value">0 ريال</span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">الإجمالي</span>
+                  <span class="detail-value">500 ريال</span>
+                </div>
+              </div>
+            </div>
+            <!-- قسم الماء -->
+            <div class="bill-section">
+              <h4>💧 الماء</h4>
+              <div class="bill-details">
+                <div class="detail-row">
+                  <span class="detail-label">مبلغ الشهر الحالي</span>
+                  <span class="detail-value">200 ريال</span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">المتأخرات</span>
+                  <span class="detail-value">0 ريال</span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">الإجمالي</span>
+                  <span class="detail-value">200 ريال</span>
+                </div>
+              </div>
+            </div>
+            <!-- قسم الإيجار -->
+            <div class="bill-section">
+              <h4>🏢 الإيجار</h4>
+              <div class="bill-details">
+                <div class="detail-row">
+                  <span class="detail-label">مبلغ الشهر الحالي</span>
+                  <span class="detail-value">5,000 ريال</span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">المتأخرات</span>
+                  <span class="detail-value">0 ريال</span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">الإجمالي</span>
+                  <span class="detail-value">5,000 ريال</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bill-actions">
+            <button class="btn-green" onclick="downloadPDF(1)">تحميل PDF</button>
+            <button class="btn-secondary" onclick="closeModal('invoiceDetailsModal')">إغلاق</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- نافذة تعديل الفاتورة -->
+    <div id="editInvoiceModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>تعديل بيانات الفاتورة</h3>
+          <button class="btn-close" onclick="closeModal('editInvoiceModal')">×</button>
+        </div>
+        <form class="form" id="editInvoiceForm">
+          <div class="form-sections">
+            <div class="form-section">
+              <h4>بيانات الفاتورة</h4>
+              <div class="form-grid" style="grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                <div class="form-group">
+                  <label for="edit-store-name">اسم المحل</label>
+                  <input type="text" id="edit-store-name" required />
+                </div>
+                <div class="form-group">
+                  <label for="edit-owner-name">اسم صاحب المحل</label>
+                  <input type="text" id="edit-owner-name" required />
+                </div>
+                <div class="form-group">
+                  <label for="edit-electricity">الكهرباء (ريال)</label>
+                  <input type="number" id="edit-electricity" required />
+                </div>
+                <div class="form-group">
+                  <label for="edit-water">الماء (ريال)</label>
+                  <input type="number" id="edit-water" required />
+                </div>
+                <div class="form-group">
+                  <label for="edit-rent">الإيجار (ريال)</label>
+                  <input type="number" id="edit-rent" required />
+                </div>
+                <div class="form-group">
+                  <label for="edit-month">الشهر</label>
+                  <input type="month" id="edit-month" required />
+                </div>
+                <div class="form-group">
+                  <label for="edit-overdue">المتأخرات (ريال)</label>
+                  <input type="number" id="edit-overdue" required />
+                </div>
+                <div class="form-group">
+                  <label for="edit-total">الإجمالي (ريال)</label>
+                  <input type="number" id="edit-total" required />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-green">حفظ التغييرات</button>
+            <button type="button" class="btn-secondary" onclick="closeModal('editInvoiceModal')">إلغاء</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    </div>
+  <script src="../views/js/mall-management/index.js"> </script>
+</body>
+</html>
