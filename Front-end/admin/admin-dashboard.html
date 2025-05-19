@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IEMM - لوحة التحكم</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="../views/css/styles.css">
+  <script src="../views/js/script.js" defer></script>
+</head>
+<body>
+  <header>
+    <div class="container navbar">
+      <h1>IEMM</h1>
+      <nav>
+        <a href="admin-dashboard.html" id="dashboard-link" class="active">📊 لوحة التحكم</a>
+        <a href="mall-management.html" id="malls-link">🏢 إدارة المجمعات</a>
+        <a href="settings.html" id="settings-link">⚙️ الإعدادات العامة</a>
+      </nav>
+      <button class="btn-dark" onclick="document.body.classList.toggle('dark')">الوضع الليلي</button>
+    </div>
+  </header>
+
+  <div class="main">
+    <div class="section active" id="dashboard-section">
+      <h2 class="section-title">📊 عدد المجمعات الجديدة شهريًا</h2>
+      <canvas id="mallsChart" height="100"></canvas>
+    </div>
+  </div>
+
+  <script src="../views/js/admin/admin-dashboard.js"> </script>
+</body>
+</html>

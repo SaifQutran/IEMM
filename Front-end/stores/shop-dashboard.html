@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IEMM - بوابة صاحب المحل</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="../views/css/styles.css">
+  <link rel="stylesheet" href="../views/css/chat.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="../views/js/script.js" defer></script>
+  <script src="../views/js/stores/chat.js" defer></script>
+</head>
+<body>
+  <!-- Header Section -->
+  <header>
+    <div class="container navbar">
+      <h1>IEMM</h1>
+      <nav>
+        <a href="shop-dashboard.html" id="dashboard-link" class="active">📊 لوحة التحكم</a>
+        <a href="products-management.html" id="products-link">🛍️ إدارة المنتجات</a>
+        <a href="inventory.html" id="inventory-link">📦 المخزون</a>
+
+        <a href="employees.html" id="staff-link">👥 إدارة العاملين</a>
+        <a href="bills-stores.html" id="bills-link">💰 الفواتير</a>
+      </nav>
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <button class="btn-dark" onclick="document.body.classList.toggle('dark')">الوضع الليلي</button>
+        <button id="chat-toggle" class="chat-toggle-btn" title="الدردشة مع مدير المول">
+          <i class="fas fa-comments"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- نافذة الدردشة الجانبية -->
+  <div id="chat-panel" class="chat-panel">
+    <div class="chat-header">
+      <div class="mall-logo-container">
+        <img id="mall-logo" alt="شعار المول" class="mall-logo">
+        <h3>الدردشة مع مدير المول</h3>
+      </div>
+      <button id="chat-close" class="chat-close-btn">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div id="messages-container" class="messages-container">
+      <!-- سيتم إنشاء الرسائل عبر JavaScript -->
+    </div>
+    <form id="message-form" class="message-form">
+      <textarea id="message-input" class="message-input" placeholder="اكتب رسالتك هنا..." rows="1"></textarea>
+      <button type="submit" class="send-message-btn">
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </form>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main">
+    <!-- Dashboard Section -->
+    <div class="section active" id="dashboard-section">
+      <h2 class="section-title">📊 نظرة عامة على المحل</h2>
+      
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h3 class="stat-title">مبيعات اليوم</h3>
+          <p class="stat-value">5,230 ريال</p>
+          <span class="stat-change positive">+12% عن أمس</span>
+        </div>
+    
+        <div class="stat-card">
+          <h3 class="stat-title">متوسط قيمة الطلب</h3>
+          <p class="stat-value">185 ريال</p>
+          <span class="stat-change positive">+5% عن المتوسط</span>
+        </div>
+    
+        <div class="stat-card">
+          <h3 class="stat-title">عدد المعاملات</h3>
+          <p class="stat-value">28</p>
+          <span class="stat-change">معاملة اليوم</span>
+        </div>
+    
+        <div class="stat-card">
+          <h3 class="stat-title">نسبة نمو المبيعات</h3>
+          <p class="stat-value">15%</p>
+          <span class="stat-change positive">هذا الشهر</span>
+        </div>
+
+        <div class="stat-card">
+          <h3 class="stat-title">المنتجات الفعالة</h3>
+          <p class="stat-value">48</p>
+          <span class="stat-change">من أصل 52</span>
+        </div>
+    
+        <div class="stat-card">
+          <h3 class="stat-title">منتجات قليلة المخزون</h3>
+          <p class="stat-value">3</p>
+          <span class="stat-change negative">تحتاج للتجديد</span>
+        </div>
+
+        <div class="stat-card">
+          <h3 class="stat-title">رضا العملاء</h3>
+          <p class="stat-value">4.8/5</p>
+          <span class="stat-change positive">95% راضون</span>
+        </div>
+
+        <div class="stat-card">
+          <h3 class="stat-title">عدد الزيارات</h3>
+          <p class="stat-value">156</p>
+          <span class="stat-change positive">+8% عن أمس</span>
+        </div>
+      </div>
+
+      <div class="charts-grid">
+        <div class="card">
+          <h3>المبيعات الأسبوعية</h3>
+          <canvas id="weeklySalesChart" height="200"></canvas>
+        </div>
+    
+        <div class="card">
+          <h3>أفضل المنتجات مبيعاً</h3>
+          <canvas id="topProductsChart" height="200"></canvas>
+        </div>
+
+        <div class="card">
+          <h3>توزيع المبيعات حسب الفئات</h3>
+          <canvas id="categorySalesChart" height="200"></canvas>
+        </div>
+
+        <div class="card">
+          <h3>مقارنة المبيعات مع الأسبوع السابق</h3>
+          <canvas id="salesComparisonChart" height="200"></canvas>
+        </div>
+
+        <div class="card">
+          <h3>أداء الموظفين في المبيعات</h3>
+          <canvas id="staffPerformanceChart" height="200"></canvas>
+        </div>
+
+        <div class="card">
+          <h3>توزيع المبيعات حسب ساعات اليوم</h3>
+          <canvas id="hourlyDistributionChart" height="200"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="../views/js/stores/index.js"> </script>
+</body>
+</html>
+
+

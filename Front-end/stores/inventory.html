@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IEMM - المخزون</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="../views/css/styles.css">
+  <link rel="stylesheet" href="../views/css/chat.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="../views/js/script.js" defer></script>
+  <script src="../views/js/stores/chat.js" defer></script>
+</head>
+<body>
+  <!-- Header Section -->
+  <header>
+    <div class="container navbar">
+      <h1>IEMM</h1>
+      <nav>
+        <a href="shop-dashboard.html" id="dashboard-link" >📊 لوحة التحكم</a>
+        <a href="products-management.html" id="products-link">🛍️ إدارة المنتجات</a>
+        <a href="inventory.html" id="inventory-link" class="active">📦 المخزون</a>
+
+        <a href="employees.html" id="staff-link">👥 إدارة العاملين</a>
+        <a href="bills-stores.html" id="bills-link">💰 الفواتير</a>
+      </nav>
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <button class="btn-dark" onclick="document.body.classList.toggle('dark')">الوضع الليلي</button>
+        <button id="chat-toggle" class="chat-toggle-btn" title="الدردشة مع مدير المول">
+          <i class="fas fa-comments"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- نافذة الدردشة الجانبية -->
+  <div id="chat-panel" class="chat-panel">
+    <div class="chat-header">
+      <div class="mall-logo-container">
+        <img id="mall-logo" alt="شعار المول" class="mall-logo">
+        <h3>الدردشة مع مدير المول</h3>
+      </div>
+      <button id="chat-close" class="chat-close-btn">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div id="messages-container" class="messages-container">
+      <!-- سيتم إنشاء الرسائل عبر JavaScript -->
+    </div>
+    <form id="message-form" class="message-form">
+      <textarea id="message-input" class="message-input" placeholder="اكتب رسالتك هنا..." rows="1"></textarea>
+      <button type="submit" class="send-message-btn">
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </form>
+  </div>
+
+    <!-- Main Content -->
+    <div class="main">
+      <!-- Inventory Management Section -->
+      <div class="section active" id="inventory-section">
+        <div class="section-header">
+          <h2 class="section-title">📦 إدارة المخزون</h2>
+        </div>
+        <div class="alerts card">
+          <h3>🚨 تنبيهات المخزون</h3>
+          <div id="inventory-alerts">
+            <!-- سيتم ملؤها بواسطة JavaScript -->
+          </div>
+        </div>
+
+        <div class="table card">
+          <div class="table-header">
+            <h3>قائمة المخزون</h3>
+            <button class="btn-green" onclick="document.getElementById('newInventoryFormContainer').style.display = document.getElementById('newInventoryFormContainer').style.display === 'none' ? 'block' : 'none'">➕ إضافة مخزون جديد</button>
+          </div>
+
+          <div class="form-container" id="newInventoryFormContainer" style="display:none;">
+            <div class="form card">
+              <h3>إضافة مخزون جديد</h3>
+              <div class="form-sections">
+                <div class="form-section">
+                  <h4>معلومات المخزون</h4>
+                  <div class="form-grid">
+                    <div class="form-group">
+                      <label>المنتج</label>
+                      <input type="text" id="product-search" placeholder="ابدأ بكتابة اسم المنتج..." required />
+                      <div id="product-suggestions" class="suggestions-container"></div>
+                    </div>
+                    <div class="form-group">
+                      <label>المخزن</label>
+                      <select id="warehouse-select" required>
+                        <option value="">اختر المخزن</option>
+                        <option value="main">المخزن الرئيسي</option>
+                        <option value="secondary">المخزن الثانوي</option>
+                        <option value="external">المخزن الخارجي</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label>الكمية المضافة</label>
+                      <input type="number" required />
+                    </div>
+                    <div class="form-group">
+                      <label>تاريخ الإضافة</label>
+                      <input type="date" required />
+                    </div>
+                    <div class="form-group">
+                      <label>رقم الرف</label>
+                      <input type="text" required />
+                    </div>
+                    <div class="form-group">
+                      <label>الموقع في المخزن</label>
+                      <input type="text" required />
+                    </div>
+                    <div class="form-group">
+                      <label>ملاحظات</label>
+                      <textarea></textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn-green">حفظ</button>
+                <button type="button" class="btn-secondary" onclick="document.getElementById('newInventoryFormContainer').style.display = 'none'">إلغاء</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>المنتج</th>
+                  <th>الكمية الحالية</th>
+                  <th>الحد الأدنى</th>
+                  <th>آخر تحديث</th>
+                  <th>الحالة</th>
+                  <th>الإجراءات</th>
+                </tr>
+              </thead>
+              <tbody id="inventory-table-body">
+                <!-- سيتم ملؤها بواسطة JavaScript -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="table-header">
+            <br>
+            <h3>قائمة المخازن</h3>
+            <button class="btn-green" onclick="document.getElementById('newWarehouseFormContainer').style.display = document.getElementById('newWarehouseFormContainer').style.display === 'none' ? 'block' : 'none'">➕ إضافة مخزن جديد</button>
+          </div>
+
+          <div class="form-container" id="newWarehouseFormContainer" style="display:none;">
+            <div class="form card">
+              <h3>إضافة مخزن جديد</h3>
+              <div class="form-sections">
+                <div class="form-section">
+                  <h4>معلومات المخزن</h4>
+                  <div class="form-grid">
+                    <div class="form-group">
+                      <label>اسم المخزن</label>
+                      <input type="text" required />
+                    </div>
+                    <div class="form-group">
+                      <label>الموقع</label>
+                      <input type="text" required />
+                    </div>
+                    <div class="form-group">
+                      <label>السعة</label>
+                      <input type="number" required />
+                    </div>
+                    <div class="form-group">
+                      <label>المسؤول</label>
+                      <input type="text" required />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn-green">حفظ</button>
+                <button type="button" class="btn-secondary" onclick="document.getElementById('newWarehouseFormContainer').style.display = 'none'">إلغاء</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>اسم المخزن</th>
+                  <th>الموقع</th>
+                  <th>السعة</th>
+                  <th>المسؤول</th>
+                  <th>الحالة</th>
+                  <th>الإجراءات</th>
+                </tr>
+              </thead>
+              <tbody id="warehouses-table-body">
+                <!-- سيتم ملؤها بواسطة JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- إضافة ستايلات CSS المطلوبة -->
+    <style>
+      /* تنسيق النماذج */
+      .form-sections {
+        display: grid;
+        gap: 24px;
+        margin-bottom: 24px;
+      }
+
+      .form-section {
+        background: #f8fafc;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .form-section h4 {
+        margin: 0 0 20px 0;
+        color: #1e3a8a;
+        font-size: 1.1rem;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #e2e8f0;
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .form-group label {
+        color: #1e293b;
+        font-weight: 500;
+        font-size: 0.9rem;
+      }
+
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        padding: 10px 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        width: 100%;
+      }
+
+      .form-group input:focus,
+      .form-group select:focus,
+      .form-group textarea:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+      }
+
+      .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid #e2e8f0;
+      }
+
+      /* تنسيق مربع الاقتراحات */
+      .suggestions-container {
+        position: absolute;
+        width: 100%;
+        max-height: 200px;
+        overflow-y: auto;
+        background-color: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        z-index: 100;
+        display: none;
+        margin-top: 2px;
+      }
+
+      .suggestion-item {
+        padding: 8px 12px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        border-bottom: 1px solid #f1f5f9;
+      }
+
+      .suggestion-item:last-child {
+        border-bottom: none;
+      }
+
+      .suggestion-item:hover, .suggestion-item.active {
+        background-color: #f1f5f9;
+      }
+
+      .product-category, .product-sku {
+        font-size: 0.8rem;
+        color: #64748b;
+        margin-right: 8px;
+      }
+
+      .product-sku {
+        font-family: monospace;
+        background-color: #f1f5f9;
+        padding: 2px 4px;
+        border-radius: 4px;
+      }
+
+      mark {
+        background-color: rgba(34, 197, 94, 0.2);
+        color: #166534;
+        padding: 0 2px;
+        border-radius: 2px;
+        font-weight: 500;
+      }
+
+      input.selected {
+        border-color: #22c55e;
+        background-color: rgba(34, 197, 94, 0.05);
+        transition: all 0.3s ease;
+      }
+
+      /* تنسيق للوضع الليلي */
+      .dark .suggestions-container {
+        background-color: #1e293b;
+        border-color: #475569;
+      }
+
+      .dark .suggestion-item {
+        border-bottom-color: #334155;
+      }
+
+      .dark .suggestion-item:hover, .dark .suggestion-item.active {
+        background-color: #334155;
+      }
+
+      .dark .product-category, .dark .product-sku {
+        color: #94a3b8;
+      }
+
+      .dark .product-sku {
+        background-color: #334155;
+      }
+
+      .dark mark {
+        background-color: rgba(34, 197, 94, 0.3);
+        color: #4ade80;
+      }
+
+      .dark input.selected {
+        border-color: #22c55e;
+        background-color: rgba(34, 197, 94, 0.1);
+      }
+
+      .dark .form-section {
+        background: var(--dark-chart);
+      }
+
+      .dark .form-section h4 {
+        color: var(--dark-text);
+        border-color: #334155;
+      }
+
+      .dark .form-group label {
+        color: var(--dark-text);
+      }
+
+      .dark .form-group input,
+      .dark .form-group select,
+      .dark .form-group textarea {
+        background: var(--dark-card);
+        color: var(--dark-text);
+        border-color: #334155;
+      }
+
+      .dark .form-actions {
+        border-color: #334155;
+      }
+
+      .table-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding: 0 1rem;
+      }
+
+      .table-header h3 {
+        margin: 0;
+      }
+    </style>
+
+    <script>
+      // دالة تأكيد الحذف
+      function confirmDelete(itemId, itemType) {
+        if(confirm(`هل أنت متأكد من حذف ${itemType} رقم ${itemId}؟`)) {
+          alert(`تم حذف ${itemType} رقم ${itemId}`);
+        }
+      }
+
+      // دالة تعديل العنصر
+      function editItem(itemId, itemType) {
+        alert(`تعديل ${itemType} رقم ${itemId}`);
+      }
+
+      // دالة عرض التفاصيل
+      function viewDetails(itemId, itemType) {
+        alert(`عرض تفاصيل ${itemType} رقم ${itemId}`);
+      }
+
+      // سيتم تنفيذها عند تحميل الصفحة
+      document.addEventListener('DOMContentLoaded', function() {
+        // بيانات تجريبية للمخزون
+        const inventoryItems = [
+          { id: 1, name: 'قميص رجالي', current: 45, min: 10, lastUpdate: '2024-04-25', status: 'normal' },
+          { id: 2, name: 'بنطلون جينز', current: 8, min: 15, lastUpdate: '2024-04-20', status: 'low' },
+          { id: 3, name: 'حذاء رياضي', current: 12, min: 5, lastUpdate: '2024-04-22', status: 'normal' },
+          { id: 4, name: 'ساعة يد', current: 3, min: 5, lastUpdate: '2024-04-21', status: 'low' },
+          { id: 5, name: 'حقيبة ظهر', current: 18, min: 8, lastUpdate: '2024-04-24', status: 'normal' }
+        ];
+
+        // بيانات تجريبية للمخازن
+        const warehouses = [
+          { id: 1, name: 'المخزن الرئيسي', location: 'الطابق الأرضي', capacity: 1000, manager: 'أحمد محمد', status: 'active' },
+          { id: 2, name: 'المخزن الثانوي', location: 'الطابق الأول', capacity: 500, manager: 'محمد علي', status: 'active' },
+          { id: 3, name: 'مخزن خارجي', location: 'المبنى الملحق', capacity: 800, manager: 'سالم خالد', status: 'inactive' }
+        ];
+
+        // ملء جدول المخزون
+        const inventoryTableBody = document.getElementById('inventory-table-body');
+        inventoryItems.forEach(item => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${item.name}</td>
+            <td>${item.current}</td>
+            <td>${item.min}</td>
+            <td>${item.lastUpdate}</td>
+            <td><span class="status-badge ${item.status === 'low' ? 'warning' : 'success'}">${item.status === 'low' ? 'منخفض' : 'عادي'}</span></td>
+            <td>
+              <button class="btn-icon" onclick="viewDetails(${item.id}, 'المنتج')">👁️</button>
+              <button class="btn-icon" onclick="editItem(${item.id}, 'المنتج')">✏️</button>
+              <button class="btn-icon" onclick="confirmDelete(${item.id}, 'المنتج')">🗑️</button>
+            </td>
+          `;
+          inventoryTableBody.appendChild(row);
+        });
+
+        // ملء جدول المخازن
+        const warehousesTableBody = document.getElementById('warehouses-table-body');
+        warehouses.forEach(warehouse => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${warehouse.name}</td>
+            <td>${warehouse.location}</td>
+            <td>${warehouse.capacity}</td>
+            <td>${warehouse.manager}</td>
+            <td><span class="status-badge ${warehouse.status === 'active' ? 'success' : 'inactive'}">${warehouse.status === 'active' ? 'نشط' : 'غير نشط'}</span></td>
+            <td>
+              <button class="btn-icon" onclick="viewDetails(${warehouse.id}, 'المخزن')">👁️</button>
+              <button class="btn-icon" onclick="editItem(${warehouse.id}, 'المخزن')">✏️</button>
+              <button class="btn-icon" onclick="confirmDelete(${warehouse.id}, 'المخزن')">🗑️</button>
+            </td>
+          `;
+          warehousesTableBody.appendChild(row);
+        });
+
+        // ملء تنبيهات المخزون
+        const inventoryAlerts = document.getElementById('inventory-alerts');
+        const lowItems = inventoryItems.filter(item => item.status === 'low');
+        if (lowItems.length > 0) {
+          lowItems.forEach(item => {
+            const alert = document.createElement('div');
+            alert.className = 'alert warning';
+            alert.innerHTML = `<strong>تنبيه!</strong> كمية المنتج "${item.name}" منخفضة (${item.current} من أصل ${item.min} المطلوبة).`;
+            inventoryAlerts.appendChild(alert);
+          });
+        } else {
+          const alert = document.createElement('div');
+          alert.className = 'alert success';
+          alert.innerHTML = '<strong>جيد!</strong> جميع المنتجات ضمن الكميات المطلوبة.';
+          inventoryAlerts.appendChild(alert);
+        }
+      });
+
+      // نموذج الاقتراحات للمنتجات
+      const productSearchInput = document.getElementById('product-search');
+      const productSuggestionsContainer = document.getElementById('product-suggestions');
+
+      // المنتجات التجريبية للاقتراح
+      const sampleProducts = [
+        { id: 1, name: 'قميص رجالي', sku: 'SHT-001', category: 'ملابس' },
+        { id: 2, name: 'بنطلون جينز', sku: 'PNT-002', category: 'ملابس' },
+        { id: 3, name: 'حذاء رياضي', sku: 'SHO-001', category: 'أحذية' },
+        { id: 4, name: 'ساعة يد', sku: 'WAT-003', category: 'اكسسوارات' },
+        { id: 5, name: 'حقيبة ظهر', sku: 'BAG-005', category: 'حقائب' }
+      ];
+
+      // مستمع الأحداث للبحث والاقتراحات
+      if (productSearchInput) {
+        productSearchInput.addEventListener('input', function() {
+          const query = this.value.trim().toLowerCase();
+          
+          if (query.length < 2) {
+            productSuggestionsContainer.style.display = 'none';
+            return;
+          }
+          
+          const filteredProducts = sampleProducts.filter(product => 
+            product.name.toLowerCase().includes(query) || 
+            product.sku.toLowerCase().includes(query)
+          );
+          
+          if (filteredProducts.length > 0) {
+            productSuggestionsContainer.innerHTML = '';
+            
+            filteredProducts.forEach(product => {
+              const suggestionItem = document.createElement('div');
+              suggestionItem.className = 'suggestion-item';
+              
+              // تمييز النص المطابق
+              let highlightedName = product.name;
+              if (product.name.toLowerCase().includes(query)) {
+                const regex = new RegExp(`(${query})`, 'ig');
+                highlightedName = product.name.replace(regex, '<mark>$1</mark>');
+              }
+              
+              suggestionItem.innerHTML = `
+                <div>${highlightedName}</div>
+                <div>
+                  <span class="product-category">${product.category}</span>
+                  <span class="product-sku">${product.sku}</span>
+                </div>
+              `;
+              
+              suggestionItem.addEventListener('click', function() {
+                productSearchInput.value = product.name;
+                productSearchInput.classList.add('selected');
+                productSuggestionsContainer.style.display = 'none';
+              });
+              
+              productSuggestionsContainer.appendChild(suggestionItem);
+            });
+            
+            productSuggestionsContainer.style.display = 'block';
+          } else {
+            productSuggestionsContainer.style.display = 'none';
+          }
+        });
+        
+        // إخفاء الاقتراحات عند النقر خارجها
+        document.addEventListener('click', function(e) {
+          if (!productSearchInput.contains(e.target) && !productSuggestionsContainer.contains(e.target)) {
+            productSuggestionsContainer.style.display = 'none';
+          }
+        });
+      }
+
+      // دالة لفتح نموذج إضافة مخزون جديد
+      function openAddStockForm() {
+        document.getElementById('newInventoryFormContainer').style.display = 'block';
+      }
+    </script>
+    <script src="../views/js/stores/index.js"> </script>
+</body>
+</html>
