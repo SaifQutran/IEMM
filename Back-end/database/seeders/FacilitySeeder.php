@@ -18,7 +18,7 @@ class FacilitySeeder extends Seeder
 
         foreach ($malls as $mall) {
             // Get all floors for this mall
-            $floors = $mall->floors;
+            $floors = $mall->floors()->get();
 
             // Create 2-4 facilities per floor
             foreach ($floors as $floor) {

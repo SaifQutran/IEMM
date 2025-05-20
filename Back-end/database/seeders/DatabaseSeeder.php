@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
             CountryGovernorateCityCompanySeeder::class,
             UserSeeder::class,
             MallSeeder::class,
+            FloorSeeder::class,
             FacilitySeeder::class,
             ShopSeeder::class,
             MoneyLogSeeder::class,
@@ -28,7 +29,6 @@ class DatabaseSeeder extends Seeder
             MessageSeeder::class,
             NotificationSeeder::class,
             ReservationSeeder::class,
-            FloorSeeder::class,
         ]);
     }
 }

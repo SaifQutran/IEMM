@@ -20,7 +20,7 @@ class ShopFactory extends Factory
             'name' => $this->faker->company . ' Shop',
             'work_times' => $this->faker->text(30),
             'state' => $this->faker->boolean(),
-            'facility_id' => $this->faker->unique()->numberBetween(1, 40),
+            'facility_id' => \App\Models\Facility::inRandomOrder()->first()->id,
             'rent_began_At' => $this->faker->date(),
             'mall_id' => $this->faker->numberBetween(1, 5),
             'owner_id' => $this->faker->numberBetween(1, 50),
