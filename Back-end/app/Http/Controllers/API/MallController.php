@@ -10,7 +10,7 @@ class MallController extends Controller
 {
     public function index()
     {
-        $malls = Mall::with(['owner', 'city'])->get()->map(function ($mall) {
+        $malls = Mall::with(['owner', 'city', 'floors'])->get()->map(function ($mall) {
             $mall->owner_name = $mall->owner ? $mall->owner->f_name . ' ' . $mall->owner->l_name : null;
             $mall->city_name = $mall->city ? $mall->city->name : null;
             unset($mall->owner, $mall->city);
@@ -62,7 +62,7 @@ class MallController extends Controller
         return response()->json([
             'status' => 'success',
             'code' => 200,
-            'message' => 'تم استرجاع محلات المدينة بنجاح',
+            'message' => 'تم استرجاع المنتجات بنجاح',
             'data' => $products
         ]);
     }
@@ -215,6 +215,39 @@ class MallController extends Controller
             'code' => 200,
             'message' => 'تم حذف المول بنجاح',
             'data' => null
+        ]);
+    }
+
+    public function floors($id)
+    {
+        $mall = Mall::with('floors')->find($id);
+
+        if (!$mall) {
+            return response()->json([
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'المول غير موجود',
+                'data' => null
+            ], 404);
+        }
+
+        $floors = $mall->floors->map(function ($floor) {
+            return [
+                'id' => $floor->id,
+                'length' => $floor->length,
+                'width' => $floor->width,
+                'floor_number' => $floor->floor_number,
+                'area' => $floor->length * $floor->width,
+                'facilities_count' => $floor->facilities()->count(),
+                'shops_count' => $floor->facilities()->whereHas('shop')->count()
+            ];
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'code' => 200,
+            'message' => 'تم استرجاع الطوابق بنجاح',
+            'data' => $floors
         ]);
     }
 }

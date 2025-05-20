@@ -22,7 +22,7 @@ use App\Http\Controllers\API\MessageController;
 use App\Http\Controllers\API\NotificationController;
 use App\Http\Controllers\API\ReservationController;
 use App\Http\Controllers\API\AuthController;
-
+use App\Http\Controllers\API\FloorController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -94,8 +94,9 @@ Route::get('/user', function (Request $request) {
 Route::apiResource('malls', MallController::class);
 Route::get('/malls/{id}/shops', [MallController::class, 'shops']);
 Route::get('/malls/{id}/facilities', [MallController::class, 'facilities']);
+Route::get('/malls/{id}/floors', [MallController::class, 'floors']);
 Route::get('/malls/{id}/chats', [MallController::class, 'facilities']);
-Route::get('/malls/{id}/products', [MallController::class, 'productsOfShops']);
+Route::get('/malls/{id}/products', [MallController::class, 'products']);
 Route::get('/malls/{id}/all_products', [MallController::class, 'products']);
 
 // Facilities
@@ -118,6 +119,15 @@ Route::apiResource('shops', ShopController::class);
 // delete : /money-logs/{id}
 // put : /money-logs/{id}
 Route::apiResource('money-logs', MoneyLogController::class);
+
+// Floors
+// get : /floors
+// post : /floors
+// delete : /floors/{id}
+// put : /floors/{id}
+Route::apiResource('floors', FloorController::class);
+Route::get('/floors/{id}/shops', [FloorController::class, 'shops']);
+Route::get('/floors/{id}/facilities', [FloorController::class, 'facilities']);
 
 // Products
 // get : /products

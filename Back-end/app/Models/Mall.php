@@ -40,6 +40,11 @@ class Mall extends Model
         return $this->hasMany(Facility::class);
     }
 
+    public function floors()
+    {
+        return $this->hasMany(Floor::class);
+    }
+
     public function shops()
     {
         return $this->hasMany(Shop::class);

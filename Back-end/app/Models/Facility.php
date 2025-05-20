@@ -12,10 +12,10 @@ class Facility extends Model
 
     protected $fillable = [
         'mall_id',
+        'floor_id',
         'width',
         'length',
         'rent_price',
-        'floor',
         'electricity_id_number',
         'water_id_number',
         'X_Coordinates',
@@ -27,7 +27,6 @@ class Facility extends Model
         'width' => 'decimal:2',
         'length' => 'decimal:2',
         'rent_price' => 'decimal:2',
-        'floor' => 'integer',
         'status' => 'boolean',
     ];
 
@@ -35,6 +34,11 @@ class Facility extends Model
     public function mall()
     {
         return $this->belongsTo(Mall::class);
+    }
+
+    public function floor()
+    {
+        return $this->belongsTo(Floor::class);
     }
 
     public function shop()

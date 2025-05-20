@@ -14,7 +14,7 @@ return new class extends Migration
             $table->decimal('width', 8, 2)->nullable();
             $table->decimal('length', 8, 2)->nullable();
             $table->decimal('rent_price', 10, 2)->nullable();
-            $table->integer('floor')->nullable();
+            $table->foreignId('floor_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string('electricity_id_number')->nullable();
             $table->string('water_id_number')->nullable();
             $table->string('X_Coordinates')->nullable();
