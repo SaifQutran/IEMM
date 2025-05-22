@@ -17,7 +17,7 @@ class MallFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->company . ' Mall',
+            'name' =>  ' مول' . $this->faker->company ,
             'floors' => $this->faker->numberBetween(1, 10),
             'location' => $this->faker->address(),
             'X_Coordinates' => $this->faker->latitude(),

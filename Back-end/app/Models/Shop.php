@@ -70,4 +70,9 @@ class Shop extends Model
     {
         return $this->hasMany(Chat::class);
     }
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'shop_categories');
+    }
 }

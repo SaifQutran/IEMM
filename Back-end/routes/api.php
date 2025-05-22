@@ -23,6 +23,7 @@ use App\Http\Controllers\API\NotificationController;
 use App\Http\Controllers\API\ReservationController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\FloorController;
+use App\Http\Controllers\API\CategoryController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -38,6 +39,7 @@ use App\Http\Controllers\API\FloorController;
 
 // Countries
 // get : /countries
+// get : /countries/{id}
 // post : /countries
 // delete : /countries/{id}
 // put : /countries/{id}
@@ -46,14 +48,25 @@ Route::apiResource('countries', CountryController::class);
 
 // Governorates  
 // get : /governorates
+// get : /governorates/{id}
 // post : /governorates
 // delete : /governorates/{id}
 // put : /governorates/{id}
 
 Route::apiResource('governorates', GovernorateController::class);
+//categories
+// get : /categories
+// get : /categories/{id}
+// post : /categories
+// delete : /categories/{id}
+// put : /categories/{id}
+
+Route::apiResource('categories', CategoryController::class);
+Route::get('/categories/{category}/products', [CategoryController::class, 'products']);
 
 // Cities
 // get : /cities
+// get : /cities/{id}
 // get : /cities/{id}/malls
 // get : /cities/{id}/malls/shops
 // post : /cities
@@ -66,6 +79,7 @@ Route::get('/cities/{id}/malls/shops', [CityController::class, 'shops']);
 
 // Companies
 // get : /companies
+// get : /companies/{id}
 // post : /companies
 // delete : /companies/{id}
 // put : /companies/{id}
@@ -83,6 +97,7 @@ Route::get('/user', function (Request $request) {
 
 // Malls
 // get : /malls
+// get : /malls/{id}
 // post : /malls
 // delete : /malls/{id}
 // put : /malls/{id}
@@ -101,6 +116,7 @@ Route::get('/malls/{id}/all_products', [MallController::class, 'products']);
 
 // Facilities
 // get : /facilities
+// get : /facilities/{id}
 // post : /facilities
 // delete : /facilities/{id}
 // put : /facilities/{id}
@@ -108,6 +124,7 @@ Route::apiResource('facilities', FacilityController::class);
 
 // Shops
 // get : /shops
+// get : /shops/{id}
 // post : /shops
 // delete : /shops/{id}
 // put : /shops/{id}
@@ -122,6 +139,7 @@ Route::apiResource('money-logs', MoneyLogController::class);
 
 // Floors
 // get : /floors
+// get : /floors/{id}
 // post : /floors
 // delete : /floors/{id}
 // put : /floors/{id}
@@ -131,6 +149,7 @@ Route::get('/floors/{id}/facilities', [FloorController::class, 'facilities']);
 
 // Products
 // get : /products
+// get : /products/{id}
 // post : /products
 // delete : /products/{id}
 // put : /products/{id}
@@ -138,6 +157,7 @@ Route::apiResource('products', ProductController::class);
 
 // Warehouses
 // get : /warehouses
+// get : /warehouses/{id}
 // post : /warehouses
 // delete : /warehouses/{id}
 // put : /warehouses/{id}
@@ -145,6 +165,7 @@ Route::apiResource('warehouses', WarehouseController::class);
 
 // Stocks
 // get : /stocks
+// get : /stocks/{id}
 // post : /stocks
 // delete : /stocks/{id}
 // put : /stocks/{id}
@@ -152,6 +173,7 @@ Route::apiResource('stocks', StockController::class);
 
 // Bills
 // get : /bills
+// get : /bills/{id}
 // post : /bills
 // delete : /bills/{id}
 // put : /bills/{id}
@@ -159,6 +181,7 @@ Route::apiResource('bills', BillController::class);
 
 // Sales
 // get : /sales
+// get : /sales/{id}
 // post : /sales
 // delete : /sales/{id}
 // put : /sales/{id}
@@ -166,6 +189,7 @@ Route::apiResource('sales', SaleController::class);
 
 // Reviews
 // get : /reviews
+// get : /reviews/{id}
 // post : /reviews
 // delete : /reviews/{id}
 // put : /reviews/{id}
@@ -173,6 +197,7 @@ Route::apiResource('reviews', ReviewController::class);
 
 // Chats
 // get : /chats
+// get : /chats/{id}
 // post : /chats
 // delete : /chats/{id}
 // put : /chats/{id}
@@ -180,6 +205,7 @@ Route::apiResource('chats', ChatController::class);
 
 // Messages
 // get : /messages
+// get : /messages/{id}
 // post : /messages
 // delete : /messages/{id}
 // put : /messages/{id}
@@ -187,6 +213,7 @@ Route::apiResource('messages', MessageController::class);
 
 // Notifications
 // get : /notifications
+// get : /notifications/{id}
 // post : /notifications
 // delete : /notifications/{id}
 // put : /notifications/{id}
@@ -215,9 +242,11 @@ Route::prefix('auth')->group(function () {
 
 // Protected user routes
 // get : /users
+// get : /users/{id}
 // post : /users
 // delete : /users/{id}
 // put : /users/{id}
+// Route::apiResource('users', UserController::class);
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('users', UserController::class);
 });

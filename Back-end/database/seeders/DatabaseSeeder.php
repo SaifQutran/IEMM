@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             FloorSeeder::class,
             FacilitySeeder::class,
             ShopSeeder::class,
+            CategorySeeder::class,
             MoneyLogSeeder::class,
             ProductSeeder::class,
             WarehouseSeeder::class,

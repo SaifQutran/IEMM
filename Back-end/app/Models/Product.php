@@ -14,7 +14,7 @@ class Product extends Model
         'name',
         'description',
         'price',
-        'category',
+        'category_id',
         'barcode',
         'Manufact_country_id',
         'company_id',
@@ -66,5 +66,10 @@ class Product extends Model
     public function reservations()
     {
         return $this->hasMany(Reservation::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 }
