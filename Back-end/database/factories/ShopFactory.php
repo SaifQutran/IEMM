@@ -17,7 +17,7 @@ class ShopFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => 'محل' . $this->faker->company ,
+            'name' => ' محل ' . $this->faker->company ,
             'work_times' => $this->faker->text(30),
             'state' => $this->faker->boolean(),
             'facility_id' => \App\Models\Facility::inRandomOrder()->first()->id,

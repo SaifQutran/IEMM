@@ -11,7 +11,7 @@ function fetchMalls() {
     $('table tbody').hide();
 
     $.ajax({
-        url: 'http://localhost:8000/api/malls',
+        url: 'http://localhost/Back-end/public/api/malls',
         method: 'GET',
         dataType: 'json',
         success: function(data) {
@@ -27,8 +27,6 @@ function fetchMalls() {
     });
 }
 
-
-
 // Display mall data in the table
 async function displayMalls(malls) {
     const tbody = $('table tbody');
@@ -39,10 +37,16 @@ async function displayMalls(malls) {
             const row = `
                 <tr>
                     <td>${m.name || '-'}</td>
-                    <td>${m.owner || '-'}</td>
-                    <td>${m.location || '-'}</td>
-                    <td>${m.floors || '0'}</td>
-                    <td>${m.city}</td>
+                    <td>${m.owner_name || '-'}</td>
+                    <td>
+                        ${m.location || '-'}
+                        <br> 
+                        <a href="https://www.google.com/maps?q=${m.Y_Coordinates},${m.X_Coordinates}" target="_blank">
+                            عرض على الخريطة
+                        </a>
+                    </td>
+                    <td>${m.floors_count || '0'}</td>
+                    <td>${m.city_name}</td>
                     <td>
                         <button class="btn-edit" onclick="editMall(${m.id})">✏️</button>
                         <button class="btn-delete" onclick="deleteMall(${m.id})">🗑️</button>
@@ -67,7 +71,7 @@ function editMall(id) {
 function deleteMall(id) {
     if (confirm('هل أنت متأكد من حذف هذا المجمع؟')) {
         $.ajax({
-            url: `http://localhost:8000/api/malls/${id}`,
+            url: `http://localhost/Back-end/public/api/malls/${id}`,
             method: 'DELETE',
             success: function() {
                 // Refresh the mall list
@@ -81,7 +85,97 @@ function deleteMall(id) {
     }
 }
 
+// Load cities function
+function loadCities() {
+    $.ajax({
+        url: 'http://localhost/Back-end/public/api/cities',
+        method: 'GET',
+        success: function(response) {
+            const citySelect = $('select[name="city_id"]');
+            citySelect.find('option:not(:first)').remove();
+            
+            response.data.forEach(city => {
+                citySelect.append(`<option value="${city.id}">${city.name}</option>`);
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error('Error loading cities:', error);
+        }
+    });
+}
+
+// Add new mall function
+function addMall(event) {
+    if (event) {
+        event.preventDefault(); // Prevent form submission
+    }
+
+    // Get form data
+    const formData = {
+        mall_name: $('input[name="mall_name"]').val(),
+        owner_name: $('input[name="owner_name"]').val(),
+        location: $('input[name="location"]').val(),
+        location_link: $('input[name="location_link"]').val(),
+        floors_count: parseInt($('input[name="floors_count"]').val()),
+        username: $('input[name="username"]').val(),
+        email: $('input[name="email"]').val(),
+        password: $('input[name="password"]').val(),
+        phone: $('input[name="phone"]').val(),
+        birth_date: $('input[name="birth_date"]').val(),
+        city_id: $('select[name="city_id"]').val()
+    };
+
+    // Validate required fields
+    if (!formData.mall_name || !formData.owner_name || !formData.location || 
+        !formData.username || !formData.email || !formData.password || 
+        !formData.phone || !formData.birth_date || !formData.city_id) {
+        alert('الرجاء ملء جميع الحقول المطلوبة');
+        return;
+    }
+
+    // Show loading state
+    $('#loading').show();
+
+    // Send POST request to API
+    $.ajax({
+        url: 'http://localhost/Back-end/public/api/malls',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function(response) {
+            // Hide form and refresh mall list
+            $('#mall-form').hide();
+            fetchMalls();
+            
+            // Clear form fields
+            $('input').val('');
+            $('select').val('');
+            
+            // Show success message
+            alert('تم إضافة المجمع بنجاح');
+        },
+        error: function(xhr, status, error) {
+            console.error('Error adding mall:', error);
+            if (xhr.responseJSON && xhr.responseJSON.errors) {
+                // Show validation errors
+                const errors = xhr.responseJSON.errors;
+                let errorMessage = 'الرجاء تصحيح الأخطاء التالية:\n';
+                for (const field in errors) {
+                    errorMessage += `- ${errors[field][0]}\n`;
+                }
+                alert(errorMessage);
+            } else {
+                alert('حدث خطأ أثناء إضافة المجمع');
+            }
+        },
+        complete: function() {
+            $('#loading').hide();
+        }
+    });
+}
+
 // Initialize the page
 $(document).ready(function() {
     fetchMalls();
+    loadCities();
 });

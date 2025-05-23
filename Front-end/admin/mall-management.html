@@ -1,77 +1,131 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>IEMM - إدارة المجمعات</title>
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <link rel="stylesheet" href="../views/css/styles.css">
-  <script src="../views/js/script.js" defer></script>
-</head>
-<body>
-  <header>
-    <div class="container navbar">
-      <h1>IEMM</h1>
-      <nav>
-        <a href="admin-dashboard.html" id="dashboard-link">📊 لوحة التحكم</a>
-        <a href="mall-management.html" id="malls-link" class="active">🏢 إدارة المجمعات</a>
-        <a href="settings.html" id="settings-link">⚙️ الإعدادات العامة</a>
-      </nav>
-      <button class="btn-dark" onclick="document.body.classList.toggle('dark')">الوضع الليلي</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IEMM - إدارة المجمعات</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="../views/css/styles.css" />
+    <script src="../views/js/script.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <div class="container navbar">
+        <h1>IEMM</h1>
+        <nav>
+          <a href="admin-dashboard.html" id="dashboard-link">📊 لوحة التحكم</a>
+          <a href="mall-management.html" id="malls-link" class="active"
+            >🏢 إدارة المجمعات</a
+          >
+          <a href="settings.html" id="settings-link">⚙️ الإعدادات العامة</a>
+        </nav>
+        <button
+          class="btn-dark"
+          onclick="document.body.classList.toggle('dark')"
+        >
+          الوضع الليلي
+        </button>
+      </div>
+    </header>
+
+    <div class="main">
+      <div class="section active" id="malls-section">
+        <div class="section-header">
+          <h2 class="section-title">🏢 إدارة المجمعات</h2>
+          <button class="btn-green" onclick="toggleForm()">
+            ➕ إضافة مجمع
+          </button>
+        </div>
+
+        <form action="" id="mall-form" style="display: none" method="post">
+          <div class="form card">
+            <h3>إضافة مجمع جديد</h3>
+            <div class="form-grid">
+              <input type="text" placeholder="اسم المجمع" name="mall_name" />
+              <input type="text" placeholder="الموقع" name="location" />
+              <input
+                type="number"
+                placeholder="عدد الأدوار"
+                name="floors_count"
+              />
+              <input
+                type="text"
+                placeholder="رابط الموقع على خرائط قوقل"
+                name="location_link"
+              />
+              <select name="city_id" required>
+                <option value="">اختر المدينة</option>
+                <!-- Cities will be loaded dynamically -->
+              </select>
+            </div>
+            <hr />
+            <h4>بيانات حساب المالك</h4>
+            <div class="form-grid">
+              <input type="text" placeholder="اسم المستخدم" name="username" />
+              <input type="text" placeholder="اسم الثنائي" name="owner_name" />
+              <input
+                type="email"
+                placeholder="البريد الإلكتروني"
+                name="email"
+              />
+              <input
+                type="password"
+                placeholder="كلمة المرور"
+                name="password"
+              />
+              <input
+                type="tel"
+                placeholder="00967xxxxxxxx"
+                name="phone"
+                pattern="^[0-9]{14}$"
+                maxlength="14"
+                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                title="الرجاء إدخال رقم جوال صحيح (مثال: 00967xxxxxxxx)"
+              />
+              <input
+                type="date"
+                name="birth_date"
+                max="2024-12-31"
+                min="1900-01-01"
+                required
+                title="الرجاء إدخال تاريخ الميلاد"
+              />
+            </div>
+            <button class="btn-green" onclick="addMall()">إضافة المجمع</button>
+          </div>
+        </form>
+
+        <div class="table card">
+          <div
+            id="loading"
+            style="display: none; text-align: center; padding: 20px"
+          >
+            جاري تحميل البيانات...
+          </div>
+          <div
+            id="error"
+            style="display: none; text-align: center; padding: 20px; color: red"
+          >
+            حدث خطأ أثناء تحميل البيانات
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>اسم المجمع</th>
+                <th>المالك</th>
+                <th>الموقع</th>
+                <th>عدد الطوابق</th>
+                <th>المدينة</th>
+                <th>الإجراءات</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- سيتم إضافة البيانات ديناميكياً -->
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
-  </header>
-
-  <div class="main">
-    <div class="section active" id="malls-section">
-      <div class="section-header">
-        <h2 class="section-title">🏢 إدارة المجمعات</h2>
-        <button class="btn-green" onclick="toggleForm()">➕ إضافة مجمع</button>
-      </div>
-      
-      <div class="form card" id="mall-form" style="display:none;">
-        <h3>إضافة مجمع جديد</h3>
-        <div class="form-grid">
-          <input type="text" placeholder="اسم المجمع" />
-          <input type="text" placeholder="اسم المالك" />
-          <input type="text" placeholder="الموقع" />
-          <input type="number" placeholder="عدد الأدوار" /> 
-        </div>
-        <hr />
-        <h4>بيانات حساب المالك</h4>
-        <div class="form-grid">
-          <input type="text" placeholder="اسم المستخدم" />
-          <input type="email" placeholder="البريد الإلكتروني" />
-          <input type="password" placeholder="كلمة المرور" />
-        </div>
-        <button class="btn-green">إضافة المجمع</button>
-      </div>
-
-      <div class="table card">
-        <div id="loading" style="display: none; text-align: center; padding: 20px;">
-          جاري تحميل البيانات...
-        </div>
-        <div id="error" style="display: none; text-align: center; padding: 20px; color: red;">
-          حدث خطأ أثناء تحميل البيانات
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>اسم المجمع</th>
-              <th>المالك</th>
-              <th>الموقع</th>
-              <th>عدد الطوابق</th>
-              <th>المدينة</th>
-              <th>الإجراءات</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- سيتم إضافة البيانات ديناميكياً -->
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <script src="../views/js/admin/mall-mangement.js"></script>
-</body>
-</html> 
+    <script src="../views/js/admin/mall-mangement.js"></script>
+  </body>
+</html>

@@ -12,7 +12,7 @@ class Mall extends Model
 
     protected $fillable = [
         'name',
-        'floors',
+        // 'floors',
         'location',
         'owner_id',
         'city_id',
@@ -21,7 +21,7 @@ class Mall extends Model
     ];
 
     protected $casts = [
-        'floors' => 'integer',
+        // 'floors' => 'integer',
     ];
 
     // Relationships
