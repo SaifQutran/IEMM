@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('floors', function (Blueprint $table) {
             $table->id();
-            $table->decimal('length', 10, 2);
-            $table->decimal('width', 10, 2);
+            $table->decimal('length', 10, 2)->nullable();
+            $table->decimal('width', 10, 2)->nullable();
             $table->integer('floor_number');
             $table->foreignId('mall_id')->constrained()->onDelete('cascade');
             $table->timestamps();

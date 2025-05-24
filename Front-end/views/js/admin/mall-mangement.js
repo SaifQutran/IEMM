@@ -11,7 +11,7 @@ function fetchMalls() {
     $('table tbody').hide();
 
     $.ajax({
-        url: 'http://localhost/Back-end/public/api/malls',
+        url: 'http://localhost/IEMM/Back-end/public/api/malls',
         method: 'GET',
         dataType: 'json',
         success: function(data) {
@@ -71,7 +71,7 @@ function editMall(id) {
 function deleteMall(id) {
     if (confirm('هل أنت متأكد من حذف هذا المجمع؟')) {
         $.ajax({
-            url: `http://localhost/Back-end/public/api/malls/${id}`,
+            url: `http://localhost/IEMM/Back-end/public/api/malls/${id}`,
             method: 'DELETE',
             success: function() {
                 // Refresh the mall list
@@ -88,7 +88,7 @@ function deleteMall(id) {
 // Load cities function
 function loadCities() {
     $.ajax({
-        url: 'http://localhost/Back-end/public/api/cities',
+        url: 'http://localhost/IEMM/Back-end/public/api/cities',
         method: 'GET',
         success: function(response) {
             const citySelect = $('select[name="city_id"]');
@@ -107,10 +107,10 @@ function loadCities() {
 // Add new mall function
 function addMall(event) {
     if (event) {
-        event.preventDefault(); // Prevent form submission
+        event.preventDefault(); // منع إرسال النموذج
     }
 
-    // Get form data
+    // جمع بيانات النموذج
     const formData = {
         mall_name: $('input[name="mall_name"]').val(),
         owner_name: $('input[name="owner_name"]').val(),
@@ -119,13 +119,14 @@ function addMall(event) {
         floors_count: parseInt($('input[name="floors_count"]').val()),
         username: $('input[name="username"]').val(),
         email: $('input[name="email"]').val(),
+        sex: $('input[name="sex"]').val(),
         password: $('input[name="password"]').val(),
         phone: $('input[name="phone"]').val(),
         birth_date: $('input[name="birth_date"]').val(),
         city_id: $('select[name="city_id"]').val()
     };
 
-    // Validate required fields
+    // التحقق من الحقول المطلوبة
     if (!formData.mall_name || !formData.owner_name || !formData.location || 
         !formData.username || !formData.email || !formData.password || 
         !formData.phone || !formData.birth_date || !formData.city_id) {
@@ -133,31 +134,54 @@ function addMall(event) {
         return;
     }
 
-    // Show loading state
+    // حفظ البيانات في ملف JSON للمعاينة (تنزيل الملف)
+    const jsonData = JSON.stringify(formData, null, 2);
+    const blob = new Blob([jsonData], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "mall_data.json";
+    a.click();
+    URL.revokeObjectURL(url);
+
+    // عرض حالة التحميل
     $('#loading').show();
 
-    // Send POST request to API
+    // إرسال الطلب إلى الـ API
     $.ajax({
-        url: 'http://localhost/Back-end/public/api/malls',
+        url: 'http://localhost/IEMM/Back-end/public/api/malls',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(formData),
+        
         success: function(response) {
-            // Hide form and refresh mall list
+            // إخفاء النموذج وتحديث القائمة
+                const jsonData = JSON.stringify(formData, null, 2);
+    const blob = new Blob([jsonData], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "mall_response.json";
+    a.click();
+    URL.revokeObjectURL(url);
+
+    // عرض حالة التحميل
+    $('#loading').show();
+
             $('#mall-form').hide();
             fetchMalls();
-            
-            // Clear form fields
+
+            // تفريغ الحقول
             $('input').val('');
             $('select').val('');
-            
-            // Show success message
+
+            // عرض رسالة نجاح
             alert('تم إضافة المجمع بنجاح');
         },
         error: function(xhr, status, error) {
             console.error('Error adding mall:', error);
             if (xhr.responseJSON && xhr.responseJSON.errors) {
-                // Show validation errors
+                // عرض الأخطاء
                 const errors = xhr.responseJSON.errors;
                 let errorMessage = 'الرجاء تصحيح الأخطاء التالية:\n';
                 for (const field in errors) {

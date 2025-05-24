@@ -164,6 +164,7 @@ class MallController extends Controller
                 'floors_count' => 'required|integer|min:1',
                 'username' => 'required|string|unique:users',
                 'email' => 'required|string|email|unique:users',
+                'sex' => 'required|in:true,false',
                 'password' => 'required|string|min:8',
                 'phone' => 'required|string|max:20',
                 'birth_date' => 'required|date',
@@ -176,6 +177,8 @@ class MallController extends Controller
                 'l_name' => substr($validatedData['owner_name'], strpos($validatedData['owner_name'], ' ') + 1), // Extract last name
                 'username' => $validatedData['username'],
                 'email' => $validatedData['email'],
+                'sex' => $validatedData['sex'] === 'true', // Convert string to boolean
+                'user_type' => 1, // Convert string to boolean
                 'password' => bcrypt($validatedData['password']),
                 'phone' => $validatedData['phone'],
                 'birth_date' => $validatedData['birth_date'],
@@ -187,19 +190,17 @@ class MallController extends Controller
             $latitude = 0.0;
             $longitude = 0.0;
             if ($validatedData['location_link']) {
-if (preg_match('/@([-.\d]+),([-.\d]+)/', $validatedData['location_link'], $matches)) {
-        
-    $latitude = floatval($matches[1]);
-    $longitude = floatval($matches[2]);
-    
-}
+                if (preg_match('/@([-.\d]+),([-.\d]+)/', $validatedData['location_link'], $matches)) {
 
-// Try to match the "!3dlatitude!4dlongitude" format
-if (preg_match('/!3d([-.\d]+)!4d([-.\d]+)/', $validatedData['location_link'], $matches)) {
-        $latitude = floatval($matches[1]);
-        $longitude = floatval($matches[2]);
-        
-    }
+                    $latitude = floatval($matches[1]);
+                    $longitude = floatval($matches[2]);
+                }
+
+                // Try to match the "!3dlatitude!4dlongitude" format
+                if (preg_match('/!3d([-.\d]+)!4d([-.\d]+)/', $validatedData['location_link'], $matches)) {
+                    $latitude = floatval($matches[1]);
+                    $longitude = floatval($matches[2]);
+                }
             }
 
             // Create the mall
