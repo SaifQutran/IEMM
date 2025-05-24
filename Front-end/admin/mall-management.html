@@ -37,6 +37,23 @@
           </button>
         </div>
 
+        <div class="form card" id="mall-form" style="display: none">
+          <h3>إضافة مجمع جديد</h3>
+          <div class="form-grid">
+            <input type="text" placeholder="اسم المجمع" />
+            <input type="text" placeholder="اسم المالك" />
+            <input type="text" placeholder="الموقع" />
+            <input type="number" placeholder="عدد الأدوار" />
+          </div>
+          <hr />
+          <h4>بيانات حساب المالك</h4>
+          <div class="form-grid">
+            <input type="text" placeholder="اسم المستخدم" />
+            <input type="email" placeholder="البريد الإلكتروني" />
+            <input type="password" placeholder="كلمة المرور" />
+          </div>
+          <button class="btn-green">إضافة المجمع</button>
+        </div>
         <form action="" id="mall-form" style="display: none" method="post">
           <div class="form card">
             <h3>إضافة مجمع جديد</h3>
@@ -141,6 +158,273 @@
         </div>
       </div>
     </div>
-    <script src="../views/js/admin/mall-mangement.js"></script>
+
+    <!-- إضافة النافذة المنبثقة لعرض بيانات المجمع -->
+    <div id="mallDetailsModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>بيانات المجمع</h3>
+        <div class="mall-details" id="mallDetailsContent">
+          <!-- سيتم إضافة البيانات ديناميكياً -->
+        </div>
+        <button class="btn-green" id="changeOwnerBtn">تغيير مالك المجمع</button>
+
+        <!-- نموذج تغيير المالك -->
+        <div id="changeOwnerForm" style="display: none; margin-top: 20px">
+          <div class="form-grid">
+            <input
+              type="text"
+              id="newOwnerName"
+              placeholder="اسم المالك الجديد"
+            />
+            <input
+              type="email"
+              id="newOwnerEmail"
+              placeholder="البريد الإلكتروني"
+            />
+          </div>
+          <div
+            style="
+              margin-top: 10px;
+              display: flex;
+              gap: 10px;
+              justify-content: flex-start;
+            "
+          >
+            <button class="btn-green" onclick="submitOwnerChange()">
+              حفظ التغييرات
+            </button>
+            <button class="btn-dark" onclick="cancelOwnerChange()">
+              إلغاء
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // بيانات اختبارية للمجمعات
+      const testMalls = [
+        {
+          id: 1,
+          name: "مجمع النخيل مول",
+          owner: "عبدالله العمري",
+          location: "طريق الملك عبدالعزيز",
+          floors: 3,
+          city: "الرياض",
+        },
+        {
+          id: 2,
+          name: "مجمع الراشد",
+          owner: "محمد السعيد",
+          location: "شارع الأمير نايف",
+          floors: 4,
+          city: "المدينة المنورة",
+        },
+        {
+          id: 3,
+          name: "مجمع الأندلس",
+          owner: "سعد القحطاني",
+          location: "طريق الملك فهد",
+          floors: 5,
+          city: "جدة",
+        },
+        {
+          id: 4,
+          name: "مجمع الظهران",
+          owner: "فيصل التركي",
+          location: "شارع الأمير محمد",
+          floors: 3,
+          city: "الدمام",
+        },
+        {
+          id: 5,
+          name: "مجمع حياة مول",
+          owner: "خالد الشمري",
+          location: "طريق الملك خالد",
+          floors: 2,
+          city: "تبوك",
+        },
+        {
+          id: 6,
+          name: "مجمع الواحة",
+          owner: "نواف العتيبي",
+          location: "شارع الستين",
+          floors: 4,
+          city: "أبها",
+        },
+        {
+          id: 7,
+          name: "مجمع القصيم مول",
+          owner: "بندر السليم",
+          location: "طريق عمر بن الخطاب",
+          floors: 3,
+          city: "بريدة",
+        },
+      ];
+
+      // دالة لإضافة البيانات الاختبارية إلى الجدول
+      function populateTableWithTestData() {
+        const tableBody = document.querySelector("table tbody");
+
+        // تفريغ الجدول
+        tableBody.innerHTML = "";
+
+        // إخفاء رسالة التحميل وإظهار الجدول
+        document.getElementById("loading").style.display = "none";
+
+        // إضافة البيانات الاختبارية
+        testMalls.forEach((mall) => {
+          const row = document.createElement("tr");
+
+          // إنشاء خلايا البيانات
+          const nameCell = document.createElement("td");
+          nameCell.textContent = mall.name;
+
+          const ownerCell = document.createElement("td");
+          ownerCell.textContent = mall.owner;
+
+          const locationCell = document.createElement("td");
+          locationCell.textContent = mall.location;
+
+          const floorsCell = document.createElement("td");
+          floorsCell.textContent = mall.floors;
+
+          const cityCell = document.createElement("td");
+          cityCell.textContent = mall.city;
+
+          // إضافة الخلايا إلى الصف
+          row.appendChild(nameCell);
+          row.appendChild(ownerCell);
+          row.appendChild(locationCell);
+          row.appendChild(floorsCell);
+          row.appendChild(cityCell);
+
+          // إضافة أزرار الإجراءات
+          const actionsCell = document.createElement("td");
+
+          // زر العرض
+          const viewBtn = document.createElement("button");
+          viewBtn.className = "btn-icon";
+          viewBtn.innerHTML = "👁️";
+          viewBtn.title = "عرض التفاصيل";
+          viewBtn.onclick = () => showMallDetails(mall);
+
+          // زر الحذف
+          const deleteBtn = document.createElement("button");
+          deleteBtn.className = "btn-icon";
+          deleteBtn.innerHTML = "🗑️";
+          deleteBtn.title = "حذف المجمع";
+          deleteBtn.onclick = () => {
+            if (confirm(`هل أنت متأكد من حذف المجمع: ${mall.name}؟`)) {
+              alert("تم حذف المجمع بنجاح");
+              row.remove();
+            }
+          };
+
+          actionsCell.appendChild(viewBtn);
+          actionsCell.appendChild(deleteBtn);
+          row.appendChild(actionsCell);
+
+          // إضافة الصف إلى الجدول
+          tableBody.appendChild(row);
+        });
+      }
+
+      // استدعاء دالة إضافة البيانات الاختبارية عند تحميل الصفحة
+      document.addEventListener("DOMContentLoaded", function () {
+        // إظهار رسالة التحميل
+        document.getElementById("loading").style.display = "block";
+
+        // محاكاة تأخير الشبكة
+        setTimeout(function () {
+          populateTableWithTestData();
+        }, 1000);
+      });
+    </script>
   </body>
 </html>
+
+<script>
+  // كود للتعامل مع النافذة المنبثقة
+  const modal = document.getElementById("mallDetailsModal");
+  const closeBtn = document.getElementsByClassName("close")[0];
+
+  // إغلاق النافذة عند النقر على زر الإغلاق
+  closeBtn.onclick = function () {
+    modal.style.display = "none";
+  };
+
+  // إغلاق النافذة عند النقر خارجها
+  window.onclick = function (event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  };
+
+  // دالة لعرض بيانات المجمع في النافذة المنبثقة
+  function showMallDetails(mallData) {
+    const detailsContent = document.getElementById("mallDetailsContent");
+
+    // تفريغ المحتوى السابق
+    detailsContent.innerHTML = "";
+
+    // إضافة بيانات المجمع
+    detailsContent.innerHTML += `<p><strong>اسم المجمع:</strong> ${mallData.name}</p>`;
+    detailsContent.innerHTML += `<p><strong>المالك:</strong> ${mallData.owner}</p>`;
+    detailsContent.innerHTML += `<p><strong>الموقع:</strong> ${mallData.location}</p>`;
+    detailsContent.innerHTML += `<p><strong>عدد الطوابق:</strong> ${mallData.floors}</p>`;
+    detailsContent.innerHTML += `<p><strong>المدينة:</strong> ${mallData.city}</p>`;
+
+    // تخزين معرف المجمع للاستخدام في زر تغيير المالك
+    document
+      .getElementById("changeOwnerBtn")
+      .setAttribute("data-mall-id", mallData.id);
+
+    // عرض النافذة
+    modal.style.display = "block";
+  }
+
+  // دالة لتغيير مالك المجمع
+  document
+    .getElementById("changeOwnerBtn")
+    .addEventListener("click", function () {
+      const changeOwnerForm = document.getElementById("changeOwnerForm");
+      changeOwnerForm.style.display =
+        changeOwnerForm.style.display === "none" ? "block" : "none";
+      this.style.display = "none";
+    });
+
+  // دالة لإلغاء تغيير المالك
+  function cancelOwnerChange() {
+    document.getElementById("changeOwnerForm").style.display = "none";
+    document.getElementById("changeOwnerBtn").style.display = "block";
+    document.getElementById("newOwnerName").value = "";
+    document.getElementById("newOwnerEmail").value = "";
+  }
+
+  // دالة لحفظ تغييرات المالك الجديد
+  function submitOwnerChange() {
+    const mallId = document
+      .getElementById("changeOwnerBtn")
+      .getAttribute("data-mall-id");
+    const newOwnerName = document.getElementById("newOwnerName").value;
+    const newOwnerEmail = document.getElementById("newOwnerEmail").value;
+
+    if (!newOwnerName || !newOwnerEmail) {
+      alert("الرجاء إدخال جميع البيانات المطلوبة");
+      return;
+    }
+
+    // هنا يمكن إضافة كود للتحقق من صحة البريد الإلكتروني وإرسال البيانات إلى الخادم
+    alert(
+      `تم تغيير مالك المجمع بنجاح\nالمالك الجديد: ${newOwnerName}\nالبريد الإلكتروني: ${newOwnerEmail}`
+    );
+
+    // إعادة تعيين النموذج
+    cancelOwnerChange();
+
+    // إغلاق النافذة المنبثقة
+    document.getElementById("mallDetailsModal").style.display = "none";
+  }
+</script>

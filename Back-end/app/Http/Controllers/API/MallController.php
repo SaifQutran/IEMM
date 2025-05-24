@@ -182,7 +182,7 @@ class MallController extends Controller
                 'password' => bcrypt($validatedData['password']),
                 'phone' => $validatedData['phone'],
                 'birth_date' => $validatedData['birth_date'],
-                'role' => 1, // Assign the owner role
+                
             ]);
 
             // TODO: Convert location_link to coordinates (latitude and longitude)
