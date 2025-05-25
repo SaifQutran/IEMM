@@ -1,102 +1,147 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>IEMM - لوحة التحكم</title>
-  <link rel="stylesheet" href="../views/css/styles.css">
-  <script src="../views/js/script.js" defer></script>
-</head>
-<body>
-  <header>
-    <div class="container navbar">
-      <h1>IEMM</h1>
-      <nav>
-        <a href="admin-dashboard.html" id="dashboard-link" class="active">📊 لوحة التحكم</a>
-        <a href="mall-management.html" id="malls-link">🏢 إدارة المجمعات</a>
-        <a href="settings.html" id="settings-link">⚙️ الإعدادات العامة</a>
-      </nav>
-      <button class="btn-dark" onclick="document.body.classList.toggle('dark')">الوضع الليلي</button>
-    </div>
-  </header>
+  <head>
+    <!-- Night mode cookie script: must be first -->
+    <script>
+      function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(";");
+        for (var i = 0; i < ca.length; i++) {
+          var c = ca[i];
+          while (c.charAt(0) == " ") c = c.substring(1, c.length);
+          if (c.indexOf(nameEQ) == 0)
+            return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+      }
+      (function applyNightModeFromCookie() {
+        const nightMode = getCookie("nightMode");
+        if (nightMode === "on") {
+          document.documentElement.classList.add("dark");
+          document.body.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+          document.body.classList.remove("dark");
+        }
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IEMM - لوحة التحكم</title>
+    <link rel="stylesheet" href="../views/css/styles.css" />
+  </head>
+  <body>
+    <header>
+      <div class="container navbar">
+        <h1>IEMM</h1>
+        <nav>
+          <a href="admin-dashboard.html" id="dashboard-link" class="active"
+            >📊 لوحة التحكم</a
+          >
+          <a href="mall-management.html" id="malls-link">🏢 إدارة المجمعات</a>
+          <a href="settings.html" id="settings-link">⚙️ الإعدادات العامة</a>
+        </nav>
+        <button class="btn-dark" onclick="toggleNightMode()">
+          الوضع الليلي
+        </button>
+      </div>
+    </header>
 
-  <div class="main">
-    <div class="section active" id="dashboard-section">
-      <h2 class="section-title">📊 لوحة التحكم</h2>
-      <!-- بطاقات الإحصائيات -->
-      <div class="stats-grid">
-        <div class="stat-card">
-          <h3>إجمالي المجمعات</h3>
-          <p class="stat-number">24</p>
-          <p class="stat-change positive">+3 هذا الشهر</p>
-        </div>
-        <div class="stat-card">
-          <h3>إجمالي المحلات</h3>
-          <p class="stat-number">342</p>
-          <p class="stat-change positive">+15 هذا الشهر</p>
-        </div>
-        <div class="stat-card">
-          <h3>المحلات الشاغرة</h3>
-          <p class="stat-number">28</p>
-          <p class="stat-change negative">-5 هذا الشهر</p>
-        </div>
-        <div class="stat-card">
-          <h3>إجمالي عمليات البيع</h3>
-          <p class="stat-number">1,234</p>
-          <p class="stat-change positive">+45 هذا الشهر</p>
-        </div>
-        <div class="stat-card success-card">
-          <h3>العمليات الناجحة</h3>
-          <p class="stat-number">8,547</p>
-          <p class="stat-detail">95% من إجمالي العمليات</p>
-          <div class="progress-bar">
-            <div class="progress" style="width: 95%"></div>
+    <div class="main">
+      <div class="section active" id="dashboard-section">
+        <h2 class="section-title">📊 لوحة التحكم</h2>
+        <!-- بطاقات الإحصائيات -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <h3>إجمالي المجمعات</h3>
+            <p class="stat-number">24</p>
+            <p class="stat-change positive">+3 هذا الشهر</p>
           </div>
-        </div>
-        <div class="stat-card error-card">
-          <h3>العمليات الفاشلة</h3>
-          <p class="stat-number">450</p>
-          <p class="stat-detail">5% من إجمالي العمليات</p>
-          <div class="progress-bar">
-            <div class="progress" style="width: 5%"></div>
+          <div class="stat-card">
+            <h3>إجمالي المحلات</h3>
+            <p class="stat-number">342</p>
+            <p class="stat-change positive">+15 هذا الشهر</p>
           </div>
-        </div>
-        <div class="stat-card info-card">
-          <h3>إجمالي المستخدمين</h3>
-          <p class="stat-number">2,606</p>
-          <div class="stat-details-grid">
-            <div class="stat-detail-item">
-              <span class="detail-label">مدراء المجمعات</span>
-              <span class="detail-value">24</span>
-            </div>
-            <div class="stat-detail-item">
-              <span class="detail-label">مدراء المحلات</span>
-              <span class="detail-value">132</span>
-            </div>
-            <div class="stat-detail-item">
-              <span class="detail-label">العملاء</span>
-              <span class="detail-value">2,450</span>
+          <div class="stat-card">
+            <h3>المحلات الشاغرة</h3>
+            <p class="stat-number">28</p>
+            <p class="stat-change negative">-5 هذا الشهر</p>
+          </div>
+          <div class="stat-card">
+            <h3>إجمالي عمليات البيع</h3>
+            <p class="stat-number">1,234</p>
+            <p class="stat-change positive">+45 هذا الشهر</p>
+          </div>
+          <div class="stat-card success-card">
+            <h3>العمليات الناجحة</h3>
+            <p class="stat-number">8,547</p>
+            <p class="stat-detail">95% من إجمالي العمليات</p>
+            <div class="progress-bar">
+              <div class="progress" style="width: 95%"></div>
             </div>
           </div>
-        </div>
-        <div class="stat-card primary-card">
-          <h3>الزيارات اليومية</h3>
-          <p class="stat-number">2,547</p>
-          <div class="stat-details-grid">
-            <div class="stat-detail-item">
-              <span class="detail-label">زيارات جديدة</span>
-              <span class="detail-value">65%</span>
+          <div class="stat-card error-card">
+            <h3>العمليات الفاشلة</h3>
+            <p class="stat-number">450</p>
+            <p class="stat-detail">5% من إجمالي العمليات</p>
+            <div class="progress-bar">
+              <div class="progress" style="width: 5%"></div>
             </div>
-            <div class="stat-detail-item">
-              <span class="detail-label">زيارات متكررة</span>
-              <span class="detail-value">35%</span>
+          </div>
+          <div class="stat-card info-card">
+            <h3>إجمالي المستخدمين</h3>
+            <p class="stat-number">2,606</p>
+            <div class="stat-details-grid">
+              <div class="stat-detail-item">
+                <span class="detail-label">مدراء المجمعات</span>
+                <span class="detail-value">24</span>
+              </div>
+              <div class="stat-detail-item">
+                <span class="detail-label">مدراء المحلات</span>
+                <span class="detail-value">132</span>
+              </div>
+              <div class="stat-detail-item">
+                <span class="detail-label">العملاء</span>
+                <span class="detail-value">2,450</span>
+              </div>
+            </div>
+          </div>
+          <div class="stat-card primary-card">
+            <h3>الزيارات اليومية</h3>
+            <p class="stat-number">2,547</p>
+            <div class="stat-details-grid">
+              <div class="stat-detail-item">
+                <span class="detail-label">زيارات جديدة</span>
+                <span class="detail-value">65%</span>
+              </div>
+              <div class="stat-detail-item">
+                <span class="detail-label">زيارات متكررة</span>
+                <span class="detail-value">35%</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <script src="../views/js/admin/admin-dashboard.js"></script>
-</body>
+    <!-- All JS scripts at the end for best performance -->
+    <script src="../views/js/script.js"></script>
+    <script src="../views/js/admin/admin-dashboard.js"></script>
+    <script>
+      function toggleNightMode() {
+        document.body.classList.toggle("dark");
+        document.documentElement.classList.toggle("dark");
+        var expires = "";
+        var days = 365;
+        var date = new Date();
+        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+        expires = "; expires=" + date.toUTCString();
+        document.cookie =
+          "nightMode=" +
+          (document.body.classList.contains("dark") ? "on" : "off") +
+          expires +
+          "; path=/";
+      }
+    </script>
+  </body>
 </html>

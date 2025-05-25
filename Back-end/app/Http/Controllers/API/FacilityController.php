@@ -10,11 +10,24 @@ class FacilityController extends Controller
 {
     public function index()
     {
+        $facilities = Facility::with(['shop.owner', 'floor'])->get()->map(function ($facility) {
+            // Tenant name
+            $facility->owner_name = $facility->shop && $facility->shop->owner ? $facility->shop->owner->f_name . ' ' . $facility->shop->owner->l_name : null;
+            // Shop name
+            $facility->shop_name = $facility->shop ? $facility->shop->name : null;
+            // Space
+            $facility->space = ($facility->width && $facility->length) ? ($facility->width * $facility->length) : null;
+            // Floor number
+            $facility->floor_number = $facility->floor ? $facility->floor->floor_number : null;
+            $facility->facility_state = $facility->status == 'ture' ? "مستأجر" : "فارغ";
+            unset($facility->floor,  $facility->shop);
+            return $facility;
+        });
         return response()->json([
             'status' => 'success',
             'code' => 200,
             'message' => 'تم استرجاع المرافق بنجاح',
-            'data' => Facility::all()
+            'data' => $facilities
         ]);
     }
 

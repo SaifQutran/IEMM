@@ -77,6 +77,9 @@ Route::apiResource('cities', CityController::class);
 Route::get('/cities/{id}/malls', [CityController::class, 'malls']);
 Route::get('/cities/{id}/malls/shops', [CityController::class, 'shops']);
 
+
+
+
 // Companies
 // get : /companies
 // get : /companies/{id}
@@ -106,6 +109,7 @@ Route::get('/user', function (Request $request) {
 // get : /malls/{id}/chats
 // get : /malls/{id}/products
 // get : /malls/{id}/all_products
+//put : /malls/${mallId}/owner
 Route::apiResource('malls', MallController::class);
 Route::get('/malls/{id}/shops', [MallController::class, 'shops']);
 Route::get('/malls/{id}/facilities', [MallController::class, 'facilities']);
@@ -113,6 +117,7 @@ Route::get('/malls/{id}/floors', [MallController::class, 'floors']);
 Route::get('/malls/{id}/chats', [MallController::class, 'facilities']);
 Route::get('/malls/{id}/products', [MallController::class, 'products']);
 Route::get('/malls/{id}/all_products', [MallController::class, 'products']);
+Route::put('/malls/{id}/owner', [MallController::class, 'changeTheOwner']);
 
 // Facilities
 // get : /facilities
