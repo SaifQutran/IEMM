@@ -2,8 +2,25 @@ class ThemeManager {
     constructor() {
         this.themeCookieName = 'theme_preference';
         this.darkThemeClass = 'dark';
+        this.buttonText = {
+            light: 'الوضع الليلي',
+            dark: 'الوضع النهاري'
+        };
+        this.addTransitionStyles() ;
         this.initializeTheme();
         this.initializeEventListeners();
+    }
+    addTransitionStyles() {
+        const style = document.createElement('style');
+        style.textContent = `
+            html,body {
+                transition: background-color .8s ease-in-out , color 0.3s ease-in-out;
+            }
+            .btn-dark {
+                transition: background-color .8s ease-in-out, color 0.3s ease-in-out;
+            }
+        `;
+        document.head.appendChild(style);
     }
 
     // Initialize theme based on cookie
@@ -14,24 +31,35 @@ class ThemeManager {
         } else {
             document.body.classList.remove(this.darkThemeClass);
         }
+        this.updateButtonText(document.getElementsByClassName('btn-dark')[0]);
     }
 
     // Initialize event listeners for theme toggle buttons
     initializeEventListeners() {
         document.querySelectorAll('.btn-dark').forEach(button => {
             button.addEventListener('click', () => {
-                this.toggleTheme();
+                this.toggleTheme(button);
+                
                 // button.textContent = currentTheme === ThemeManager.THEMES.DARK ? 'Switch to Light Mode' : 'Switch to Dark Mode';
             });
         });
+        // document.querySelectorAll('.btn-dark').forEach(button => {
+        //     button.addEventListener('click', () => {
+        //         this.toggleTheme(button);
+        //     });
+        // });
     }
 
     // Toggle theme and update cookie
-    toggleTheme() {
+    toggleTheme(button) {
         const isDark = document.body.classList.toggle(this.darkThemeClass);
         this.setThemeCookie(isDark ? 'dark' : 'light');
+        this.updateButtonText(button);
     }
-
+    updateButtonText(button) {
+        const isDark = document.body.classList.contains(this.darkThemeClass);
+        button.textContent = isDark ? this.buttonText.dark : this.buttonText.light;
+    } 
     // Get theme from cookie
     getThemeCookie() {
         const cookies = document.cookie.split(';');
@@ -56,10 +84,5 @@ class ThemeManager {
 // Initialize theme manager when document is ready
 document.addEventListener('DOMContentLoaded', () => {
     window.themeManager = new ThemeManager();
-    // document.getElementsByClassName('btn-dark').onclick(function(){
-    //     // document.body.classList.toggle('dark');
-    //     // document.getElementsByClassName('convert').textContent=currentTheme === themeManager.THEMES.DARK ? 'Switch to Light Mode' : 'Switch to Dark Mode';
-       
-    // });
    
 }); 

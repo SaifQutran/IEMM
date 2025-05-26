@@ -75,7 +75,7 @@ body {
   font-family: "Cairo", Arial, sans-serif;
   background: #f9fafb;
   color: #1e293b;
-  transition: background 0.3s, color 0.3s ;
+  transition: background 0.3s , color 0.3s ;
 }
 
 body.dark,
