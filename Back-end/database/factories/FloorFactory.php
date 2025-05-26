@@ -25,11 +25,14 @@ class FloorFactory extends Factory
      */
     public function definition(): array
     {
+        $mall = Mall::factory()->create();
+        $maxFloor = Floor::where('mall_id', $mall->id)->max('floor_number') ?? 0;
+
         return [
             'length' => $this->faker->randomFloat(2, 50, 200),
             'width' => $this->faker->randomFloat(2, 50, 200),
-            'floor_number' => $this->faker->numberBetween(1, 10),
-            'mall_id' => Mall::factory()
+            'floor_number' => $maxFloor + 1,
+            'mall_id' => $mall->id
         ];
     }
-} 
+}

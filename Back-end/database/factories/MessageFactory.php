@@ -16,8 +16,21 @@ class MessageFactory extends Factory
      */
     public function definition(): array
     {
+        $messages = [
+            'الرجاء مراجعة فاتورة الماء',
+            'الرجاء مراجعة فاتورة الكهرباء',
+            'الرجاء الاستعجال في تسديد المتأخرات من الإيجار',
+            'تم تسديد المبلغ يرجى مراجعة السجلات',
+            'يرجى مراجعة المدفوعات المعلقة',
+            'تم استلام الدفعة الشهرية',
+            'يرجى تحديث بيانات الفواتير',
+            'تم تسجيل شكوى جديدة بخصوص الفواتير',
+            'يرجى مراجعة كشف الحساب الشهري',
+            'تم إصدار فاتورة جديدة'
+        ];
+
         return [
-            'content' => $this->faker->text(),
+            'content' => $this->faker->randomElement($messages),
             'sender_type' => $this->faker->boolean(),
             'sender_id' => $this->faker->numberBetween(1, 50),
             'chat_id' => $this->faker->numberBetween(1, 40),
