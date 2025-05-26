@@ -5,11 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>IEMM - إدارة المحلات</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="../views/css/styles.css">
     <link rel="stylesheet" href="../views/css/malls-dashbboard/mall.css">
     <link rel="stylesheet" href="../views/css/chat.css">
     <script src="../views/js/script.js" defer></script>
     <script src="../views/js/chat.js" defer></script>
+    <script src="../views/js/mall-management/stores-management.js" defer></script>
+    <script src="../views/js/theme-manager.js" defer></script>
     <!-- إضافة مكتبة Font Awesome للأيقونات -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   </head>
@@ -24,7 +27,8 @@
         <a href="bills.html" id="bills-link">💰 الفواتير</a>   
       </nav>
       <div style="display: flex; align-items: center; gap: 12px;">
-        <button class="btn-dark" onclick="document.body.classList.toggle('dark')">الوضع الليلي</button>
+        <button class="btn-dark" >الوضع الليلي</button>
+        <!-- <button class="btn-dark " onclick="document.body.classList.toggle('dark')">الوضع الليلي</button> -->
         <button id="chat-toggle" class="chat-toggle-btn" title="الدردشة مع أصحاب المحلات">
           <i class="fas fa-comments"></i>
         </button>
@@ -94,7 +98,7 @@
               <div class="table-header">
                 <h3>قائمة المحلات</h3>
                 <button class="btn-green" onclick="openNewStoreForm()">➕ إضافة محل جديد</button>
-                <div class="form-container" id="newStoreFormContainer" style="display:none;">
+                <form class="form-container" id="newStoreFormContainer" style="display:none;">
                   <div class="form card">
                     <h3>إضافة محل جديد</h3>
                     <div class="form-grid">
@@ -117,9 +121,9 @@
                     </div>
                     <button class="btn-green">حفظ</button>
                   </div>
-                </div>
+                </form>
               </div>
-              <div class="table-wrapper">
+              <div class="table-wrapper   ">
                 <table>
                   <thead>
                     <tr>
@@ -132,8 +136,8 @@
                       <th>الإجراءات</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    <tr>
+                  <tbody class="stores-table">
+                    <!-- <tr>
                       <td>A101</td>
                       <td>الأرضي</td>
                       <td>مطعم</td>
@@ -152,7 +156,7 @@
                       <td>ملابس</td>
                       <td>85 م²</td>
                       <td>متاح</td>
-                      <td>-</td>
+                      <td>-</td> -->
                       <td>
                         <button class="btn-green btn-sm">تعيين مستأجر</button>
                         <button class="btn-icon" title="تغيير الحالة">🔄</button>
