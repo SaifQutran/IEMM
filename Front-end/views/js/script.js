@@ -156,11 +156,11 @@ const mallsChart = new Chart(
 // تهيئة الوضع الليلي
 document.addEventListener('DOMContentLoaded', () => {
   // إضافة مستمع لزر الوضع الليلي
-  // document.querySelectorAll('.btn-dark').forEach(button => {
-  //   button.addEventListener('click', () => {
-  //     document.body.classList.toggle('dark');
-  //   });
-  // });
+  document.querySelectorAll('.btn-dark').forEach(button => {
+    button.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+    });
+  });
 
   // تهيئة الرسوم البيانية في لوحة تحكم المحل
   if (document.getElementById('weeklySalesChart')) {
@@ -517,7 +517,6 @@ function updateAllCharts() {
 // إضافة مستمع لزر تغيير الوضع
 document.querySelectorAll('.btn-dark').forEach(button => {
   button.addEventListener('click', () => {
-    alert("enter");
     setTimeout(updateAllCharts, 100);
   });
 });

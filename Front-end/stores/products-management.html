@@ -7,10 +7,11 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="../views/css/styles.css">
   <link rel="stylesheet" href="../views/css/chat.css">
+  <link rel="stylesheet" href="../views/css/product-modal.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="../views/js/script.js" defer></script>
   <script src="../views/js/stores/chat.js" defer></script>
-  <script src="../views/js/theme-manager.js" defer></script>
+  <script src="../views/js/stores/product-modal.js" defer></script>
 </head>
 <body>
   <!-- Header Section -->
@@ -26,8 +27,7 @@
         <a href="bills-stores.html" id="bills-link">💰 الفواتير</a>
       </nav>
       <div style="display: flex; align-items: center; gap: 12px;">
-        <button class="btn-dark">الوضع الليلي</button>
-        <!-- <button class="btn-dark" onclick="document.body.classList.toggle('dark')">الوضع الليلي</button> -->
+        <button class="btn-dark" onclick="document.body.classList.toggle('dark')">الوضع الليلي</button>
         <button id="chat-toggle" class="chat-toggle-btn" title="الدردشة مع مدير المول">
           <i class="fas fa-comments"></i>
         </button>
@@ -483,11 +483,131 @@
       }
     }
 
+    // تعديل دالة عرض المنتج لاستدعاء الدالة من ملف product-modal.js
     function viewProduct(id) {
-      alert(`عرض تفاصيل المنتج رقم ${id}`);
-      // هنا يمكن فتح نافذة منبثقة لعرض تفاصيل كاملة للمنتج
+        if (typeof viewProductDetails === 'function') {
+            viewProductDetails(id);
+        } else {
+            console.error('لم يتم تحميل ملف product-modal.js بشكل صحيح');
+        }
     }
   </script>
   <script src="../views/js/stores/index.js"></script>
 </body>
 </html>
+
+  <!-- نافذة تفاصيل المنتج المنبثقة -->
+  <div id="productDetailsModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-product-title">تفاصيل المنتج</h3>
+        <button class="btn-close" onclick="closeProductModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <!-- معلومات المنتج -->
+        <div class="details-section">
+          <h4>معلومات المنتج</h4>
+          <div class="product-info-grid" id="product-info-container">
+            <!-- سيتم ملؤها بواسطة JavaScript -->
+          </div>
+        </div>
+
+        <!-- التعليقات والتقييمات -->
+        <div class="details-section">
+          <h4>التعليقات والتقييمات</h4>
+          <div class="reviews-container">
+            <div class="rating-summary">
+              <div class="average-rating">
+                <div class="average-rating-value" id="average-rating-value">0.0</div>
+                <div class="stars" id="average-rating-stars">★★★★★</div>
+                <div id="total-reviews">0 تقييم</div>
+              </div>
+              <div class="rating-bars" id="rating-bars-container">
+                <!-- سيتم ملؤها بواسطة JavaScript -->
+              </div>
+            </div>
+            <div class="reviews-list" id="reviews-list-container">
+              <!-- سيتم ملؤها بواسطة JavaScript -->
+            </div>
+          </div>
+        </div>
+
+        <!-- تفاصيل المخزون -->
+        <div class="details-section">
+          <h4>تفاصيل المخزون</h4>
+          <table class="inventory-table">
+            <thead>
+              <tr>
+                <th>المخزن</th>
+                <th>الكمية</th>
+                <th>الحالة</th>
+                <th>آخر تحديث</th>
+              </tr>
+            </thead>
+            <tbody id="inventory-table-body">
+              <!-- سيتم ملؤها بواسطة JavaScript -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- تفاصيل المبيعات -->
+        <div class="details-section">
+          <h4>تفاصيل المبيعات</h4>
+          <div class="sales-stats-container">
+            <div class="sales-stats-grid">
+              <div class="stat-card">
+                <div class="stat-title">إجمالي المبيعات</div>
+                <div class="stat-value" id="total-sales">0</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-title">الإيرادات</div>
+                <div class="stat-value" id="total-revenue">0 ريال</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-title">متوسط التقييم</div>
+                <div class="stat-value" id="avg-rating">0.0</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-title">عدد التعليقات</div>
+                <div class="stat-value" id="reviews-count">0</div>
+              </div>
+            </div>
+            <div class="sales-charts">
+              <div class="chart-container">
+                <h5>توزيع المبيعات حسب العمر</h5>
+                <canvas id="age-chart"></canvas>
+              </div>
+              <div class="chart-container">
+                <h5>توزيع المبيعات حسب الجنس</h5>
+                <canvas id="gender-chart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة تعديل حقل -->
+  <div id="editFieldModal" class="modal">
+    <div class="modal-content edit-field-modal">
+      <div class="modal-header">
+        <h3 id="edit-field-title">تعديل الحقل</h3>
+        <button class="btn-close" onclick="closeEditFieldModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label id="edit-field-label">قيمة الحقل</label>
+          <input type="text" id="edit-field-input" />
+        </div>
+        <div class="form-actions">
+          <button class="btn-green" onclick="saveFieldEdit()">حفظ</button>
+          <button class="btn-secondary" onclick="closeEditFieldModal()">إلغاء</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- إضافة ملفات CSS و JavaScript -->
+  <link rel="stylesheet" href="../views/css/product-modal.css">
+  <script src="../views/js/stores/product-modal.js"></script>
