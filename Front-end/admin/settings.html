@@ -15,13 +15,19 @@
         return null;
       }
       (function applyNightModeFromCookie() {
-        const nightMode = getCookie("nightMode");
-        if (nightMode === "on") {
-          document.documentElement.classList.add("dark");
-          document.body.classList.add("dark");
+        const body = document.body;
+        const toggleElement = document.getElementById("night-mode-toggle");
+
+        if (!body || !toggleElement) return;
+
+        const nightMode = getCookie("nightMode"); // مثلاً لو عندك كود يجيب الكوكي
+
+        if (nightMode === "true") {
+          body.classList.add("dark");
+          toggleElement.classList.add("active");
         } else {
-          document.documentElement.classList.remove("dark");
-          document.body.classList.remove("dark");
+          body.classList.remove("dark");
+          toggleElement.classList.remove("active");
         }
       })();
     </script>
@@ -66,6 +72,7 @@
     </div>
 
     <!-- All JS scripts at the end for best performance -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="../views/js/script.js"></script>
     <script>
       function toggleNightMode() {
@@ -84,5 +91,6 @@
         // Optional: console.log("Cookie after set:", document.cookie);
       }
     </script>
+    <script src="../views/js/admin/mall-mangement.js"></script>
   </body>
 </html>

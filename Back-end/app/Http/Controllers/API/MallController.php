@@ -49,7 +49,7 @@ class MallController extends Controller
             $shop->floor = $shop->facility && $shop->facility->floor ? $shop->facility->floor->floor_number : null;
             $shop->shop_state = $shop->state == 'ture' ? "مفتوح" : "مغلق";
             // Space (area)
-     
+
             // Categories
             $shop->categories_names = $shop->categories ? $shop->categories->pluck('name')->all() : [];
             unset($shop->categories, $shop->facility);
@@ -60,6 +60,64 @@ class MallController extends Controller
             'code' => 200,
             'message' => 'تم استرجاع المحلات بنجاح',
             'data' => $shops
+        ]);
+    }
+    public function shopsOwners($id)
+    {
+        $mall = Mall::find($id);
+
+        if (!$mall) {
+            return response()->json([
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'المول غير موجود',
+                'data' => null
+            ], 404);
+        }
+
+        // Get all shops in the mall with their owners and facilities
+        $shops = $mall->shops()
+            ->with(['owner', 'facility.floor'])
+            ->get();
+
+        // Group shops by owner
+        $owners = [];
+        foreach ($shops as $shop) {
+            if (!$shop->owner) continue;
+
+            $ownerId = $shop->owner->id;
+            if (!isset($owners[$ownerId])) {
+                $owners[$ownerId] = [
+                    'owner_name' => $shop->owner->f_name . ' ' . $shop->owner->l_name,
+                    'owner_email' => $shop->owner->email,
+                    'phone' => $shop->owner->phone,
+                    'facilities' => []
+                ];
+            }
+
+            // Add facility with floor number if it exists
+            if ($shop->facility && $shop->facility->floor) {
+                $owners[$ownerId]['facilities'][] = [
+                    'facility_id' => $shop->facility->id,
+                    'floor_number' => $shop->facility->floor->floor_number
+                ];
+            }
+        }
+
+        // Convert to array and format facilities as requested
+        $formattedOwners = array_map(function ($owner) {
+            $owner['facilities'] = array_map(
+                fn($facility) => "{$facility['facility_id']}({$facility['floor_number']})",
+                $owner['facilities']
+            );
+            return $owner;
+        }, array_values($owners));
+
+        return response()->json([
+            'status' => 'success',
+            'code' => 200,
+            'message' => 'تم استرجاع بيانات الملاك بنجاح',
+            'data' => $formattedOwners
         ]);
     }
     public function products($id)
