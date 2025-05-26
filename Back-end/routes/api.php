@@ -256,10 +256,10 @@ Route::prefix('auth')->group(function () {
 // post : /users
 // delete : /users/{id}
 // put : /users/{id}
-// Route::apiResource('users', UserController::class);
-Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('users', UserController::class);
-});
+Route::apiResource('users', UserController::class);
+// Route::middleware('auth:sanctum')->group(function () {
+//     Route::apiResource('users', UserController::class);
+// });
 
 /*
 Note: apiResource automatically creates the following routes for each resource:
