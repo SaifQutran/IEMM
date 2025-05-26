@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\CountryController;
+use App\Http\Controllers\API\AdminPageController;
 use App\Http\Controllers\API\GovernorateController;
 use App\Http\Controllers\API\CityController;
 use App\Http\Controllers\API\CompanyController;
@@ -63,6 +64,8 @@ Route::apiResource('governorates', GovernorateController::class);
 
 Route::apiResource('categories', CategoryController::class);
 Route::get('/categories/{category}/products', [CategoryController::class, 'products']);
+// For Admin Page
+Route::get('/admin', [AdminPageController::class, 'index']);
 
 // Cities
 // get : /cities
@@ -76,6 +79,9 @@ Route::get('/categories/{category}/products', [CategoryController::class, 'produ
 Route::apiResource('cities', CityController::class);
 Route::get('/cities/{id}/malls', [CityController::class, 'malls']);
 Route::get('/cities/{id}/malls/shops', [CityController::class, 'shops']);
+
+
+
 
 // Companies
 // get : /companies
@@ -104,15 +110,19 @@ Route::get('/user', function (Request $request) {
 // get : /malls/{id}/shops
 // get : /malls/{id}/facilities
 // get : /malls/{id}/chats
+// get : /malls/{id}/shops/owners
 // get : /malls/{id}/products
 // get : /malls/{id}/all_products
+//put : /malls/${mallId}/owner
 Route::apiResource('malls', MallController::class);
 Route::get('/malls/{id}/shops', [MallController::class, 'shops']);
+Route::get('/malls/{id}/shops/owners', [MallController::class, 'shopsOwners']);
 Route::get('/malls/{id}/facilities', [MallController::class, 'facilities']);
 Route::get('/malls/{id}/floors', [MallController::class, 'floors']);
 Route::get('/malls/{id}/chats', [MallController::class, 'facilities']);
 Route::get('/malls/{id}/products', [MallController::class, 'products']);
 Route::get('/malls/{id}/all_products', [MallController::class, 'products']);
+Route::put('/malls/{id}/owner', [MallController::class, 'changeTheOwner']);
 
 // Facilities
 // get : /facilities

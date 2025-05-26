@@ -4,7 +4,10 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Mall;
+use App\Models\Facility;
+use App\Models\Shop;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
 class MallController extends Controller
 {
@@ -37,12 +40,84 @@ class MallController extends Controller
                 'data' => null
             ], 404);
         }
+        // Eager load relations for efficiency
+        $shops = $mall->shops()->with(['owner', 'facility.floor', 'categories'])->get()->map(function ($shop) {
+            // Owner name
+            $shop->owner_name = $shop->owner ? $shop->owner->f_name . ' ' . $shop->owner->l_name : null;
+            unset($shop->owner);
+            // Floor info
+            $shop->floor = $shop->facility && $shop->facility->floor ? $shop->facility->floor->floor_number : null;
+            $shop->shop_state = $shop->state == 'ture' ? "مفتوح" : "مغلق";
+            // Space (area)
 
+            // Categories
+            $shop->categories_names = $shop->categories ? $shop->categories->pluck('name')->all() : [];
+            unset($shop->categories, $shop->facility);
+            return $shop;
+        });
         return response()->json([
             'status' => 'success',
             'code' => 200,
             'message' => 'تم استرجاع المحلات بنجاح',
-            'data' => $mall->shops
+            'data' => $shops
+        ]);
+    }
+    public function shopsOwners($id)
+    {
+        $mall = Mall::find($id);
+
+        if (!$mall) {
+            return response()->json([
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'المول غير موجود',
+                'data' => null
+            ], 404);
+        }
+
+        // Get all shops in the mall with their owners and facilities
+        $shops = $mall->shops()
+            ->with(['owner', 'facility.floor'])
+            ->get();
+
+        // Group shops by owner
+        $owners = [];
+        foreach ($shops as $shop) {
+            if (!$shop->owner) continue;
+
+            $ownerId = $shop->owner->id;
+            if (!isset($owners[$ownerId])) {
+                $owners[$ownerId] = [
+                    'owner_name' => $shop->owner->f_name . ' ' . $shop->owner->l_name,
+                    'owner_email' => $shop->owner->email,
+                    'phone' => $shop->owner->phone,
+                    'facilities' => []
+                ];
+            }
+
+            // Add facility with floor number if it exists
+            if ($shop->facility && $shop->facility->floor) {
+                $owners[$ownerId]['facilities'][] = [
+                    'facility_id' => $shop->facility->id,
+                    'floor_number' => $shop->facility->floor->floor_number
+                ];
+            }
+        }
+
+        // Convert to array and format facilities as requested
+        $formattedOwners = array_map(function ($owner) {
+            $owner['facilities'] = array_map(
+                fn($facility) => "{$facility['facility_id']}({$facility['floor_number']})",
+                $owner['facilities']
+            );
+            return $owner;
+        }, array_values($owners));
+
+        return response()->json([
+            'status' => 'success',
+            'code' => 200,
+            'message' => 'تم استرجاع بيانات الملاك بنجاح',
+            'data' => $formattedOwners
         ]);
     }
     public function products($id)
@@ -93,7 +168,19 @@ class MallController extends Controller
     public function facilities($id)
     {
         $mall = Mall::find($id);
-
+        $facilities = Facility::with(['shop.owner', 'floor'])->where(['mall_id'])->get()->map(function ($facility) {
+            // Tenant name
+            $facility->owner_name = $facility->shop && $facility->shop->owner ? $facility->shop->owner->f_name . ' ' . $facility->shop->owner->l_name : null;
+            // Shop name
+            $facility->shop_name = $facility->shop ? $facility->shop->name : null;
+            // Space
+            $facility->space = ($facility->width && $facility->length) ? ($facility->width * $facility->length) : null;
+            // Floor number
+            $facility->floor_number = $facility->floor ? $facility->floor->floor_number : null;
+            $facility->facility_state = $facility->status == 'ture' ? "مستأجر" : "فارغ";
+            unset($facility->floor,  $facility->shop);
+            return $facility;
+        });
         if (!$mall) {
             return response()->json([
                 'status' => 'error',
@@ -107,7 +194,7 @@ class MallController extends Controller
             'status' => 'success',
             'code' => 200,
             'message' => 'تم استرجاع المنشأت بنجاح',
-            'data' => $mall->facilities
+            'data' => $facilities
         ]);
     }
     public function chats($id)
@@ -182,7 +269,7 @@ class MallController extends Controller
                 'password' => bcrypt($validatedData['password']),
                 'phone' => $validatedData['phone'],
                 'birth_date' => $validatedData['birth_date'],
-                
+
             ]);
 
             // TODO: Convert location_link to coordinates (latitude and longitude)
@@ -240,6 +327,71 @@ class MallController extends Controller
                 'status' => 'error',
                 'code' => 500,
                 'message' => 'حدث خطأ أثناء إنشاء المجمع والمستخدم والطوابق',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+    public function changeTheOwner(Request $request, $id)
+    {
+        $mall = Mall::find($id);
+        if (!$mall) {
+            return response()->json([
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'المول غير موجود',
+                'data' => null
+            ]);
+        }
+
+        try {
+            // Validate incoming request data
+            $validatedData = $request->validate([
+                'owner_name' => 'required|string|max:255',
+                'username' => 'required|string|unique:users',
+                'email' => 'required|string|email|unique:users',
+                'sex' => 'required|in:true,false',
+                'password' => 'required|string|min:8',
+                'phone' => 'required|string|max:20',
+                'birth_date' => 'required|date',
+
+            ]);
+            //  edit the past owner change its user_type or delete the user
+            // Create the user (owner)
+            $user = \App\Models\User::create([
+                'f_name' => strtok($validatedData['owner_name'], ' '), // Extract first name
+                'l_name' => substr($validatedData['owner_name'], strpos($validatedData['owner_name'], ' ') + 1), // Extract last name
+                'username' => $validatedData['username'],
+                'email' => $validatedData['email'],
+                'sex' => $validatedData['sex'] === 'true', // Convert string to boolean
+                'user_type' => 1, // Convert string to boolean
+                'password' => bcrypt($validatedData['password']),
+                'phone' => $validatedData['phone'],
+                'birth_date' => $validatedData['birth_date'],
+
+            ]);
+
+            $mall->owner_id = $user->id;
+            $mall->save();
+
+
+            return response()->json([
+                'status' => 'success',
+                'code' => 201,
+                'message' => 'تم تعديل المالك بنجاح',
+                'data' => $mall
+            ], 201);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'status' => 'error',
+                'code' => 422,
+                'message' => 'خطأ في التحقق من البيانات',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'code' => 500,
+                'message' => 'حدث خطأ أثناء تعديل المالك',
                 'error' => $e->getMessage()
             ], 500);
         }
