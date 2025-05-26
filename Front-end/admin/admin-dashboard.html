@@ -6,7 +6,6 @@
   <title>IEMM - لوحة التحكم</title>
   <link rel="stylesheet" href="../views/css/styles.css">
   <script src="../views/js/script.js" defer></script>
-  <script src="../views/js/theme-manager.js" defer></script>
 </head>
 <body>
   <header>
@@ -17,22 +16,87 @@
         <a href="mall-management.html" id="malls-link">🏢 إدارة المجمعات</a>
         <a href="settings.html" id="settings-link">⚙️ الإعدادات العامة</a>
       </nav>
-      <button class="btn-dark">الوضع الليلي</button>
-      <!-- <button class="btn-dark" onclick="document.body.classList.toggle('dark')">الوضع الليلي</button> -->
+      <button class="btn-dark" onclick="document.body.classList.toggle('dark')">الوضع الليلي</button>
     </div>
   </header>
-  
-    <div class="main">
-      <div class="section active" id="dashboard-section">
-        <h2 class="section-title">📊 لوحة التحكم</h2>
-        <!-- بطاقات الإحصائيات -->
-        <div class="stats-grid"></div>
+
+  <div class="main">
+    <div class="section active" id="dashboard-section">
+      <h2 class="section-title">📊 لوحة التحكم</h2>
+      <!-- بطاقات الإحصائيات -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h3>إجمالي المجمعات</h3>
+          <p class="stat-number">24</p>
+          <p class="stat-change positive">+3 هذا الشهر</p>
+        </div>
+        <div class="stat-card">
+          <h3>إجمالي المحلات</h3>
+          <p class="stat-number">342</p>
+          <p class="stat-change positive">+15 هذا الشهر</p>
+        </div>
+        <div class="stat-card">
+          <h3>المحلات الشاغرة</h3>
+          <p class="stat-number">28</p>
+          <p class="stat-change negative">-5 هذا الشهر</p>
+        </div>
+        <div class="stat-card">
+          <h3>إجمالي عمليات البيع</h3>
+          <p class="stat-number">1,234</p>
+          <p class="stat-change positive">+45 هذا الشهر</p>
+        </div>
+        <div class="stat-card success-card">
+          <h3>العمليات الناجحة</h3>
+          <p class="stat-number">8,547</p>
+          <p class="stat-detail">95% من إجمالي العمليات</p>
+          <div class="progress-bar">
+            <div class="progress" style="width: 95%"></div>
+          </div>
+        </div>
+        <div class="stat-card error-card">
+          <h3>العمليات الفاشلة</h3>
+          <p class="stat-number">450</p>
+          <p class="stat-detail">5% من إجمالي العمليات</p>
+          <div class="progress-bar">
+            <div class="progress" style="width: 5%"></div>
+          </div>
+        </div>
+        <div class="stat-card info-card">
+          <h3>إجمالي المستخدمين</h3>
+          <p class="stat-number">2,606</p>
+          <div class="stat-details-grid">
+            <div class="stat-detail-item">
+              <span class="detail-label">مدراء المجمعات</span>
+              <span class="detail-value">24</span>
+            </div>
+            <div class="stat-detail-item">
+              <span class="detail-label">مدراء المحلات</span>
+              <span class="detail-value">132</span>
+            </div>
+            <div class="stat-detail-item">
+              <span class="detail-label">العملاء</span>
+              <span class="detail-value">2,450</span>
+            </div>
+          </div>
+        </div>
+        <div class="stat-card primary-card">
+          <h3>الزيارات اليومية</h3>
+          <p class="stat-number">2,547</p>
+          <div class="stat-details-grid">
+            <div class="stat-detail-item">
+              <span class="detail-label">زيارات جديدة</span>
+              <span class="detail-value">65%</span>
+            </div>
+            <div class="stat-detail-item">
+              <span class="detail-label">زيارات متكررة</span>
+              <span class="detail-value">35%</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+  </div>
 
-    <!-- All JS scripts at the end for best performance -->
-    <script src="../views/js/script.js"></script>
-    <script src="../views/js/admin/admin-dashboard.js"></script>
-    <script src="../views/js/admin/mall-mangement.js"></script>
-  </body>
+  <script src="../views/js/admin/admin-dashboard.js"></script>
+</body>
 </html>

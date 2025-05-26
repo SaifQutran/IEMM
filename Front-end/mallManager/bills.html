@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="../views/css/chat.css">
     <script src="../views/js/script.js" defer></script>
     <script src="../views/js/chat.js" defer></script>
-    <script src="../views/js/theme-manager.js" defer></script>
     <!-- إضافة مكتبة Font Awesome للأيقونات -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   </head>
@@ -20,13 +19,12 @@
     <div class="container navbar">
       <h1>IEMM</h1>
       <nav>
-        <a href="mall-dashboard.html" id="dashboard-link">📊 لوحة التحكم</a>
-        <a href="stores-management.html" id="stores-link">🏪 إدارة المحلات</a>
-        <a href="bills.html" id="bills-link" class="active">💰 الفواتير</a>   
+        <a href="mall-dashboard.html" id="dashboard-link"><i class="fas fa-chart-line"></i> لوحة التحكم</a>
+        <a href="stores-management.html" id="stores-link"><i class="fas fa-store"></i> إدارة المحلات</a>
+        <a href="bills.html" id="bills-link" class="active"><i class="fas fa-file-invoice-dollar"></i> الفواتير</a>   
       </nav>
       <div style="display: flex; align-items: center; gap: 12px;">
-        <button class="btn-dark">الوضع الليلي</button>
-        <!-- <button class="btn-dark" onclick="document.body.classList.toggle('dark')">الوضع الليلي</button> -->
+        <button class="btn-dark" onclick="document.body.classList.toggle('dark')">الوضع الليلي</button>
         <button id="chat-toggle" class="chat-toggle-btn" title="الدردشة مع أصحاب المحلات">
           <i class="fas fa-comments"></i>
         </button>
@@ -80,34 +78,39 @@
     <!-- Bills Section -->
     <div class="section active" id="bills-section">
       <div class="section-header">
-        <h2 class="section-title">💰 إدارة الفواتير</h2>
-        <div class="action-buttons">
-          <button class="btn-green" onclick="document.getElementById('newInvoiceFormContainer').style.display = document.getElementById('newInvoiceFormContainer').style.display === 'none' ? 'block' : 'none'">➕ إنشاء فاتورة جديدة</button>
-          <div class="form-container" id="newInvoiceFormContainer" style="display:none;">
-            <div class="form card">
-              <h3>إضافة فاتورة جديدة</h3>
-              <div class="form-grid">
-                <select required>
-                  <option value="">اختر المحل</option>
-                  <option value="A101">A101 - مطعم</option>
-                  <option value="B202">B202 - ملابس</option>
-                </select>
-    
-                <select required>
-                  <option value="">اختر نوع الفاتورة</option>
-                  <option value="rent">إيجار</option>
-                  <option value="electricity">كهرباء</option>
-                  <option value="water">ماء</option>
-                </select>
-    
-                <input type="number" placeholder="المبلغ" required>
-                <input type="date" placeholder="تاريخ الإصدار" required>
-                <input type="date" placeholder="تاريخ الاستحقاق" required>
-                <textarea placeholder="ملاحظات"></textarea>
-              </div>
-              <button class="btn-green">حفظ</button>
-            </div>
+        <h2 class="section-title"><i class="fas fa-file-invoice-dollar"></i> إدارة الفواتير</h2>
+      </div>
+
+      <div class="action-buttons" style="margin-bottom: 1rem;">
+        <button class="btn-green" onclick="document.getElementById('newInvoiceFormContainer').style.display = document.getElementById('newInvoiceFormContainer').style.display === 'none' ? 'block' : 'none'">
+          <i class="fas fa-plus"></i> إنشاء فاتورة جديدة
+        </button>
+      </div>
+
+      <!-- نموذج إنشاء فاتورة جديدة -->
+      <div class="form-container" id="newInvoiceFormContainer" style="display:none;">
+        <div class="form card">
+          <h3>إضافة فاتورة جديدة</h3>
+          <div class="form-grid">
+            <select required>
+              <option value="">اختر المحل</option>
+              <option value="A101">A101 - مطعم</option>
+              <option value="B202">B202 - ملابس</option>
+            </select>
+
+            <select required>
+              <option value="">اختر نوع الفاتورة</option>
+              <option value="rent">إيجار</option>
+              <option value="electricity">كهرباء</option>
+              <option value="water">ماء</option>
+            </select>
+
+            <input type="number" placeholder="المبلغ" required>
+            <input type="date" placeholder="تاريخ الإصدار" required>
+            <input type="date" placeholder="تاريخ الاستحقاق" required>
+            <textarea placeholder="ملاحظات"></textarea>
           </div>
+          <button class="btn-green">حفظ</button>
         </div>
       </div>
 
@@ -134,22 +137,24 @@
               </select>
             </div>
 
-            <button class="btn-dark" onclick="openBulkMessageModal()">🔔 إرسال رسالة جماعية</button>
+            <button class="btn-dark" onclick="openBulkMessageModal()">
+              <i class="fas fa-bell"></i> إرسال رسالة جماعية
+            </button>
           </div>
         </div>
         <div class="table-wrapper">
           <table>
             <thead>
               <tr>
-                <th>🏪 اسم المحل</th>
-                <th>👤 اسم صاحب المحل</th>
-                <th>⚡ الكهرباء</th>
-                <th>💧 الماء</th>
-                <th>🏢 الإيجار</th>
-                <th>📅 الشهر</th>
-                <th>⏳ المتأخرات</th>
-                <th>💰 الإجمالي</th>
-                <th>⚙️ الإجراءات</th>
+                <th>اسم المحل</th>
+                <th>اسم صاحب المحل</th>
+                <th>الكهرباء</th>
+                <th>الماء</th>
+                <th>الإيجار</th>
+                <th>الشهر</th>
+                <th>المتأخرات</th>
+                <th>الإجمالي</th>
+                <th>الإجراءات</th>
               </tr>
             </thead>
             <tbody>
@@ -163,9 +168,8 @@
                 <td>0 ريال</td>
                 <td>5,700 ريال</td>
                 <td>
-                  <button class="btn-icon" title="عرض التفاصيل" onclick="viewInvoice(1)">🔍</button>
-                  <button class="btn-icon" title="تعديل" onclick="editInvoice(1)">✏️</button>
-                  <button class="btn-icon" title="إرسال رسالة" onclick="sendMessage(1)">✉️</button>
+                  <button class="btn-icon" title="عرض التفاصيل" onclick="viewInvoice(1)"><i class="fas fa-eye"></i></button>
+                  <button class="btn-icon" title="إرسال رسالة" onclick="sendMessage(1)"><i class="fas fa-envelope"></i></button>
                 </td>
               </tr>
               <tr data-invoice-id="2">
@@ -178,9 +182,190 @@
                 <td>1,500 ريال</td>
                 <td>6,550 ريال</td>
                 <td>
-                  <button class="btn-icon" title="عرض التفاصيل" onclick="viewInvoice(2)">🔍</button>
-                  <button class="btn-icon" title="تعديل" onclick="editInvoice(2)">✏️</button>
-                  <button class="btn-icon" title="إرسال رسالة" onclick="sendMessage(2)">✉️</button>
+                  <button class="btn-icon" title="عرض التفاصيل" onclick="viewInvoice(2)"><i class="fas fa-eye"></i></button>
+                  <button class="btn-icon" title="إرسال رسالة" onclick="sendMessage(2)"><i class="fas fa-envelope"></i></button>
+                </td>
+              </tr>
+              <tr data-invoice-id="3">
+                <td>محل C303</td>
+                <td>محمد علي</td>
+                <td>600 ريال</td>
+                <td>250 ريال</td>
+                <td>6,000 ريال</td>
+                <td>فبراير 2024</td>
+                <td>0 ريال</td>
+                <td>6,850 ريال</td>
+                <td>
+                  <button class="btn-icon" title="عرض التفاصيل" onclick="viewInvoice(3)"><i class="fas fa-eye"></i></button>
+                  <button class="btn-icon" title="إرسال رسالة" onclick="sendMessage(3)"><i class="fas fa-envelope"></i></button>
+                </td>
+              </tr>
+              <tr data-invoice-id="4">
+                <td>محل D404</td>
+                <td>سارة أحمد</td>
+                <td>450 ريال</td>
+                <td>180 ريال</td>
+                <td>3,500 ريال</td>
+                <td>فبراير 2024</td>
+                <td>2,000 ريال</td>
+                <td>6,130 ريال</td>
+                <td>
+                  <button class="btn-icon" title="عرض التفاصيل" onclick="viewInvoice(4)"><i class="fas fa-eye"></i></button>
+                  <button class="btn-icon" title="إرسال رسالة" onclick="sendMessage(4)"><i class="fas fa-envelope"></i></button>
+                </td>
+              </tr>
+              <tr data-invoice-id="5">
+                <td>محل E505</td>
+                <td>عبدالرحمن خالد</td>
+                <td>800 ريال</td>
+                <td>350 ريال</td>
+                <td>7,000 ريال</td>
+                <td>فبراير 2024</td>
+                <td>0 ريال</td>
+                <td>8,150 ريال</td>
+                <td>
+                  <button class="btn-icon" title="عرض التفاصيل" onclick="viewInvoice(5)"><i class="fas fa-eye"></i></button>
+                  <button class="btn-icon" title="إرسال رسالة" onclick="sendMessage(5)"><i class="fas fa-envelope"></i></button>
+                </td>
+              </tr>
+              <tr data-invoice-id="6">
+                <td>محل F606</td>
+                <td>نورة محمد</td>
+                <td>550 ريال</td>
+                <td>220 ريال</td>
+                <td>4,500 ريال</td>
+                <td>فبراير 2024</td>
+                <td>1,000 ريال</td>
+                <td>6,270 ريال</td>
+                <td>
+                  <button class="btn-icon" title="عرض التفاصيل" onclick="viewInvoice(6)"><i class="fas fa-eye"></i></button>
+                  <button class="btn-icon" title="إرسال رسالة" onclick="sendMessage(6)"><i class="fas fa-envelope"></i></button>
+                </td>
+              </tr>
+              <tr data-invoice-id="7">
+                <td>محل G707</td>
+                <td>فاطمة علي</td>
+                <td>700 ريال</td>
+                <td>280 ريال</td>
+                <td>5,500 ريال</td>
+                <td>فبراير 2024</td>
+                <td>0 ريال</td>
+                <td>6,480 ريال</td>
+                <td>
+                  <button class="btn-icon" title="عرض التفاصيل" onclick="viewInvoice(7)"><i class="fas fa-eye"></i></button>
+                  <button class="btn-icon" title="إرسال رسالة" onclick="sendMessage(7)"><i class="fas fa-envelope"></i></button>
+                </td>
+              </tr>
+              <tr data-invoice-id="8">
+                <td>محل H808</td>
+                <td>عمر عبدالله</td>
+                <td>650 ريال</td>
+                <td>260 ريال</td>
+                <td>6,500 ريال</td>
+                <td>فبراير 2024</td>
+                <td>1,500 ريال</td>
+                <td>8,910 ريال</td>
+                <td>
+                  <button class="btn-icon" title="عرض التفاصيل" onclick="viewInvoice(8)"><i class="fas fa-eye"></i></button>
+                  <button class="btn-icon" title="إرسال رسالة" onclick="sendMessage(8)"><i class="fas fa-envelope"></i></button>
+                </td>
+              </tr>
+              <tr data-invoice-id="9">
+                <td>محل I909</td>
+                <td>ريم خالد</td>
+                <td>500 ريال</td>
+                <td>200 ريال</td>
+                <td>4,000 ريال</td>
+                <td>فبراير 2024</td>
+                <td>0 ريال</td>
+                <td>4,700 ريال</td>
+                <td>
+                  <button class="btn-icon" title="عرض التفاصيل" onclick="viewInvoice(9)"><i class="fas fa-eye"></i></button>
+                  <button class="btn-icon" title="إرسال رسالة" onclick="sendMessage(9)"><i class="fas fa-envelope"></i></button>
+                </td>
+              </tr>
+              <tr data-invoice-id="10">
+                <td>محل J1010</td>
+                <td>عبدالله محمد</td>
+                <td>750 ريال</td>
+                <td>300 ريال</td>
+                <td>7,500 ريال</td>
+                <td>فبراير 2024</td>
+                <td>2,000 ريال</td>
+                <td>10,550 ريال</td>
+                <td>
+                  <button class="btn-icon" title="عرض التفاصيل" onclick="viewInvoice(10)"><i class="fas fa-eye"></i></button>
+                  <button class="btn-icon" title="إرسال رسالة" onclick="sendMessage(10)"><i class="fas fa-envelope"></i></button>
+                </td>
+              </tr>
+              <tr data-invoice-id="11">
+                <td>محل K1111</td>
+                <td>منى أحمد</td>
+                <td>600 ريال</td>
+                <td>250 ريال</td>
+                <td>5,000 ريال</td>
+                <td>فبراير 2024</td>
+                <td>0 ريال</td>
+                <td>5,850 ريال</td>
+                <td>
+                  <button class="btn-icon" title="عرض التفاصيل" onclick="viewInvoice(11)"><i class="fas fa-eye"></i></button>
+                  <button class="btn-icon" title="إرسال رسالة" onclick="sendMessage(11)"><i class="fas fa-envelope"></i></button>
+                </td>
+              </tr>
+              <tr data-invoice-id="12">
+                <td>محل L1212</td>
+                <td>ياسر علي</td>
+                <td>800 ريال</td>
+                <td>350 ريال</td>
+                <td>8,000 ريال</td>
+                <td>فبراير 2024</td>
+                <td>1,500 ريال</td>
+                <td>10,650 ريال</td>
+                <td>
+                  <button class="btn-icon" title="عرض التفاصيل" onclick="viewInvoice(12)"><i class="fas fa-eye"></i></button>
+                  <button class="btn-icon" title="إرسال رسالة" onclick="sendMessage(12)"><i class="fas fa-envelope"></i></button>
+                </td>
+              </tr>
+              <tr data-invoice-id="13">
+                <td>محل M1313</td>
+                <td>نوف عبدالله</td>
+                <td>550 ريال</td>
+                <td>220 ريال</td>
+                <td>4,500 ريال</td>
+                <td>فبراير 2024</td>
+                <td>0 ريال</td>
+                <td>5,270 ريال</td>
+                <td>
+                  <button class="btn-icon" title="عرض التفاصيل" onclick="viewInvoice(13)"><i class="fas fa-eye"></i></button>
+                  <button class="btn-icon" title="إرسال رسالة" onclick="sendMessage(13)"><i class="fas fa-envelope"></i></button>
+                </td>
+              </tr>
+              <tr data-invoice-id="14">
+                <td>محل N1414</td>
+                <td>سلطان محمد</td>
+                <td>700 ريال</td>
+                <td>280 ريال</td>
+                <td>6,000 ريال</td>
+                <td>فبراير 2024</td>
+                <td>2,000 ريال</td>
+                <td>8,980 ريال</td>
+                <td>
+                  <button class="btn-icon" title="عرض التفاصيل" onclick="viewInvoice(14)"><i class="fas fa-eye"></i></button>
+                  <button class="btn-icon" title="إرسال رسالة" onclick="sendMessage(14)"><i class="fas fa-envelope"></i></button>
+                </td>
+              </tr>
+              <tr data-invoice-id="15">
+                <td>محل O1515</td>
+                <td>غادة خالد</td>
+                <td>650 ريال</td>
+                <td>260 ريال</td>
+                <td>5,500 ريال</td>
+                <td>فبراير 2024</td>
+                <td>0 ريال</td>
+                <td>6,410 ريال</td>
+                <td>
+                  <button class="btn-icon" title="عرض التفاصيل" onclick="viewInvoice(15)"><i class="fas fa-eye"></i></button>
+                  <button class="btn-icon" title="إرسال رسالة" onclick="sendMessage(15)"><i class="fas fa-envelope"></i></button>
                 </td>
               </tr>
             </tbody>
@@ -208,84 +393,421 @@
       <!-- Invoice Details Modal -->
       <div id="invoiceDetailsModal" class="modal">
         <div class="modal-content">
-          <h3>تفاصيل الفواتير</h3>
-          
+          <div class="modal-header">
+            <h3>تفاصيل الفاتورة</h3>
+            <button class="btn-close" onclick="closeModal('invoiceDetailsModal')">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
           <div class="bill-sections-container">
-            <div class="bill-section">
-              <h4>🏪 اسم المحل</h4>
-              <div class="bill-details">
-                <div class="detail-row">
-                  <span class="detail-label">اسم المحل</span>
-                  <span class="detail-value">محل A101</span>
+            <div>
+              <div class="bill-section">
+                <div class="section-header">
+                  <h4>معلومات المحل</h4>
+                  <button class="btn-icon" title="تعديل معلومات المحل" onclick="toggleEditMode('store-info')">
+                    <i class="fas fa-edit"></i>
+                  </button>
                 </div>
-                <div class="detail-row">
-                  <span class="detail-label">اسم صاحب المحل</span>
-                  <span class="detail-value">أحمد محمد</span>
+                <div class="bill-details">
+                  <div class="detail-row">
+                    <span class="detail-label">اسم المحل</span>
+                    <div class="detail-value-container">
+                      <span class="detail-value">محل A101</span>
+                      <input type="text" class="edit-input" value="محل A101" style="display: none;">
+                    </div>
+                  </div>
+                  <div class="detail-row">
+                    <span class="detail-label">اسم صاحب المحل</span>
+                    <div class="detail-value-container">
+                      <span class="detail-value">أحمد محمد</span>
+                      <input type="text" class="edit-input" value="أحمد محمد" style="display: none;">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bill-section">
+                <div class="section-header">
+                  <h4>الإيجار</h4>
+                  <button class="btn-icon" title="تعديل فاتورة الإيجار" onclick="toggleEditMode('rent')">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                </div>
+                <div class="bill-details">
+                  <div class="detail-row">
+                    <span class="detail-label">مبلغ الشهر الحالي</span>
+                    <div class="detail-value-container">
+                      <span class="detail-value">5,000 ريال</span>
+                      <input type="number" class="edit-input" value="5000" style="display: none;">
+                    </div>
+                  </div>
+                  <div class="detail-row">
+                    <span class="detail-label">المتأخرات</span>
+                    <div class="detail-value-container">
+                      <span class="detail-value">0 ريال</span>
+                      <input type="number" class="edit-input" value="0" style="display: none;">
+                    </div>
+                  </div>
+                  <div class="detail-row total">
+                    <span class="detail-label">الإجمالي</span>
+                    <span class="detail-value">5,000 ريال</span>
+                  </div>
                 </div>
               </div>
             </div>
-            <!-- قسم الكهرباء -->
-            <div class="bill-section">
-              <h4>⚡ الكهرباء</h4>
-              <div class="bill-details">
-                <div class="detail-row">
-                  <span class="detail-label">مبلغ الشهر الحالي</span>
-                  <span class="detail-value">500 ريال</span>
+            <div>
+              <div class="bill-section">
+                <div class="section-header">
+                  <h4>الكهرباء</h4>
+                  <button class="btn-icon" title="تعديل فاتورة الكهرباء" onclick="toggleEditMode('electricity')">
+                    <i class="fas fa-edit"></i>
+                  </button>
                 </div>
-                <div class="detail-row">
-                  <span class="detail-label">المتأخرات</span>
-                  <span class="detail-value">0 ريال</span>
+                <div class="bill-details">
+                  <div class="detail-row">
+                    <span class="detail-label">مبلغ الشهر الحالي</span>
+                    <div class="detail-value-container">
+                      <span class="detail-value">500 ريال</span>
+                      <input type="number" class="edit-input" value="500" style="display: none;">
+                    </div>
+                  </div>
+                  <div class="detail-row">
+                    <span class="detail-label">المتأخرات</span>
+                    <div class="detail-value-container">
+                      <span class="detail-value">0 ريال</span>
+                      <input type="number" class="edit-input" value="0" style="display: none;">
+                    </div>
+                  </div>
+                  <div class="detail-row total">
+                    <span class="detail-label">الإجمالي</span>
+                    <span class="detail-value">500 ريال</span>
+                  </div>
                 </div>
-                <div class="detail-row">
-                  <span class="detail-label">الإجمالي</span>
-                  <span class="detail-value">500 ريال</span>
+              </div>
+              <div class="bill-section">
+                <div class="section-header">
+                  <h4>الماء</h4>
+                  <button class="btn-icon" title="تعديل فاتورة الماء" onclick="toggleEditMode('water')">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                </div>
+                <div class="bill-details">
+                  <div class="detail-row">
+                    <span class="detail-label">مبلغ الشهر الحالي</span>
+                    <div class="detail-value-container">
+                      <span class="detail-value">200 ريال</span>
+                      <input type="number" class="edit-input" value="200" style="display: none;">
+                    </div>
+                  </div>
+                  <div class="detail-row">
+                    <span class="detail-label">المتأخرات</span>
+                    <div class="detail-value-container">
+                      <span class="detail-value">0 ريال</span>
+                      <input type="number" class="edit-input" value="0" style="display: none;">
+                    </div>
+                  </div>
+                  <div class="detail-row total">
+                    <span class="detail-label">الإجمالي</span>
+                    <span class="detail-value">200 ريال</span>
+                  </div>
                 </div>
               </div>
             </div>
-            <!-- قسم الماء -->
-            <div class="bill-section">
-              <h4>💧 الماء</h4>
+            <div class="bill-section total-section">
               <div class="bill-details">
-                <div class="detail-row">
-                  <span class="detail-label">مبلغ الشهر الحالي</span>
-                  <span class="detail-value">200 ريال</span>
-                </div>
-                <div class="detail-row">
-                  <span class="detail-label">المتأخرات</span>
-                  <span class="detail-value">0 ريال</span>
-                </div>
-                <div class="detail-row">
-                  <span class="detail-label">الإجمالي</span>
-                  <span class="detail-value">200 ريال</span>
-                </div>
-              </div>
-            </div>
-            <!-- قسم الإيجار -->
-            <div class="bill-section">
-              <h4>🏢 الإيجار</h4>
-              <div class="bill-details">
-                <div class="detail-row">
-                  <span class="detail-label">مبلغ الشهر الحالي</span>
-                  <span class="detail-value">5,000 ريال</span>
-                </div>
-                <div class="detail-row">
-                  <span class="detail-label">المتأخرات</span>
-                  <span class="detail-value">0 ريال</span>
-                </div>
-                <div class="detail-row">
-                  <span class="detail-label">الإجمالي</span>
-                  <span class="detail-value">5,000 ريال</span>
+                <div class="detail-row grand-total">
+                  <span class="detail-label">إجمالي الفاتورة</span>
+                  <span class="detail-value">5,700 ريال</span>
                 </div>
               </div>
             </div>
           </div>
-
           <div class="bill-actions">
-            <button class="btn-green" onclick="downloadPDF(1)">تحميل PDF</button>
+            <button class="btn-green" onclick="downloadPDF(1)">
+              <i class="fas fa-download"></i>
+              تحميل PDF
+            </button>
             <button class="btn-secondary" onclick="closeModal('invoiceDetailsModal')">إغلاق</button>
           </div>
         </div>
       </div>
+
+      <style>
+        /* تحسين تصميم النافذة المنبثقة */
+        .modal-content {
+          width: 90vw;
+          max-width: 1400px;
+          min-width: 350px;
+          padding: 2.5rem 3.5rem;
+          background: #ffffff;
+          border-radius: 16px;
+          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .bill-sections-container {
+          display: flex;
+          flex-direction: column;
+          gap: 2rem;
+        }
+        @media (max-width: 1100px) {
+          .modal-content {
+            padding: 1.2rem 0.5rem;
+          }
+          .bill-sections-container {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+          }
+        }
+        .bill-section {
+          background: #ffffff;
+          border-radius: 12px;
+          padding: 1.2rem 1.5rem 1.5rem 1.5rem;
+          border: 1px solid #e2e8f0;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+          transition: box-shadow 0.3s, background 0.3s;
+          min-width: 0;
+        }
+        .bill-section.editing {
+          background: #f0f6ff;
+          box-shadow: 0 4px 16px rgba(37,99,235,0.08);
+          border-color: #2563eb;
+        }
+        .bill-details {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 1.1rem 1.5rem;
+        }
+        .detail-row {
+          display: flex;
+          align-items: center;
+          background: #f8fafc;
+          border-radius: 8px;
+          padding: 0.7rem 1rem;
+          margin-bottom: 0;
+          min-width: 0;
+          transition: background 0.2s;
+        }
+        .detail-row:hover {
+          background: #f1f5f9;
+        }
+        .detail-label {
+          color: #334155;
+          font-size: 1.05rem;
+          min-width: 110px;
+          font-weight: 600;
+          margin-left: 10px;
+        }
+        .detail-value {
+          color: #1e293b;
+          font-weight: 600;
+          font-size: 1.08rem;
+          word-break: break-word;
+        }
+        .detail-row.total, .detail-row.grand-total {
+          grid-column: 1 / -1;
+          background: #f0f7ff;
+          color: #1e40af;
+          border: 1px solid #bfdbfe;
+          padding: 1.1rem 1.2rem;
+          margin-top: 0.5rem;
+          font-size: 1.15rem;
+          border-radius: 8px;
+          box-shadow: 0 2px 4px rgba(37, 99, 235, 0.05);
+        }
+        .detail-row.grand-total {
+          background: #1e40af;
+          color: white;
+          border: none;
+          font-weight: 600;
+          box-shadow: 0 4px 6px rgba(37, 99, 235, 0.1);
+        }
+        .detail-row.grand-total .detail-label,
+        .detail-row.grand-total .detail-value {
+          color: white;
+          font-size: 1.2rem;
+          font-weight: 600;
+        }
+        .detail-row.total .detail-label,
+        .detail-row.total .detail-value {
+          color: #1e40af;
+          font-weight: 600;
+        }
+        .detail-row.total:hover {
+          background: #e0f2fe;
+        }
+        .detail-row.grand-total:hover {
+          background: #1e3a8a;
+        }
+        .section-header h4 {
+          font-size: 1.15rem;
+          color: #1e293b;
+          font-weight: 700;
+          margin: 0;
+        }
+        .btn-icon {
+          padding: 0.6rem;
+          border: none;
+          background: #f8fafc;
+          cursor: pointer;
+          transition: all 0.2s;
+          border-radius: 8px;
+          color: #64748b;
+        }
+        .btn-icon:hover {
+          background: #e2e8f0;
+          color: #2563eb;
+        }
+        .edit-inline-btn {
+          margin-right: 5px;
+          padding: 0.4rem;
+          border: none;
+          background: #f8fafc;
+          cursor: pointer;
+          transition: all 0.2s;
+          border-radius: 6px;
+        }
+
+        .edit-inline-btn.save-btn {
+          color: #22c55e;
+        }
+
+        .edit-inline-btn.save-btn:hover {
+          background: #dcfce7;
+        }
+
+        .edit-inline-btn.cancel-btn {
+          color: #ef4444;
+        }
+
+        .edit-inline-btn.cancel-btn:hover {
+          background: #fee2e2;
+        }
+
+        .detail-value-container {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+
+        .edit-input {
+          width: 120px;
+          padding: 0.4rem 0.6rem;
+          border: 1px solid #e2e8f0;
+          border-radius: 6px;
+          font-size: 1rem;
+        }
+      </style>
+
+      <script>
+        function toggleEditMode(sectionType) {
+          const section = document.querySelector(`.bill-section:has(button[onclick="toggleEditMode('${sectionType}')"])`);
+          const sectionHeader = section.querySelector('.section-header');
+          const editButton = section.querySelector('.btn-icon');
+          const isEditing = editButton.classList.contains('editing');
+          
+          if (isEditing) {
+            section.classList.remove('editing');
+            // إزالة أزرار الحفظ والإلغاء
+            const saveBtn = sectionHeader.querySelector('.save-btn');
+            const cancelBtn = sectionHeader.querySelector('.cancel-btn');
+            if (saveBtn) saveBtn.remove();
+            if (cancelBtn) cancelBtn.remove();
+            // إعادة زر التعديل
+            editButton.style.display = 'block';
+          } else {
+            section.classList.add('editing');
+            // إخفاء زر التعديل
+            editButton.style.display = 'none';
+            
+            // إضافة أزرار الحفظ والإلغاء
+            const saveBtn = document.createElement('button');
+            saveBtn.type = 'button';
+            saveBtn.className = 'btn-icon save-btn';
+            saveBtn.title = 'حفظ';
+            saveBtn.innerHTML = '<i class="fas fa-save"></i>';
+            saveBtn.onclick = function() { saveChanges(section); toggleEditMode(sectionType); };
+            
+            const cancelBtn = document.createElement('button');
+            cancelBtn.type = 'button';
+            cancelBtn.className = 'btn-icon cancel-btn';
+            cancelBtn.title = 'إلغاء';
+            cancelBtn.innerHTML = '<i class="fas fa-times"></i>';
+            cancelBtn.onclick = function() { 
+              // إعادة القيم إلى حالتها الأصلية
+              const inputs = section.querySelectorAll('.edit-input');
+              const values = section.querySelectorAll('.detail-value');
+              inputs.forEach((input, index) => {
+                input.style.display = 'none';
+                values[index].style.display = 'block';
+              });
+              // إعادة الحالة إلى وضع القراءة
+              section.classList.remove('editing');
+              // إزالة أزرار الحفظ والإلغاء
+              saveBtn.remove();
+              cancelBtn.remove();
+              // إعادة زر التعديل
+              editButton.style.display = 'block';
+            };
+            
+            sectionHeader.appendChild(saveBtn);
+            sectionHeader.appendChild(cancelBtn);
+          }
+          
+          // تبديل عرض القيم وحقول الإدخال
+          const inputs = section.querySelectorAll('.edit-input');
+          const values = section.querySelectorAll('.detail-value');
+          
+          inputs.forEach((input, index) => {
+            if (isEditing) {
+              input.style.display = 'none';
+              values[index].style.display = 'block';
+            } else {
+              input.style.display = 'block';
+              values[index].style.display = 'none';
+              input.value = values[index].textContent.replace(' ريال', '');
+            }
+          });
+        }
+
+        function saveChanges(section) {
+          const inputs = section.querySelectorAll('.edit-input');
+          const values = section.querySelectorAll('.detail-value');
+          
+          inputs.forEach((input, index) => {
+            const newValue = input.value;
+            if (input.type === 'number') {
+              values[index].textContent = `${newValue} ريال`;
+            } else {
+              values[index].textContent = newValue;
+            }
+          });
+
+          // تحديث الإجماليات
+          updateTotals();
+        }
+
+        function updateTotals() {
+          // تحديث إجمالي الكهرباء
+          const electricityCurrent = parseInt(document.querySelector('.bill-section:nth-child(2) .detail-value').textContent);
+          const electricityOverdue = parseInt(document.querySelector('.bill-section:nth-child(2) .detail-row:nth-child(2) .detail-value').textContent);
+          const electricityTotal = electricityCurrent + electricityOverdue;
+          document.querySelector('.bill-section:nth-child(2) .detail-row.total .detail-value').textContent = `${electricityTotal} ريال`;
+
+          // تحديث إجمالي الماء
+          const waterCurrent = parseInt(document.querySelector('.bill-section:nth-child(3) .detail-value').textContent);
+          const waterOverdue = parseInt(document.querySelector('.bill-section:nth-child(3) .detail-row:nth-child(2) .detail-value').textContent);
+          const waterTotal = waterCurrent + waterOverdue;
+          document.querySelector('.bill-section:nth-child(3) .detail-row.total .detail-value').textContent = `${waterTotal} ريال`;
+
+          // تحديث إجمالي الإيجار
+          const rentCurrent = parseInt(document.querySelector('.bill-section:nth-child(4) .detail-value').textContent);
+          const rentOverdue = parseInt(document.querySelector('.bill-section:nth-child(4) .detail-row:nth-child(2) .detail-value').textContent);
+          const rentTotal = rentCurrent + rentOverdue;
+          document.querySelector('.bill-section:nth-child(4) .detail-row.total .detail-value').textContent = `${rentTotal} ريال`;
+
+          // تحديث إجمالي الفاتورة
+          const grandTotal = electricityTotal + waterTotal + rentTotal;
+          document.querySelector('.total-section .grand-total .detail-value').textContent = `${grandTotal} ريال`;
+        }
+      </script>
     </div>
 
     <!-- نافذة تعديل الفاتورة -->
@@ -344,5 +866,350 @@
     </div>
     </div>
   <script src="../views/js/mall-management/index.js"> </script>
+  <script>
+    // دالة لفتح نافذة تعديل القسم
+    function editSection(sectionType) {
+      // إخفاء نافذة التفاصيل
+      document.getElementById('invoiceDetailsModal').style.display = 'none';
+      
+      // فتح نافذة التعديل
+      const editModal = document.getElementById('editInvoiceModal');
+      editModal.style.display = 'block';
+
+      // تعبئة البيانات الحالية في نموذج التعديل
+      const currentData = getCurrentSectionData(sectionType);
+      fillEditForm(currentData, sectionType);
+    }
+
+    // دالة للحصول على بيانات القسم الحالي
+    function getCurrentSectionData(sectionType) {
+      const modal = document.getElementById('invoiceDetailsModal');
+      let data = {};
+
+      switch(sectionType) {
+        case 'store-info':
+          data = {
+            storeName: modal.querySelector('.bill-section:nth-child(1) .detail-row:nth-child(1) .detail-value').textContent,
+            ownerName: modal.querySelector('.bill-section:nth-child(1) .detail-row:nth-child(2) .detail-value').textContent
+          };
+          break;
+        case 'electricity':
+          data = {
+            current: modal.querySelector('.bill-section:nth-child(2) .detail-row:nth-child(1) .detail-value').textContent.replace(' ريال', ''),
+            overdue: modal.querySelector('.bill-section:nth-child(2) .detail-row:nth-child(2) .detail-value').textContent.replace(' ريال', '')
+          };
+          break;
+        case 'water':
+          data = {
+            current: modal.querySelector('.bill-section:nth-child(3) .detail-row:nth-child(1) .detail-value').textContent.replace(' ريال', ''),
+            overdue: modal.querySelector('.bill-section:nth-child(3) .detail-row:nth-child(2) .detail-value').textContent.replace(' ريال', '')
+          };
+          break;
+        case 'rent':
+          data = {
+            current: modal.querySelector('.bill-section:nth-child(4) .detail-row:nth-child(1) .detail-value').textContent.replace(' ريال', ''),
+            overdue: modal.querySelector('.bill-section:nth-child(4) .detail-row:nth-child(2) .detail-value').textContent.replace(' ريال', '')
+          };
+          break;
+      }
+
+      return data;
+    }
+
+    // دالة لملء نموذج التعديل بالبيانات الحالية
+    function fillEditForm(data, sectionType) {
+      const form = document.getElementById('editInvoiceForm');
+      
+      // تحديث عنوان النموذج
+      const modalTitle = editModal.querySelector('.modal-header h3');
+      modalTitle.textContent = `تعديل ${getSectionTitle(sectionType)}`;
+
+      // إخفاء جميع حقول النموذج
+      const allFields = form.querySelectorAll('.form-group');
+      allFields.forEach(field => field.style.display = 'none');
+
+      // إظهار الحقول المطلوبة فقط
+      switch(sectionType) {
+        case 'store-info':
+          document.getElementById('edit-store-name').value = data.storeName;
+          document.getElementById('edit-owner-name').value = data.ownerName;
+          document.getElementById('edit-store-name').parentElement.style.display = 'block';
+          document.getElementById('edit-owner-name').parentElement.style.display = 'block';
+          break;
+        case 'electricity':
+        case 'water':
+        case 'rent':
+          const currentField = document.getElementById(`edit-${sectionType}`);
+          const overdueField = document.getElementById('edit-overdue');
+          currentField.value = data.current;
+          overdueField.value = data.overdue;
+          currentField.parentElement.style.display = 'block';
+          overdueField.parentElement.style.display = 'block';
+          break;
+      }
+    }
+
+    // دالة للحصول على عنوان القسم
+    function getSectionTitle(sectionType) {
+      const titles = {
+        'store-info': 'معلومات المحل',
+        'electricity': 'فاتورة الكهرباء',
+        'water': 'فاتورة الماء',
+        'rent': 'فاتورة الإيجار'
+      };
+      return titles[sectionType] || '';
+    }
+
+    // دالة لحفظ التعديلات
+    function saveEditChanges(event) {
+      event.preventDefault();
+      const form = event.target;
+      const formData = new FormData(form);
+      
+      // هنا يمكنك إضافة كود لإرسال البيانات إلى الخادم
+      console.log('تم حفظ التعديلات:', Object.fromEntries(formData));
+
+      // إغلاق نافذة التعديل
+      closeModal('editInvoiceModal');
+      
+      // إعادة فتح نافذة التفاصيل مع البيانات المحدثة
+      document.getElementById('invoiceDetailsModal').style.display = 'block';
+      
+      // تحديث البيانات في نافذة التفاصيل
+      updateInvoiceDetails(formData);
+    }
+
+    // دالة لتحديث البيانات في نافذة التفاصيل
+    function updateInvoiceDetails(formData) {
+      // هنا يمكنك إضافة كود لتحديث البيانات في نافذة التفاصيل
+      // بناءً على البيانات المستلمة من النموذج
+    }
+
+    // إضافة مستمع الحدث لنموذج التعديل
+    document.getElementById('editInvoiceForm').addEventListener('submit', saveEditChanges);
+  </script>
+
+  <!-- نافذة الرسالة المنبثقة -->
+  <div id="messageModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>إرسال رسالة</h3>
+        <button class="btn-close" onclick="closeModal('messageModal')">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <form id="messageForm" class="form">
+        <div class="form-group">
+          <label>محتوى الرسالة</label>
+          <textarea id="messageContent" rows="5" placeholder="اكتب رسالتك هنا..." required></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-green">
+            <i class="fas fa-paper-plane"></i>
+            إرسال
+          </button>
+          <button type="button" class="btn-secondary" onclick="closeModal('messageModal')">إلغاء</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <style>
+    /* تنسيقات نافذة الرسالة */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+    }
+
+    .modal-content {
+      position: relative;
+      background-color: white;
+      margin: 5% auto;
+      padding: 2rem;
+      width: 90%;
+      max-width: 500px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .modal-header h3 {
+      font-size: 1.5rem;
+      color: #1e293b;
+      margin: 0;
+    }
+
+    .btn-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: #64748b;
+      cursor: pointer;
+      padding: 0.5rem;
+      transition: all 0.2s;
+    }
+
+    .btn-close:hover {
+      color: #ef4444;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #475569;
+      font-weight: 500;
+    }
+
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s;
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+      margin-top: 1.5rem;
+    }
+  </style>
+
+  <script>
+    // دالة فتح نافذة الرسالة
+    function sendMessage(invoiceId) {
+      const modal = document.getElementById('messageModal');
+      const form = document.getElementById('messageForm');
+      
+      // إظهار النافذة المنبثقة
+      modal.style.display = 'block';
+      
+      // إعادة تعيين النموذج
+      form.reset();
+    }
+
+    // دالة إغلاق النافذة المنبثقة
+    function closeModal(modalId) {
+      document.getElementById(modalId).style.display = 'none';
+    }
+
+    // معالجة إرسال الرسالة
+    document.getElementById('messageForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const content = document.getElementById('messageContent').value;
+      
+      // هنا يمكنك إضافة كود لإرسال الرسالة إلى الخادم
+      console.log('إرسال رسالة:', {
+        content
+      });
+      
+      // إغلاق النافذة المنبثقة
+      closeModal('messageModal');
+      
+      // إظهار رسالة نجاح
+      alert('تم إرسال الرسالة بنجاح');
+    });
+
+    // إغلاق النافذة المنبثقة عند النقر خارجها
+    window.onclick = function(event) {
+      if (event.target.classList.contains('modal')) {
+        event.target.style.display = 'none';
+      }
+    }
+  </script>
+
+  <style>
+    /* تنسيقات الجدول */
+    .table-wrapper {
+      max-height: 400px; /* ارتفاع يكفي لعرض 5 صفوف */
+      overflow-y: auto;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      margin-top: 1rem;
+    }
+
+    .table-wrapper table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .table-wrapper thead {
+      position: sticky;
+      top: 0;
+      background: #f8fafc;
+      z-index: 1;
+    }
+
+    .table-wrapper thead th {
+      padding: 1rem;
+      text-align: right;
+      font-weight: 600;
+      color: #1e293b;
+      border-bottom: 2px solid #e2e8f0;
+      background: #f8fafc;
+    }
+
+    .table-wrapper tbody tr {
+      border-bottom: 1px solid #e2e8f0;
+      transition: background-color 0.2s;
+    }
+
+    .table-wrapper tbody tr:hover {
+      background-color: #f1f5f9;
+    }
+
+    .table-wrapper tbody td {
+      padding: 1rem;
+      color: #334155;
+    }
+
+    /* تنسيق شريط التمرير */
+    .table-wrapper::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .table-wrapper::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 4px;
+    }
+
+    .table-wrapper::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+
+    .table-wrapper::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
 </body>
 </html>

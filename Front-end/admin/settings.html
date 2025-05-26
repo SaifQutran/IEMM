@@ -6,7 +6,6 @@
   <title>IEMM - الإعدادات العامة</title>
   <link rel="stylesheet" href="../views/css/styles.css">
   <script src="../views/js/script.js" defer></script>
-  <script src="../views/js/theme-manager.js" defer></script>
 </head>
 <body>
   <header>
@@ -17,31 +16,26 @@
         <a href="mall-management.html" id="malls-link">🏢 إدارة المجمعات</a>
         <a href="settings.html" id="settings-link" class="active">⚙️ الإعدادات العامة</a>
       </nav>
-      <button class="btn-dark">الوضع الليلي</button>
-      <!-- <button class="btn-dark" onclick="document.body.classList.toggle('dark')">الوضع الليلي</button> -->
+      <button class="btn-dark" onclick="document.body.classList.toggle('dark')">الوضع الليلي</button>
     </div>
   </header>
-    <div class="main">
-      <div class="section active" id="settings-section">
-        <h2 class="section-title">⚙️ الإعدادات العامة</h2>
-        <div class="card">
-          <div class="form">
-            <h3>إعدادات النظام</h3>
-            <input type="text" placeholder="اسم النظام" />
-            <input type="email" placeholder="البريد الإلكتروني للدعم" />
-            <select>
-              <option value="ar">العربية</option>
-              <option value="en">English</option>
-            </select>
-            <button class="btn-green">حفظ التغييرات</button>
-          </div>
+
+  <div class="main">
+    <div class="section active" id="settings-section">
+      <h2 class="section-title">⚙️ الإعدادات العامة</h2>
+      <div class="card">
+        <div class="form">
+          <h3>إعدادات النظام</h3>
+          <input type="text" placeholder="اسم النظام" />
+          <input type="email" placeholder="البريد الإلكتروني للدعم" />
+          <select>
+            <option value="ar">العربية</option>
+            <option value="en">English</option>
+          </select>
+          <button class="btn-green">حفظ التغييرات</button>
         </div>
       </div>
     </div>
-
-    <!-- All JS scripts at the end for best performance -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="../views/js/script.js"></script>
-    <script src="../views/js/admin/mall-mangement.js"></script>
-  </body>
-</html>
+  </div>
+</body>
+</html> 
