@@ -31,23 +31,16 @@ class ThemeManager {
         } else {
             document.body.classList.remove(this.darkThemeClass);
         }
-        this.updateButtonText(document.getElementsByClassName('btn-dark')[0]);
+        this.updateButtonText(document.getElementsByClassName('convert')[0]);
     }
 
     // Initialize event listeners for theme toggle buttons
     initializeEventListeners() {
-        document.querySelectorAll('.btn-dark').forEach(button => {
+        document.querySelectorAll('.convert').forEach(button => {
             button.addEventListener('click', () => {
                 this.toggleTheme(button);
-                
-                // button.textContent = currentTheme === ThemeManager.THEMES.DARK ? 'Switch to Light Mode' : 'Switch to Dark Mode';
             });
         });
-        // document.querySelectorAll('.btn-dark').forEach(button => {
-        //     button.addEventListener('click', () => {
-        //         this.toggleTheme(button);
-        //     });
-        // });
     }
 
     // Toggle theme and update cookie
