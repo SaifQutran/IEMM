@@ -376,24 +376,4 @@ function showMallDetails(mallData) {
         }
         return null;
       }
-
-      function applyNightModeFromCookie() {
-        const nightMode = getCookie('nightMode');
-        if (nightMode === 'on') {
-          document.body.classList.add('dark');
-        } else {
-          document.body.classList.remove('dark');
-        }
-      }
-
-      document.addEventListener('DOMContentLoaded', function () {
-        applyNightModeFromCookie();
-        const nightModeBtn = document.querySelector('.btn-dark');
-        if (nightModeBtn) {
-          nightModeBtn.onclick = function () {
-            document.body.classList.toggle('dark');
-            setCookie('nightMode', document.body.classList.contains('dark') ? 'on' : 'off', 365);
-          };
-        }
-      });
       

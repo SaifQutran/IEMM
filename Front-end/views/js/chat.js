@@ -89,14 +89,14 @@ const storeContacts = [
 // إضافة استماع لحدث تحميل المستند
 document.addEventListener('DOMContentLoaded', function() {
   initChat();
-  applyNightModeFromCookie();
-  const nightModeBtn = document.querySelector('.btn-dark');
-  if (nightModeBtn) {
-    nightModeBtn.onclick = function () {
-      document.body.classList.toggle('dark');
-      setCookie('nightMode', document.body.classList.contains('dark') ? 'on' : 'off', 365);
-    };
-  }
+  // applyNightModeFromCookie();
+  // const nightModeBtn = document.querySelector('.btn-dark');
+  // if (nightModeBtn) {
+  //   nightModeBtn.onclick = function () {
+  //     document.body.classList.toggle('dark');
+  //     setCookie('nightMode', document.body.classList.contains('dark') ? 'on' : 'off', 365);
+  //   };
+  // }
 });
 
 // تهيئة الدردشة
@@ -323,11 +323,5 @@ function getCookie(name) {
   return null;
 }
 
-function applyNightModeFromCookie() {
-  const nightMode = getCookie('nightMode');
-  if (nightMode === 'on') {
-    document.body.classList.add('dark');
-  } else {
-    document.body.classList.remove('dark');
-  }
-} 
+
+ 

@@ -33,22 +33,6 @@
     <!-- All JS scripts at the end for best performance -->
     <script src="../views/js/script.js"></script>
     <script src="../views/js/admin/admin-dashboard.js"></script>
-    <script>
-      function toggleNightMode() {
-        document.body.classList.toggle("dark");
-        document.documentElement.classList.toggle("dark");
-        var expires = "";
-        var days = 365;
-        var date = new Date();
-        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-        expires = "; expires=" + date.toUTCString();
-        document.cookie =
-          "nightMode=" +
-          (document.body.classList.contains("dark") ? "on" : "off") +
-          expires +
-          "; path=/";
-      }
-    </script>
     <script src="../views/js/admin/mall-mangement.js"></script>
   </body>
 </html>

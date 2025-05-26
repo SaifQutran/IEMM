@@ -65,16 +65,6 @@ function setCookie(name, value, days) {
         }
         return null;
       }
-
-      function applyNightModeFromCookie() {
-        const nightMode = getCookie('nightMode');
-        if (nightMode === 'on') {
-          document.body.classList.add('dark');
-        } else {
-          document.body.classList.remove('dark');
-        }
-      }
-
       document.addEventListener('DOMContentLoaded', function () {
         // Fetch dashboard data from API
         fetch(DASHBOARD_API)
@@ -87,14 +77,4 @@ function setCookie(name, value, days) {
           .catch(err => {
             console.error('Error fetching dashboard data:', err);
           });
-
-        // Night mode logic (unchanged)
-        applyNightModeFromCookie();
-        const nightModeBtn = document.querySelector('.btn-dark');
-        if (nightModeBtn) {
-          nightModeBtn.onclick = function () {
-            document.body.classList.toggle('dark');
-            setCookie('nightMode', document.body.classList.contains('dark') ? 'on' : 'off', 365);
-          };
-        }
       });
