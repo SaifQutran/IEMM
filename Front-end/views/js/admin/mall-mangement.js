@@ -45,7 +45,7 @@ async function displayMalls(malls) {
 
             const locationCell = document.createElement("td");
             locationCell.innerHTML = `
-                ${m.location || '-'}
+                            ${m.city_name + ' - ' + m.location|| '-'}
                 <br>
                 <a href="https://www.google.com/maps?q=${m.Y_Coordinates},${m.X_Coordinates}" target="_blank">
                     عرض على الخريطة
