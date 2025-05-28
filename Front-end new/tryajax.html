@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Laravel API AJAX Example</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+  <h1>governorates List</h1>
+  <ul id="governorates-list"></ul>
+
+  <script>
+    // $.ajax({
+    // url: "http://127.0.0.1:8000/api/governorates",
+    // method: "GET",
+    // success: function(data) {
+    //     if (Array.isArray(data)) {
+    //         data.forEach(function(item) {
+    //             console.log(item);
+    //         });
+    //     } else {
+    //         console.error("Expected an array but received:", data);
+    //     }
+    // },
+    // error: function(xhr, status, error) {
+    //     console.error("Error fetching data:", error);
+    // }
+    // });
+        $(document).ready(function() {
+        $.ajax({
+            url: 'http://127.0.0.1:8000/api/governorates',
+            method: 'GET',
+            success: function(data) {
+           data.data.forEach(function(governorates) {
+            console.log(governorates);
+            $('#governorates-list').append('<li>' + governorates.governorate + '</li>');
+            });
+            },
+            error: function(xhr, status, error) {
+            console.error('AJAX Error:', error);
+            }
+        });
+        });
+  </script>
+
+</body>
+</html>
+<!-- $.ajax({
+    url: "http://127.0.0.1:8000/api/governorates",
+    method: "GET",
+    success: function(data) {
+        if (Array.isArray(data)) {
+            data.forEach(function(item) {
+                console.log(item);
+            });
+        } else {
+            console.error("Expected an array but received:", data);
+        }
+    },
+    error: function(xhr, status, error) {
+        console.error("Error fetching data:", error);
+    }
+}); -->
