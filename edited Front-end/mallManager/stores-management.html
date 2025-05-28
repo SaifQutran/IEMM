@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IEMM - إدارة المحلات</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="../views/css/styles.css">
+    <link rel="stylesheet" href="../views/css/malls-dashbboard/mall.css">
+    <link rel="stylesheet" href="../views/css/chat.css">
+    <script src="../views/js/script.js" defer></script>
+    <script src="../views/js/chat.js" defer></script>
+    <!-- إضافة مكتبة Font Awesome للأيقونات -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  </head>
+<body>
+      <!-- Header Section -->
+  <header>
+    <div class="container navbar">
+      <h1>IEMM</h1>
+      <nav>
+        <a href="mall-dashboard.html" id="dashboard-link">📊 لوحة التحكم</a>
+        <a href="stores-management.html" id="stores-link" class="active">🏪 إدارة المحلات</a>
+        <a href="bills.html" id="bills-link">💰 الفواتير</a>   
+      </nav>
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <button class="btn-dark" onclick="document.body.classList.toggle('dark')">الوضع الليلي</button>
+        <button id="chat-toggle" class="chat-toggle-btn" title="الدردشة مع أصحاب المحلات">
+          <i class="fas fa-comments"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- نافذة الدردشة الجانبية -->
+  <div id="chat-panel" class="chat-panel">
+    <!-- قائمة جهات الاتصال -->
+    <div id="contacts-view">
+      <div class="chat-header">
+        <h3>الدردشة مع أصحاب المحلات</h3>
+        <button id="chat-close" class="chat-close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div id="contact-list" class="contact-list">
+        <!-- سيتم إنشاء قائمة جهات الاتصال عبر JavaScript -->
+      </div>
+    </div>
+
+    <!-- نافذة المحادثة -->
+    <div id="chat-conversation" class="chat-conversation">
+      <div class="conversation-header">
+        <button id="back-to-contacts" class="back-to-contacts">
+          <i class="fas fa-arrow-right"></i>
+        </button>
+        <div class="conversation-contact">
+          <div id="conversation-avatar" class="conversation-avatar">أ</div>
+          <div class="conversation-info">
+            <h4 id="conversation-title">أحمد محمد</h4>
+            <p id="conversation-store">مطعم الأصالة</p>
+          </div>
+        </div>
+      </div>
+      <div id="messages-container" class="messages-container">
+        <!-- سيتم إنشاء الرسائل عبر JavaScript -->
+      </div>
+      <form id="message-form" class="message-form">
+        <textarea id="message-input" class="message-input" placeholder="اكتب رسالتك هنا..." rows="1"></textarea>
+        <button type="submit" class="send-message-btn">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main">
+        <!-- Stores Management Section -->
+        <div class="section active" id="stores-section">
+          <div class="section-header">
+            <h2 class="section-title">🏪 إدارة المحلات</h2>
+            <div class="view-toggle-buttons">
+              <button class="btn-dark active" id="table-view-btn" onclick="toggleView('table')">عرض الجداول</button>
+              <button class="btn-dark" id="map-view-btn" onclick="toggleView('map')">عرض الخريطة</button>
+            </div>
+            <br>
+            <div class="action-buttons">
+            </div>
+          </div>
+          <!-- جداول البيانات -->
+          <div class="tables-container" id="tables-view">
+            <!-- جدول المحلات -->
+            <div class="table card">
+              <div class="table-header">
+                <h3>قائمة المحلات</h3>
+                <button class="btn-green" onclick="openNewStoreForm()">➕ إضافة محل جديد</button>
+                <div class="form-container" id="newStoreFormContainer" style="display:none;">
+                  <div class="form card">
+                    <h3>إضافة محل جديد</h3>
+                    <div class="form-grid">
+                      <input type="text" placeholder="رقم المحل" required />
+                      <input type="number" placeholder="المساحة" required />
+                      <select required>
+                        <option value="">اختر النشاط</option>
+                        <option value="restaurant">مطعم</option>
+                        <option value="clothing">ملابس</option>
+                        <option value="electronics">إلكترونيات</option>
+                        <option value="cosmetics">مستحضرات تجميل</option>
+                        <option value="services">خدمات</option>
+                        <option value="other">أخرى</option>
+                      </select>
+                      <input type="number" placeholder="رقم الدور" required />
+                      <input type="number" placeholder="الموقع X" required />
+                      <input type="number" placeholder="الموقع Y" required />
+                      <input type="number" placeholder="العرض" required />
+                      <input type="number" placeholder="الطول" required />
+                    </div>
+                    <button class="btn-green">حفظ</button>
+                  </div>
+                </div>
+              </div>
+              <div class="table-wrapper">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>رقم المحل</th>
+                      <th>الدور</th>
+                      <th>النشاط</th>
+                      <th>المساحة</th>
+                      <th>الحالة</th>
+                      <th>صاحب المحل</th>
+                      <th>الإجراءات</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>A101</td>
+                      <td>الأرضي</td>
+                      <td>مطعم</td>
+                      <td>120 م²</td>
+                      <td>مؤجر</td>
+                      <td>أحمد محمد</td>
+                      <td>
+                        <button class="btn-icon" title="تعديل" onclick="editStore(1)">✏️</button>
+                        <button class="btn-icon" title="تغيير الحالة">🔄</button>
+                        <button class="btn-icon" title="حذف">🗑️</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>A102</td>
+                      <td>الأرضي</td>
+                      <td>ملابس</td>
+                      <td>85 م²</td>
+                      <td>متاح</td>
+                      <td>-</td>
+                      <td>
+                        <button class="btn-green btn-sm">تعيين مستأجر</button>
+                        <button class="btn-icon" title="تغيير الحالة">🔄</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="table-header">
+                <br>
+                <h3>قائمة أصحاب المحلات</h3>
+                <button class="btn-green" onclick="openNewTenantForm()">➕ إضافة صاحب محل</button>
+                <div class="form-container" id="newTenantFormContainer" style="display:none;">
+                  <div class="form card">
+                    <h3>إضافة صاحب محل</h3>
+                    <div class="form-grid">
+                      <input type="text" placeholder="اسم المستأجر" required />
+                      <input type="tel" placeholder="رقم الجوال" required />
+                      <input type="email" placeholder="البريد الإلكتروني" />
+                      <select required>
+                        <option value="">اختر المحل</option>
+                        <option value="A102">A102 - متاح</option>
+                        <option value="A103">A103 - متاح</option>
+                      </select>
+                    </div>
+                    <button class="btn-green">حفظ</button>
+                  </div>
+                </div>
+              </div>
+              <div class="table-wrapper">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>الاسم</th>
+                      <th>رقم الجوال</th>
+                      <th>البريد الإلكتروني</th>
+                      <th>المحلات المستأجرة</th>
+                      <th>الإجراءات</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>أحمد محمد</td>
+                      <td>0501234567</td>
+                      <td>ahmed@example.com</td>
+                      <td>A101, B203</td>
+                      <td>
+                        <button class="btn-icon" title="تعديل" onclick="editTenant(1)">✏️</button>
+                        <button class="btn-icon" title="حذف">🗑️</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        
+          <!-- خريطة المول -->
+          <div class="card" id="map-view" style="display: none;">
+            <h3>خريطة المول</h3>
+            <div class="floor-controls">
+              <button class="btn-green" onclick="decrementFloor()">-</button>
+              <span id="currentFloor">الدور: 0</span>
+              <button class="btn-green" onclick="incrementFloor()">+</button>
+            </div>
+            <div id="mall-map"></div>
+          </div>
+          <!-- نموذج إضافة محل جديد -->
+          <div class="form-container" id="newStoreFormContainer" style="display:none;">
+            <div class="form card">
+              <h3>إضافة محل جديد</h3>
+              <div class="form-grid" style="grid-template-columns: repeat(3, 1fr); gap: 16px;">
+                <!-- معلومات المحل الأسائية -->
+                <div class="form-section" style="background: #f8fafc; padding: 16px; border-radius: 12px;">
+                  <h4 style="margin: 0 0 12px 0; color: #1e3a8a;">معلومات المحل الأسائية</h4>
+                  <div class="input-group" style="display: flex; flex-direction: column; gap: 12px;">
+                    <input type="text" placeholder="رقم المحل" required style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #e2e8f0;" />
+                    <input type="number" placeholder="المساحة" required style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #e2e8f0;" />
+                    <select required style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #e2e8f0; background: white;">
+                      <option value="">اختر النشاط</option>
+                      <option value="restaurant">مطعم</option>
+                      <option value="clothing">ملابس</option>
+                      <option value="electronics">إلكترونيات</option>
+                      <option value="cosmetics">مستحضرات تجميل</option>
+                      <option value="services">خدمات</option>
+                      <option value="other">أخرى</option>
+                    </select>
+                  </div>
+                </div>
+                <!-- موقع المحل -->
+                <div class="form-section" style="background: #f8fafc; padding: 16px; border-radius: 12px;">
+                  <h4 style="margin: 0 0 12px 0; color: #1e3a8a;">موقع المحل</h4>
+                  <div class="input-group" style="display: flex; flex-direction: column; gap: 12px;">
+                    <input type="number" placeholder="رقم الدور" required style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #e2e8f0;" />
+                    <div class="coordinates" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                      <input type="number" placeholder="الموقع X" required style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #e2e8f0;" />
+                      <input type="number" placeholder="الموقع Y" required style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #e2e8f0;" />
+                    </div>
+                  </div>
+                </div>
+                <!-- أبعاد المحل -->
+                <div class="form-section" style="background: #f8fafc; padding: 16px; border-radius: 12px;">
+                  <h4 style="margin: 0 0 12px 0; color: #1e3a8a;">أبعاد المحل</h4>
+                  <div class="input-group dimensions" style="display: flex; flex-direction: column; gap: 12px;">
+                    <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; align-items: center;">
+                      <input type="number" placeholder="العرض" required style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #e2e8f0;" />
+                      <span style="text-align: center; color: #64748b;">×</span>
+                      <input type="number" placeholder="الطول" required style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #e2e8f0;" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button class="btn-green" style="margin-top: 24px; width: 100%; padding: 12px;">حفظ</button>
+            </div>
+          </div>
+          <!-- نموذج إضافة صاحب محل -->
+        
+        </div>
+            <!-- نافذة تعديل المحل -->
+        <div id="editStoreModal" class="modal">
+        <div class="modal-content">
+            <h3>تعديل بيانات المحل</h3>
+            <form class="form">
+            <div class="form-sections">
+                <!-- قسم بيانات المحل -->
+                <div class="form-section">
+                <h4>بيانات المحل</h4>
+                <div class="form-grid">
+                    <div class="form-group">
+                    <label for="edit-store-number">رقم المحل</label>
+                    <input type="text" id="edit-store-number" placeholder="رقم المحل" required />
+                    </div>
+                    <div class="form-group">
+                    <label for="edit-store-area">المساحة</label>
+                    <input type="number" id="edit-store-area" placeholder="المساحة" required />
+                    </div>
+                    <div class="form-group">
+                    <label for="edit-store-activity">النشاط</label>
+                    <select id="edit-store-activity" required>
+                        <option value="">اختر النشاط</option>
+                        <option value="restaurant">مطعم</option>
+                        <option value="clothing">ملابس</option>
+                        <option value="electronics">إلكترونيات</option>
+                        <option value="cosmetics">مستحضرات تجميل</option>
+                        <option value="services">خدمات</option>
+                        <option value="other">أخرى</option>
+                    </select>
+                    </div>
+                    <div class="form-group">
+                    <label for="edit-store-floor">رقم الدور</label>
+                    <input type="number" id="edit-store-floor" placeholder="رقم الدور" required />
+                    </div>
+                    <div class="form-group">
+                    <label for="edit-store-x">الموقع X</label>
+                    <input type="number" id="edit-store-x" placeholder="الموقع X" required />
+                    </div>
+                    <div class="form-group">
+                    <label for="edit-store-y">الموقع Y</label>
+                    <input type="number" id="edit-store-y" placeholder="الموقع Y" required />
+                    </div>
+                    <div class="form-group">
+                    <label for="edit-store-width">العرض</label>
+                    <input type="number" id="edit-store-width" placeholder="العرض" required />
+                    </div>
+                    <div class="form-group">
+                    <label for="edit-store-height">الطول</label>
+                    <input type="number" id="edit-store-height" placeholder="الطول" required />
+                    </div>
+                </div>
+                </div>
+
+                <!-- قسم بيانات صاحب المحل -->
+                <div class="form-section">
+                <h4>بيانات صاحب المحل</h4>
+                <div class="form-grid">
+                    <div class="form-group">
+                    <label for="edit-tenant-name">اسم المستأجر</label>
+                    <input type="text" id="edit-tenant-name" placeholder="اسم المستأجر" required />
+                    </div>
+                    <div class="form-group">
+                    <label for="edit-tenant-phone">رقم الجوال</label>
+                    <input type="tel" id="edit-tenant-phone" placeholder="رقم الجوال" required />
+                    </div>
+                    <div class="form-group">
+                    <label for="edit-tenant-email">البريد الإلكتروني</label>
+                    <input type="email" id="edit-tenant-email" placeholder="البريد الإلكتروني" />
+                    </div>
+                    <div class="form-group">
+                    <label for="edit-tenant-id">رقم الهوية</label>
+                    <input type="text" id="edit-tenant-id" placeholder="رقم الهوية" required />
+                    </div>
+                    <div class="form-group">
+                    <label for="edit-tenant-contract-start">تاريخ بداية العقد</label>
+                    <input type="date" id="edit-tenant-contract-start" required />
+                    </div>
+                    <div class="form-group">
+                    <label for="edit-tenant-contract-end">تاريخ نهاية العقد</label>
+                    <input type="date" id="edit-tenant-contract-end" required />
+                    </div>
+                </div>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn-green">حفظ التغييرات</button>
+                <button type="button" class="btn-secondary" onclick="closeModal('editStoreModal')">إلغاء</button>
+            </div>
+            </form>
+        </div>
+        </div>
+
+        <!-- نافذة عرض تفاصيل المحل -->
+        <div id="storeDetailsModal" class="modal">
+        <div class="modal-content">
+            <h3>تفاصيل المحل</h3>
+            <div class="details-sections">
+            <!-- قسم بيانات المحل -->
+            <div class="details-section">
+                <h4>بيانات المحل</h4>
+                <div class="details-grid">
+                <div class="detail-row">
+                    <span class="detail-label">رقم المحل:</span>
+                    <span class="detail-value" id="view-store-number"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">المساحة:</span>
+                    <span class="detail-value" id="view-store-area"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">النشاط:</span>
+                    <span class="detail-value" id="view-store-activity"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">رقم الدور:</span>
+                    <span class="detail-value" id="view-store-floor"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">الموقع:</span>
+                    <span class="detail-value" id="view-store-location"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">الأبعاد:</span>
+                    <span class="detail-value" id="view-store-dimensions"></span>
+                </div>
+                </div>
+            </div>
+
+            <!-- قسم بيانات صاحب المحل -->
+            <div class="details-section">
+                <h4>بيانات صاحب المحل</h4>
+                <div class="details-grid">
+                <div class="detail-row">
+                    <span class="detail-label">اسم المستأجر:</span>
+                    <span class="detail-value" id="view-tenant-name"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">رقم الجوال:</span>
+                    <span class="detail-value" id="view-tenant-phone"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">البريد الإلكتروني:</span>
+                    <span class="detail-value" id="view-tenant-email"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">رقم الهوية:</span>
+                    <span class="detail-value" id="view-tenant-id"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">تاريخ بداية العقد:</span>
+                    <span class="detail-value" id="view-tenant-contract-start"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">تاريخ نهاية العقد:</span>
+                    <span class="detail-value" id="view-tenant-contract-end"></span>
+                </div>
+                </div>
+            </div>
+            </div>
+            <div class="modal-actions">
+            <button class="btn-secondary" onclick="closeModal('storeDetailsModal')">إغلاق</button>
+            </div>
+        </div>
+        </div>
+    </div>
+<script src="../views/js/mall-management/index.js"></script>
+
+</body>
+</html>
+

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script>
+      function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(";");
+        for (var i = 0; i < ca.length; i++) {
+          var c = ca[i];
+          while (c.charAt(0) == " ") c = c.substring(1, c.length);
+          if (c.indexOf(nameEQ) == 0)
+            return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+      }
+      (function applyNightModeFromCookie() {
+        const nightMode = getCookie("nightMode");
+        if (nightMode === "on") {
+          document.documentElement.classList.add("dark");
+          document.body.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+          document.body.classList.remove("dark");
+        }
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IEMM - إدارة المجمعات</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="../views/css/styles.css" />
+    <script src="../views/js/script.js" defer></script>
+    
+  </head>
+  <body>
+    <header>
+      <div class="container navbar">
+        <h1>IEMM</h1>
+        <nav>
+          <a href="admin-dashboard.html" id="dashboard-link">📊 لوحة التحكم</a>
+          <a href="mall-management.html" id="malls-link" class="active"
+            >🏢 إدارة المجمعات</a
+          >
+          <a href="settings.html" id="settings-link">⚙️ الإعدادات العامة</a>
+        </nav>
+        <button class="btn-dark" onclick="toggleNightMode()">
+          الوضع الليلي
+        </button>
+      </div>
+    </header>
+
+    <div class="main">
+      <div class="section active" id="malls-section">
+        <div class="section-header">
+          <h2 class="section-title">🏢 إدارة المجمعات</h2>
+          <button class="btn-green" onclick="toggleForm()">
+            ➕ إضافة مجمع
+          </button>
+        </div>
+
+        <form action="" id="mall-form" style="display: none" method="post">
+          <div class="form card">
+            <h3>إضافة مجمع جديد</h3>
+            <div class="form-grid">
+              <input type="text" placeholder="اسم المجمع" name="mall_name" />
+              <input type="text" placeholder="الموقع" name="location" />
+              <input
+                type="number"
+                placeholder="عدد الأدوار"
+                name="floors_count"
+              />
+              <input
+                type="text"
+                placeholder="رابط الموقع على خرائط قوقل"
+                name="location_link"
+              />
+              <select name="city_id" required>
+                <option value="">اختر المدينة</option>
+                <!-- Cities will be loaded dynamically -->
+              </select>
+            </div>
+            <hr />
+            <h4>بيانات حساب المالك</h4>
+            <div class="form-grid">
+              <input type="text" placeholder="اسم المستخدم" name="username" />
+              <input
+                type="text"
+                placeholder="الاسم الثنائي"
+                name="owner_name"
+              />
+              <input
+                type="email"
+                placeholder="البريد الإلكتروني"
+                name="email"
+              />
+              <input
+                type="password"
+                placeholder="كلمة المرور"
+                name="password"
+              />
+              <div class="radio-group">
+                <label>الجنس:</label>
+                <div>
+                  <input
+                    type="radio"
+                    id="male"
+                    name="sex"
+                    value="true"
+                    required
+                  />
+                  <label for="male">ذكر</label>
+                  <input type="radio" id="female" name="sex" value="false" />
+                  <label for="female">أنثى</label>
+                </div>
+              </div>
+              <input
+                type="tel"
+                placeholder="00967xxxxxxxx"
+                name="phone"
+                pattern="^[0-9]{14}$"
+                maxlength="14"
+                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                title="الرجاء إدخال رقم جوال صحيح (مثال: 00967xxxxxxxx)"
+              />
+              <input
+                type="date"
+                name="birth_date"
+                max="2024-12-31"
+                min="1900-01-01"
+                required
+                title="الرجاء إدخال تاريخ الميلاد"
+              />
+            </div>
+            <button class="btn-green" onclick="addMall(event)">
+              إضافة المجمع
+            </button>
+          </div>
+        </form>
+
+        <div class="table card">
+          <div
+            id="loading"
+            style="display: none; text-align: center; padding: 20px"
+          >
+            جاري تحميل البيانات...
+          </div>
+          <div
+            id="error"
+            style="display: none; text-align: center; padding: 20px; color: red"
+          >
+            حدث خطأ أثناء تحميل البيانات
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>اسم المجمع</th>
+                <th>المالك</th>
+                <th>الموقع</th>
+                <th>عدد الطوابق</th>
+                <th>المدينة</th>
+                <th>الإجراءات</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- سيتم إضافة البيانات ديناميكياً -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- إضافة النافذة المنبثقة لعرض بيانات المجمع -->
+    <div id="mallDetailsModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>بيانات المجمع</h3>
+        <div class="mall-details" id="mallDetailsContent">
+          <!-- سيتم إضافة البيانات ديناميكياً -->
+        </div>
+        <button class="btn-green" id="changeOwnerBtn">تغيير مالك المجمع</button>
+
+        <!-- نموذج تغيير المالك -->
+        <div id="changeOwnerForm" style="display: none; margin-top: 20px">
+          <h4>بيانات المالك الجديد</h4>
+          <div class="form-grid">
+            <input
+              type="text"
+              placeholder="اسم المستخدم"
+              id="newUsername"
+              name="newUsername"
+            />
+            <input
+              type="text"
+              placeholder="الاسم الثنائي"
+              id="newOwnerName"
+              name="newOwnerName"
+            />
+            <input
+              type="email"
+              placeholder="البريد الإلكتروني"
+              id="newOwnerEmail"
+              name="newOwnerEmail"
+            />
+            <input
+              type="password"
+              placeholder="كلمة المرور"
+              id="newPassword"
+              name="newPassword"
+            />
+            <div class="radio-group">
+              <label>الجنس:</label>
+              <div>
+                <input
+                  type="radio"
+                  id="newMale"
+                  name="newSex"
+                  value="true"
+                  required
+                />
+                <label for="newMale">ذكر</label>
+                <input
+                  type="radio"
+                  id="newFemale"
+                  name="newSex"
+                  value="false"
+                />
+                <label for="newFemale">أنثى</label>
+              </div>
+            </div>
+            <input
+              type="tel"
+              placeholder="00967xxxxxxxx"
+              id="newPhone"
+              name="newPhone"
+              pattern="^[0-9]{14}$"
+              maxlength="14"
+              oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+              title="الرجاء إدخال رقم جوال صحيح (مثال: 00967xxxxxxxx)"
+            />
+            <input
+              type="date"
+              id="newBirthDate"
+              name="newBirthDate"
+              max="2024-12-31"
+              min="1900-01-01"
+              required
+              title="الرجاء إدخال تاريخ الميلاد"
+            />
+          </div>
+          <div
+            style="
+              margin-top: 10px;
+              display: flex;
+              gap: 10px;
+              justify-content: flex-start;
+            "
+          >
+            <button class="btn-green" onclick="submitOwnerChange()">
+              حفظ التغييرات
+            </button>
+            <button class="btn-dark" onclick="cancelOwnerChange()">
+              إلغاء
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // كود للتعامل مع النافذة المنبثقة
+      const modal = document.getElementById("mallDetailsModal");
+      const closeBtn = document.getElementsByClassName("close")[0];
+
+      // إغلاق النافذة عند النقر على زر الإغلاق
+      closeBtn.onclick = function () {
+        modal.style.display = "none";
+      };
+
+      // إغلاق النافذة عند النقر خارجها
+      window.onclick = function (event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      };
+
+      // دالة لعرض بيانات المجمع في النافذة المنبثقة
+    </script>
+
+    <script>
+      function toggleNightMode() {
+        document.body.classList.toggle("dark");
+        document.documentElement.classList.toggle("dark");
+        var expires = "";
+        var days = 365;
+        var date = new Date();
+        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+        expires = "; expires=" + date.toUTCString();
+        document.cookie =
+          "nightMode=" +
+          (document.body.classList.contains("dark") ? "on" : "off") +
+          expires +
+          "; path=/";
+        console.log("Cookie after set:", document.cookie);
+      }
+    </script>
+
+    <!-- All JS scripts at the end for best performance -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../views/js/script.js"></script>
+    <script src="../views/js/admin/mall-mangement.js"></script>
+  </body>
+</html>

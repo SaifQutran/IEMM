@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IEMM - إدارة المنتجات </title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="../views/css/styles.css">
+  <link rel="stylesheet" href="../views/css/chat.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="../views/js/script.js" defer></script>
+  <script src="../views/js/stores/chat.js" defer></script>
+</head>
+<body>
+  <!-- Header Section -->
+  <header>
+    <div class="container navbar">
+      <h1>IEMM</h1>
+      <nav>
+        <a href="shop-dashboard.html" id="dashboard-link">📊 لوحة التحكم</a>
+        <a href="products-management.html" id="products-link" class="active">🛍️ إدارة المنتجات</a>
+        <a href="inventory.html" id="inventory-link">📦 المخزون</a>
+
+        <a href="employees.html" id="staff-link">👥 إدارة العاملين</a>
+        <a href="bills-stores.html" id="bills-link">💰 الفواتير</a>
+      </nav>
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <button class="btn-dark" onclick="document.body.classList.toggle('dark')">الوضع الليلي</button>
+        <button id="chat-toggle" class="chat-toggle-btn" title="الدردشة مع مدير المول">
+          <i class="fas fa-comments"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- نافذة الدردشة الجانبية -->
+  <div id="chat-panel" class="chat-panel">
+    <div class="chat-header">
+      <div class="mall-logo-container">
+        <img id="mall-logo" alt="شعار المول" class="mall-logo">
+        <h3>الدردشة مع مدير المول</h3>
+      </div>
+      <button id="chat-close" class="chat-close-btn">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div id="messages-container" class="messages-container">
+      <!-- سيتم إنشاء الرسائل عبر JavaScript -->
+    </div>
+    <form id="message-form" class="message-form">
+      <textarea id="message-input" class="message-input" placeholder="اكتب رسالتك هنا..." rows="1"></textarea>
+      <button type="submit" class="send-message-btn">
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </form>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main">    
+    <!-- Products Management Section -->
+    <div class="section active" id="products-section">
+      <div class="section-header">
+        <h2 class="section-title">🛍️ إدارة المنتجات</h2>
+        <button class="btn-green" onclick="document.getElementById('newProductFormContainer').style.display = document.getElementById('newProductFormContainer').style.display === 'none' ? 'block' : 'none'">➕ إضافة منتج جديد</button>
+      </div>
+
+      <div class="form-container" id="newProductFormContainer" style="display:none;">
+        <div class="form card">
+          <h3>إضافة منتج جديد</h3>
+          <div class="form-sections">
+            <!-- معلومات المنتج الأساسية -->
+            <div class="form-section">
+              <h4>معلومات المنتج الأساسية</h4>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>اسم المنتج</label>
+                  <input type="text" required />
+                </div>
+                <div class="form-group">
+                  <label>الوصف</label>
+                  <textarea required></textarea>
+                </div>
+                <div class="form-group">
+                  <label>التصنيف</label>
+                  <select required>
+                    <option value="">اختر التصنيف</option>
+                    <option value="electronics">إلكترونيات</option>
+                    <option value="clothing">ملابس</option>
+                    <option value="accessories">اكسسوارات</option>
+                    <option value="other">أخرى</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- معلومات السعر والكمية -->
+            <div class="form-section">
+              <h4>معلومات السعر والكمية</h4>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>السعر</label>
+                  <input type="number" step="0.01" required />
+                </div>
+                <div class="form-group">
+                  <label>الكمية</label>
+                  <input type="number" required />
+                </div>
+                <div class="form-group">
+                  <label>الحد الأدنى للكمية</label>
+                  <input type="number" required />
+                </div>
+              </div>
+            </div>
+
+            <!-- صور المنتج -->
+            <div class="form-section">
+              <h4>صور المنتج</h4>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>الصور</label>
+                  <div class="image-upload-container">
+                    <input type="file" accept="image/*" multiple id="productImages" style="display: none;" />
+                    <div class="image-preview-container" id="imagePreviewContainer"></div>
+                    <button type="button" class="btn-secondary" onclick="document.getElementById('productImages').click()">اختر الصور</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- معلومات إضافية -->
+            <div class="form-section">
+              <h4>معلومات إضافية</h4>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>حالة المنتج</label>
+                  <select required>
+                    <option value="">اختر الحالة</option>
+                    <option value="active">متوفر</option>
+                    <option value="inactive">غير متوفر</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>الباركود</label>
+                  <input type="text" required />
+                </div>
+                <div class="form-group">
+                  <label>بلد التصنيع</label>
+                  <input type="text" required />
+                </div>
+                <div class="form-group">
+                  <label>الشركة المصنعة</label>
+                  <input type="text" required />
+                </div>
+                <div class="form-group">
+                  <label>تاريخ الإنتاج</label>
+                  <input type="date" required />
+                </div>
+                <div class="form-group">
+                  <label>تاريخ انتهاء الصلاحية</label>
+                  <input type="date" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-green">حفظ</button>
+            <button type="button" class="btn-secondary" onclick="document.getElementById('newProductFormContainer').style.display = 'none'">إلغاء</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="table card">
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>المنتج</th>
+                <th>الباركود</th>
+                <th>الشركة المصنعة</th>
+                <th>السعر</th>
+                <th>الكمية</th>
+                <th>تاريخ الإنتاج</th>
+                <th>تاريخ الانتهاء</th>
+                <th>الحالة</th>
+                <th>الإجراءات</th>
+              </tr>
+            </thead>
+            <tbody id="products-table-body">
+              <!-- سيتم ملؤها بواسطة JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    /* تنسيق حاوية الصور */
+    .image-upload-container {
+      border: 2px dashed #e2e8f0;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .image-preview-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .image-preview {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .image-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .image-preview .remove-image {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: rgba(255, 255, 255, 0.8);
+      border: none;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* تنسيق الخصائص */
+    .attributes-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .attribute-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .attribute-row input {
+      flex: 1;
+    }
+
+    /* تنسيق النماذج */
+    .form-sections {
+      display: grid;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .form-section {
+      background: #f8fafc;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-section h4 {
+      margin: 0 0 20px 0;
+      color: #1e3a8a;
+      font-size: 1.1rem;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-group label {
+      color: #1e293b;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 10px 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      width: 100%;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    /* Dark Mode Styles */
+    body.dark .form-section {
+      background: var(--dark-chart);
+    }
+
+    body.dark .form-section h4 {
+      color: var(--dark-text);
+      border-color: #334155;
+    }
+
+    body.dark .form-group label {
+      color: var(--dark-text);
+    }
+
+    body.dark .form-group input,
+    body.dark .form-group select,
+    body.dark .form-group textarea {
+      background: var(--dark-card);
+      border-color: #334155;
+      color: var(--dark-text);
+    }
+
+    body.dark .form-actions {
+      border-color: #334155;
+    }
+
+    body.dark .image-upload-container {
+      border-color: #334155;
+    }
+  </style>
+
+  <script>
+    // دالة معاينة الصور
+    document.getElementById('productImages').addEventListener('change', function(e) {
+      const container = document.getElementById('imagePreviewContainer');
+      container.innerHTML = '';
+      
+      Array.from(e.target.files).forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const preview = document.createElement('div');
+          preview.className = 'image-preview';
+          preview.innerHTML = `
+            <img src="${e.target.result}" alt="Preview" />
+            <button type="button" class="remove-image" onclick="removeImage(${index})">×</button>
+          `;
+          container.appendChild(preview);
+        }
+        reader.readAsDataURL(file);
+      });
+    });
+
+    // دالة حذف صورة
+    function removeImage(index) {
+      const container = document.getElementById('imagePreviewContainer');
+      const previews = container.getElementsByClassName('image-preview');
+      if (previews[index]) {
+        previews[index].remove();
+      }
+    }
+
+    // تهيئة بيانات المنتجات 
+    document.addEventListener('DOMContentLoaded', function() {
+      // بيانات تجريبية للمنتجات
+      const products = [
+        {
+          id: 1,
+          name: "هاتف ذكي موديل XYZ",
+          barcode: "4589712365478",
+          manufacturer: "شركة التقنيات المتطورة",
+          price: 1599.99,
+          quantity: 45,
+          prodDate: "2023-10-15",
+          expDate: "2026-10-15",
+          status: "active"
+        },
+        {
+          id: 2,
+          name: "حقيبة ظهر كلاسيكية",
+          barcode: "7845123698745",
+          manufacturer: "أزياء العالمية",
+          price: 249.99,
+          quantity: 78,
+          prodDate: "2023-12-01",
+          expDate: "",
+          status: "active"
+        },
+        {
+          id: 3,
+          name: "سماعات لاسلكية",
+          barcode: "3265987412589",
+          manufacturer: "الصوتيات المتقدمة",
+          price: 399.99,
+          quantity: 32,
+          prodDate: "2024-01-10",
+          expDate: "2029-01-10",
+          status: "active"
+        },
+        {
+          id: 4,
+          name: "ساعة ذكية",
+          barcode: "9874563214785",
+          manufacturer: "تقنيات الساعات",
+          price: 799.99,
+          quantity: 12,
+          prodDate: "2023-11-20",
+          expDate: "2028-11-20",
+          status: "inactive"
+        },
+        {
+          id: 5,
+          name: "شاحن محمول",
+          barcode: "6541239874563",
+          manufacturer: "طاقة بلس",
+          price: 129.99,
+          quantity: 65,
+          prodDate: "2024-02-05",
+          expDate: "2027-02-05",
+          status: "active"
+        }
+      ];
+
+      // إضافة المنتجات للجدول
+      const tbody = document.getElementById('products-table-body');
+      products.forEach(product => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${product.name}</td>
+          <td>${product.barcode}</td>
+          <td>${product.manufacturer}</td>
+          <td>${product.price} ريال</td>
+          <td>${product.quantity}</td>
+          <td>${product.prodDate}</td>
+          <td>${product.expDate || 'غير محدد'}</td>
+          <td><span class="status-badge ${product.status === 'active' ? 'active' : 'inactive'}">${product.status === 'active' ? 'متوفر' : 'غير متوفر'}</span></td>
+          <td>
+            <button class="btn-icon" onclick="editProduct(${product.id})">✏️</button>
+            <button class="btn-icon" onclick="deleteProduct(${product.id})">🗑️</button>
+            <button class="btn-icon" onclick="viewProduct(${product.id})">👁️</button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    });
+
+    // دوال تحرير وحذف وعرض المنتج
+    function editProduct(id) {
+      alert(`تم فتح نموذج تحرير المنتج رقم ${id}`);
+      // هنا يمكن فتح نموذج تحرير وملئه بالبيانات الحالية للمنتج
+    }
+
+    function deleteProduct(id) {
+      if (confirm(`هل أنت متأكد من رغبتك في حذف المنتج رقم ${id}؟`)) {
+        alert(`تم حذف المنتج رقم ${id}`);
+        // هنا يمكن إرسال طلب API لحذف المنتج وتحديث الجدول
+      }
+    }
+
+    function viewProduct(id) {
+      alert(`عرض تفاصيل المنتج رقم ${id}`);
+      // هنا يمكن فتح نافذة منبثقة لعرض تفاصيل كاملة للمنتج
+    }
+  </script>
+  <script src="../views/js/stores/index.js"></script>
+</body>
+</html>

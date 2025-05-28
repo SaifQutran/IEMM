@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <!-- Night mode cookie script: must be first -->
+    <script>
+      function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(";");
+        for (var i = 0; i < ca.length; i++) {
+          var c = ca[i];
+          while (c.charAt(0) == " ") c = c.substring(1, c.length);
+          if (c.indexOf(nameEQ) == 0)
+            return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+      }
+      (function applyNightModeFromCookie() {
+        const nightMode = getCookie("nightMode");
+        if (nightMode === "on") {
+          document.documentElement.classList.add("dark");
+          document.body.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+          document.body.classList.remove("dark");
+        }
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IEMM - لوحة التحكم</title>
+    <link rel="stylesheet" href="../views/css/styles.css" />
+  </head>
+  <body>
+    <header>
+      <div class="container navbar">
+        <h1>IEMM</h1>
+        <nav>
+          <a href="admin-dashboard.html" id="dashboard-link" class="active"
+            >📊 لوحة التحكم</a
+          >
+          <a href="mall-management.html" id="malls-link">🏢 إدارة المجمعات</a>
+          <a href="settings.html" id="settings-link">⚙️ الإعدادات العامة</a>
+        </nav>
+        <button class="btn-dark" onclick="toggleNightMode()">
+          الوضع الليلي
+        </button>
+      </div>
+    </header>
+
+    <div class="main">
+      <div class="section active" id="dashboard-section">
+        <h2 class="section-title">📊 لوحة التحكم</h2>
+        <!-- بطاقات الإحصائيات -->
+        <div class="stats-grid"></div>
+      </div>
+    </div>
+
+    <!-- All JS scripts at the end for best performance -->
+    <script src="../views/js/script.js"></script>
+    <script src="../views/js/admin/admin-dashboard.js"></script>
+    <script>
+      function toggleNightMode() {
+        document.body.classList.toggle("dark");
+        document.documentElement.classList.toggle("dark");
+        var expires = "";
+        var days = 365;
+        var date = new Date();
+        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+        expires = "; expires=" + date.toUTCString();
+        document.cookie =
+          "nightMode=" +
+          (document.body.classList.contains("dark") ? "on" : "off") +
+          expires +
+          "; path=/";
+      }
+    </script>
+    <script src="../views/js/admin/mall-mangement.js"></script>
+  </body>
+</html>

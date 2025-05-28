@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IEMM - إدارة المجمعات</title>
+  <link rel="stylesheet" href="views/css/styles.css">
+  <script src="views/js/script.js" defer></script>
+</head>
+<body>
+  <!-- Navbar -->
+  <header>
+    <div class="container navbar">
+      <h1 style="font-size:1.25rem;font-weight:bold;">IEMM</h1>
+      <button class="btn-dark" onclick="document.body.classList.toggle('dark')">الوضع الليلي</button>
+    </div>
+  </header>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h2 class="hero-title">إدارة ذكية للمجمعات التجارية</h2>
+        <p class="hero-desc">نظام متكامل يربط بين الإدارة، التجار والعملاء في بيئة رقمية حديثة.</p>
+        <a href="login.html" class="btn-cta"> تسجيل الدخول </a>
+      </div>
+      <div class="hero-img">
+        <img src="https://cdn.pixabay.com/photo/2023/06/10/17/16/interface-8054454_1280.png" alt="نظام تقني">
+      </div>
+    </div>
+  </section>
+  <!-- Features Section -->
+  <section id="features" class="features-section">
+    <div class="container">
+      <h2 class="features-title">مميزات النظام</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <svg class="feature-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h2l.5 1H19.5l.5-1h2m-3 0v10H6V10m9 4h.01M15 18h.01M9 14h.01M9 18h.01M12 14h.01M12 18h.01" /></svg>
+          <h3 class="feature-title">تكامل شامل</h3>
+          <p class="feature-desc">ربط سهل بين إدارة المجمع، المحلات، والعملاء ضمن نظام واحد.</p>
+        </div>
+        <div class="feature-card">
+          <svg class="feature-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a4 4 0 014-4h6M9 13H5m2 4h-.01" /></svg>
+          <h3 class="feature-title">تقارير وإحصائيات</h3>
+          <p class="feature-desc">لوحة تحكم ذكية لعرض الأداء، المبيعات، والطلبات بسهولة.</p>
+        </div>
+        <div class="feature-card">
+          <svg class="feature-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6V4m0 0H4a2 2 0 00-2 2v14a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2h-8zm0 0v2" /></svg>
+          <h3 class="feature-title">سهولة الاستخدام</h3>
+          <p class="feature-desc">واجهة بسيطة وسلسة لجميع المستخدمين، حتى غير التقنيين.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Contact Section -->
+  <section class="contact-section">
+    <div class="container">
+      <h2 class="contact-title">تواصل معنا</h2>
+      <p class="contact-desc">هل لديك استفسار؟ يسعدنا تواصلك معنا عبر النموذج التالي.</p>
+      <form class="contact-form">
+        <input type="text" placeholder="الاسم">
+        <input type="email" placeholder="البريد الإلكتروني">
+        <textarea rows="4" placeholder="رسالتك"></textarea>
+        <button type="submit">إرسال</button>
+      </form>
+    </div>
+  </section>
+</body>
+</html>
