@@ -1,42 +1,96 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8" />
-  <meta   name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>IEMM - الإعدادات العامة</title>
-  <link rel="stylesheet" href="../views/css/styles.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script src="../views/js/script.js" defer></script>
-</head>
-<body>
-  <header>
-    <div class="container navbar">
-      <h1>IEMM</h1>
-      <nav>
-        <a href="admin-dashboard.html" id="dashboard-link"><i class="fas fa-chart-line"></i> لوحة التحكم</a>
-        <a href="mall-management.html" id="malls-link"><i class="fas fa-building"></i> إدارة المجمعات</a>
-        <a href="settings.html" id="settings-link" class="active"><i class="fas fa-cog"></i> الإعدادات العامة</a>
-      </nav>
-      <button class="btn-dark" onclick="document.body.classList.toggle('dark')">الوضع الليلي</button>
-    </div>
-  </header>
+  <head>
+    <!-- Night mode cookie script: must be first -->
+    <script>
+      function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(";");
+        for (var i = 0; i < ca.length; i++) {
+          var c = ca[i];
+          while (c.charAt(0) == " ") c = c.substring(1, c.length);
+          if (c.indexOf(nameEQ) == 0)
+            return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+      }
+      (function applyNightModeFromCookie() {
+        const body = document.body;
+        const toggleElement = document.getElementById("night-mode-toggle");
 
-  <div class="main">
-    <div class="section active" id="settings-section">
-      <h2 class="section-title"><i class="fas fa-cog"></i> الإعدادات العامة</h2>
-      <div class="card">
-        <div class="form">
-          <h3>إعدادات النظام</h3>
-          <input type="text" placeholder="اسم النظام" />
-          <input type="email" placeholder="البريد الإلكتروني للدعم" />
-          <select>
-            <option value="ar">العربية</option>
-            <option value="en">English</option>
-          </select>
-          <button class="btn-green">حفظ التغييرات</button>
+        if (!body || !toggleElement) return;
+
+        const nightMode = getCookie("nightMode"); // مثلاً لو عندك كود يجيب الكوكي
+
+        if (nightMode === "true") {
+          body.classList.add("dark");
+          toggleElement.classList.add("active");
+        } else {
+          body.classList.remove("dark");
+          toggleElement.classList.remove("active");
+        }
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IEMM - الإعدادات العامة</title>
+    <link rel="stylesheet" href="../views/css/styles.css" />
+  </head>
+  <body>
+    <header>
+      <div class="container navbar">
+        <h1>IEMM</h1>
+        <nav>
+          <a href="admin-dashboard.html" id="dashboard-link">📊 لوحة التحكم</a>
+          <a href="mall-management.html" id="malls-link">🏢 إدارة المجمعات</a>
+          <a href="settings.html" id="settings-link" class="active"
+            >⚙️ الإعدادات العامة</a
+          >
+        </nav>
+        <button class="btn-dark" onclick="toggleNightMode()">
+          الوضع الليلي
+        </button>
+      </div>
+    </header>
+
+    <div class="main">
+      <div class="section active" id="settings-section">
+        <h2 class="section-title">⚙️ الإعدادات العامة</h2>
+        <div class="card">
+          <div class="form">
+            <h3>إعدادات النظام</h3>
+            <input type="text" placeholder="اسم النظام" />
+            <input type="email" placeholder="البريد الإلكتروني للدعم" />
+            <select>
+              <option value="ar">العربية</option>
+              <option value="en">English</option>
+            </select>
+            <button class="btn-green">حفظ التغييرات</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</body>
-</html> 
+
+    <!-- All JS scripts at the end for best performance -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../views/js/script.js"></script>
+    <script>
+      function toggleNightMode() {
+        document.body.classList.toggle("dark");
+        document.documentElement.classList.toggle("dark");
+        var expires = "";
+        var days = 365;
+        var date = new Date();
+        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+        expires = "; expires=" + date.toUTCString();
+        document.cookie =
+          "nightMode=" +
+          (document.body.classList.contains("dark") ? "on" : "off") +
+          expires +
+          "; path=/";
+        // Optional: console.log("Cookie after set:", document.cookie);
+      }
+    </script>
+    <script src="../views/js/admin/mall-mangement.js"></script>
+  </body>
+</html>

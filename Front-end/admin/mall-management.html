@@ -1,109 +1,155 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>IEMM - إدارة المجمعات</title>
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <link rel="stylesheet" href="../views/css/styles.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script src="../views/js/script.js" defer></script>
-  <style>
-    .btn-icon {
-      padding: 0.5rem;
-      border: none;
-      background: none;
-      cursor: pointer;
-      transition: all 0.2s;
-      border-radius: 6px;
-      font-size: 1.1rem;
-      color: #64748b;
-    }
-    .btn-icon:hover {
-      background-color: #f1f5f9;
-      color: #2563eb;
-      transform: translateY(-1px);
-    }
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid #e2e8f0;
-    }
-    .modal-header h3 {
-      font-size: 1.5rem;
-      color: #1e293b;
-      margin: 0;
-    }
-    .btn-close {
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      color: #64748b;
-      cursor: pointer;
-      padding: 0.5rem;
-      transition: all 0.2s;
-    }
-    .btn-close:hover {
-      color: #ef4444;
-    }
-    /* تحديد ارتفاع جدول المجمعات لعرض 5 صفوف فقط مع شريط تمرير */
-    .table-wrapper {
-      max-height: 340px;
-      overflow-y: auto;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <div class="container navbar">
-      <h1>IEMM</h1>
-      <nav>
-        <a href="admin-dashboard.html" id="dashboard-link"><i class="fas fa-chart-line"></i> لوحة التحكم</a>
-        <a href="mall-management.html" id="malls-link" class="active"><i class="fas fa-building"></i> إدارة المجمعات</a>
-        <a href="settings.html" id="settings-link"><i class="fas fa-cog"></i> الإعدادات العامة</a>
-      </nav>
-      <button class="btn-dark" onclick="document.body.classList.toggle('dark')">الوضع الليلي</button>
-    </div>
-  </header>
-
-  <div class="main">
-    <div class="section active" id="malls-section">
-      <div class="section-header">
-        <h2 class="section-title"><i class="fas fa-building"></i> إدارة المجمعات</h2>
-        <button class="btn-green" onclick="toggleForm()"><i class="fas fa-plus"></i> إضافة مجمع</button>
+  <head>
+    <script>
+      function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(";");
+        for (var i = 0; i < ca.length; i++) {
+          var c = ca[i];
+          while (c.charAt(0) == " ") c = c.substring(1, c.length);
+          if (c.indexOf(nameEQ) == 0)
+            return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+      }
+      (function applyNightModeFromCookie() {
+        const nightMode = getCookie("nightMode");
+        if (nightMode === "on") {
+          document.documentElement.classList.add("dark");
+          document.body.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+          document.body.classList.remove("dark");
+        }
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IEMM - إدارة المجمعات</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="../views/css/styles.css" />
+    <script src="../views/js/script.js" defer></script>
+    
+  </head>
+  <body>
+    <header>
+      <div class="container navbar">
+        <h1>IEMM</h1>
+        <nav>
+          <a href="admin-dashboard.html" id="dashboard-link">📊 لوحة التحكم</a>
+          <a href="mall-management.html" id="malls-link" class="active"
+            >🏢 إدارة المجمعات</a
+          >
+          <a href="settings.html" id="settings-link">⚙️ الإعدادات العامة</a>
+        </nav>
+        <button class="btn-dark" onclick="toggleNightMode()">
+          الوضع الليلي
+        </button>
       </div>
-      
-      <div class="form card" id="mall-form" style="display:none;">
+    </header>
 
-        
-        <h3>إضافة مجمع جديد</h3>
-        <div class="form-grid">
-          <input type="text" placeholder="اسم المجمع" />
-          <input type="text" placeholder="اسم المالك" />
-          <input type="text" placeholder="الموقع" />
-          <input type="number" placeholder="عدد الأدوار" /> 
+    <div class="main">
+      <div class="section active" id="malls-section">
+        <div class="section-header">
+          <h2 class="section-title">🏢 إدارة المجمعات</h2>
+          <button class="btn-green" onclick="toggleForm()">
+            ➕ إضافة مجمع
+          </button>
         </div>
-        <hr />
-        <h4>بيانات حساب المالك</h4>
-        <div class="form-grid">
-          <input type="text" placeholder="اسم المستخدم" />
-          <input type="email" placeholder="البريد الإلكتروني" />
-          <input type="password" placeholder="كلمة المرور" />
-        </div>
-        <button class="btn-green">إضافة المجمع</button>
-      </div>
 
-      <div class="table card">
-        <div id="loading" style="display: none; text-align: center; padding: 20px;">
-          جاري تحميل البيانات...
-        </div>
-        <div id="error" style="display: none; text-align: center; padding: 20px; color: red;">
-          حدث خطأ أثناء تحميل البيانات
-        </div>
-        <div class="table-wrapper" style="max-height: 340px; overflow-y: auto;">
+        <form action="" id="mall-form" style="display: none" method="post">
+          <div class="form card">
+            <h3>إضافة مجمع جديد</h3>
+            <div class="form-grid">
+              <input type="text" placeholder="اسم المجمع" name="mall_name" />
+              <input type="text" placeholder="الموقع" name="location" />
+              <input
+                type="number"
+                placeholder="عدد الأدوار"
+                name="floors_count"
+              />
+              <input
+                type="text"
+                placeholder="رابط الموقع على خرائط قوقل"
+                name="location_link"
+              />
+              <select name="city_id" required>
+                <option value="">اختر المدينة</option>
+                <!-- Cities will be loaded dynamically -->
+              </select>
+            </div>
+            <hr />
+            <h4>بيانات حساب المالك</h4>
+            <div class="form-grid">
+              <input type="text" placeholder="اسم المستخدم" name="username" />
+              <input
+                type="text"
+                placeholder="الاسم الثنائي"
+                name="owner_name"
+              />
+              <input
+                type="email"
+                placeholder="البريد الإلكتروني"
+                name="email"
+              />
+              <input
+                type="password"
+                placeholder="كلمة المرور"
+                name="password"
+              />
+              <div class="radio-group">
+                <label>الجنس:</label>
+                <div>
+                  <input
+                    type="radio"
+                    id="male"
+                    name="sex"
+                    value="true"
+                    required
+                  />
+                  <label for="male">ذكر</label>
+                  <input type="radio" id="female" name="sex" value="false" />
+                  <label for="female">أنثى</label>
+                </div>
+              </div>
+              <input
+                type="tel"
+                placeholder="00967xxxxxxxx"
+                name="phone"
+                pattern="^[0-9]{14}$"
+                maxlength="14"
+                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                title="الرجاء إدخال رقم جوال صحيح (مثال: 00967xxxxxxxx)"
+              />
+              <input
+                type="date"
+                name="birth_date"
+                max="2024-12-31"
+                min="1900-01-01"
+                required
+                title="الرجاء إدخال تاريخ الميلاد"
+              />
+            </div>
+            <button class="btn-green" onclick="addMall(event)">
+              إضافة المجمع
+            </button>
+          </div>
+        </form>
+
+        <div class="table card">
+          <div
+            id="loading"
+            style="display: none; text-align: center; padding: 20px"
+          >
+            جاري تحميل البيانات...
+          </div>
+          <div
+            id="error"
+            style="display: none; text-align: center; padding: 20px; color: red"
+          >
+            حدث خطأ أثناء تحميل البيانات
+          </div>
           <table>
             <thead>
               <tr>
@@ -122,262 +168,145 @@
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- إضافة النافذة المنبثقة لعرض بيانات المجمع -->
-  <div id="mallDetailsModal" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
+    <!-- إضافة النافذة المنبثقة لعرض بيانات المجمع -->
+    <div id="mallDetailsModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
         <h3>بيانات المجمع</h3>
-        <button class="btn-close" onclick="closeMallDetailsModal()">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
-      <div class="mall-details" id="mallDetailsContent">
-        <!-- سيتم إضافة البيانات ديناميكياً -->
-      </div>
-      <button class="btn-green" id="changeOwnerBtn">تغيير مالك المجمع</button>
-      
-      <!-- نموذج تغيير المالك -->
-      <div id="changeOwnerForm" style="display: none; margin-top: 20px;">
-        <div class="form-grid">
-          <input type="text" id="newOwnerName" placeholder="اسم المالك الجديد" />
-          <input type="email" id="newOwnerEmail" placeholder="البريد الإلكتروني" />
+        <div class="mall-details" id="mallDetailsContent">
+          <!-- سيتم إضافة البيانات ديناميكياً -->
         </div>
-        <div style="margin-top: 10px; display: flex; gap: 10px; justify-content: flex-start;">
-          <button class="btn-green" onclick="submitOwnerChange()">حفظ التغييرات</button>
-          <button class="btn-dark" onclick="cancelOwnerChange()">إلغاء</button>
+        <button class="btn-green" id="changeOwnerBtn">تغيير مالك المجمع</button>
+
+        <!-- نموذج تغيير المالك -->
+        <div id="changeOwnerForm" style="display: none; margin-top: 20px">
+          <h4>بيانات المالك الجديد</h4>
+          <div class="form-grid">
+            <input
+              type="text"
+              placeholder="اسم المستخدم"
+              id="newUsername"
+              name="newUsername"
+            />
+            <input
+              type="text"
+              placeholder="الاسم الثنائي"
+              id="newOwnerName"
+              name="newOwnerName"
+            />
+            <input
+              type="email"
+              placeholder="البريد الإلكتروني"
+              id="newOwnerEmail"
+              name="newOwnerEmail"
+            />
+            <input
+              type="password"
+              placeholder="كلمة المرور"
+              id="newPassword"
+              name="newPassword"
+            />
+            <div class="radio-group">
+              <label>الجنس:</label>
+              <div>
+                <input
+                  type="radio"
+                  id="newMale"
+                  name="newSex"
+                  value="true"
+                  required
+                />
+                <label for="newMale">ذكر</label>
+                <input
+                  type="radio"
+                  id="newFemale"
+                  name="newSex"
+                  value="false"
+                />
+                <label for="newFemale">أنثى</label>
+              </div>
+            </div>
+            <input
+              type="tel"
+              placeholder="00967xxxxxxxx"
+              id="newPhone"
+              name="newPhone"
+              pattern="^[0-9]{14}$"
+              maxlength="14"
+              oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+              title="الرجاء إدخال رقم جوال صحيح (مثال: 00967xxxxxxxx)"
+            />
+            <input
+              type="date"
+              id="newBirthDate"
+              name="newBirthDate"
+              max="2024-12-31"
+              min="1900-01-01"
+              required
+              title="الرجاء إدخال تاريخ الميلاد"
+            />
+          </div>
+          <div
+            style="
+              margin-top: 10px;
+              display: flex;
+              gap: 10px;
+              justify-content: flex-start;
+            "
+          >
+            <button class="btn-green" onclick="submitOwnerChange()">
+              حفظ التغييرات
+            </button>
+            <button class="btn-dark" onclick="cancelOwnerChange()">
+              إلغاء
+            </button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  
-  <script>
-  // بيانات اختبارية للمجمعات
-  const testMalls = [
-    {
-      id: 1,
-      name: "مجمع النخيل مول",
-      owner: "عبدالله العمري",
-      location: "طريق الملك عبدالعزيز",
-      floors: 3,
-      city: "الرياض"
-    },
-    {
-      id: 2,
-      name: "مجمع الراشد",
-      owner: "محمد السعيد",
-      location: "شارع الأمير نايف",
-      floors: 4,
-      city: "المدينة المنورة"
-    },
-    {
-      id: 3,
-      name: "مجمع الأندلس",
-      owner: "سعد القحطاني",
-      location: "طريق الملك فهد",
-      floors: 5,
-      city: "جدة"
-    },
-    {
-      id: 4,
-      name: "مجمع الظهران",
-      owner: "فيصل التركي",
-      location: "شارع الأمير محمد",
-      floors: 3,
-      city: "الدمام"
-    },
-    {
-      id: 5,
-      name: "مجمع حياة مول",
-      owner: "خالد الشمري",
-      location: "طريق الملك خالد",
-      floors: 2,
-      city: "تبوك"
-    },
-    {
-      id: 6,
-      name: "مجمع الواحة",
-      owner: "نواف العتيبي",
-      location: "شارع الستين",
-      floors: 4,
-      city: "أبها"
-    },
-    {
-      id: 7,
-      name: "مجمع القصيم مول",
-      owner: "بندر السليم",
-      location: "طريق عمر بن الخطاب",
-      floors: 3,
-      city: "بريدة"
-    }
-  ];
-  
-  // دالة لإضافة البيانات الاختبارية إلى الجدول
-  function populateTableWithTestData() {
-    const tableBody = document.querySelector("table tbody");
-    
-    // تفريغ الجدول
-    tableBody.innerHTML = "";
-    
-    // إخفاء رسالة التحميل وإظهار الجدول
-    document.getElementById("loading").style.display = "none";
-    
-    // إضافة البيانات الاختبارية
-    testMalls.forEach(mall => {
-      const row = document.createElement("tr");
-      
-      // إنشاء خلايا البيانات
-      const nameCell = document.createElement("td");
-      nameCell.textContent = mall.name;
-      
-      const ownerCell = document.createElement("td");
-      ownerCell.textContent = mall.owner;
-      
-      const locationCell = document.createElement("td");
-      locationCell.textContent = mall.location;
-      
-      const floorsCell = document.createElement("td");
-      floorsCell.textContent = mall.floors;
-      
-      const cityCell = document.createElement("td");
-      cityCell.textContent = mall.city;
-      
-      // إضافة الخلايا إلى الصف
-      row.appendChild(nameCell);
-      row.appendChild(ownerCell);
-      row.appendChild(locationCell);
-      row.appendChild(floorsCell);
-      row.appendChild(cityCell);
-      
-      // إضافة أزرار الإجراءات
-      const actionsCell = document.createElement("td");
-      
-      // زر العرض
-      const viewBtn = document.createElement("button");
-      viewBtn.className = "btn-icon";
-      viewBtn.innerHTML = '<i class="fas fa-eye"></i>';
-      viewBtn.title = "عرض التفاصيل";
-      viewBtn.onclick = () => showMallDetails(mall);
-      
-      // زر الحذف 
-      const deleteBtn = document.createElement("button");
-      deleteBtn.className = "btn-icon";
-      deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
-      deleteBtn.title = "حذف المجمع";
-      deleteBtn.onclick = () => {
-        if (confirm(`هل أنت متأكد من حذف المجمع: ${mall.name}؟`)) {
-          alert("تم حذف المجمع بنجاح");
-          row.remove();
+
+    <script>
+      // كود للتعامل مع النافذة المنبثقة
+      const modal = document.getElementById("mallDetailsModal");
+      const closeBtn = document.getElementsByClassName("close")[0];
+
+      // إغلاق النافذة عند النقر على زر الإغلاق
+      closeBtn.onclick = function () {
+        modal.style.display = "none";
+      };
+
+      // إغلاق النافذة عند النقر خارجها
+      window.onclick = function (event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
         }
       };
-      
-      actionsCell.appendChild(viewBtn);
-      actionsCell.appendChild(deleteBtn);
-      row.appendChild(actionsCell);
-      
-      // إضافة الصف إلى الجدول
-      tableBody.appendChild(row);
-    });
-  }
-  
-  // استدعاء دالة إضافة البيانات الاختبارية عند تحميل الصفحة
-  document.addEventListener("DOMContentLoaded", function() {
-    // إظهار رسالة التحميل
-    document.getElementById("loading").style.display = "block";
-    
-    // محاكاة تأخير الشبكة
-    setTimeout(function() {
-      populateTableWithTestData();
-    }, 1000);
 
-    // تفعيل زر تغيير مالك المجمع بعد تحميل العناصر
-    var changeOwnerBtn = document.getElementById("changeOwnerBtn");
-    if (changeOwnerBtn) {
-      changeOwnerBtn.onclick = function() {
-        document.getElementById("changeOwnerForm").style.display = "block";
-        this.style.display = "none";
-      };
-    }
-  });
-  </script>
-</body>
+      // دالة لعرض بيانات المجمع في النافذة المنبثقة
+    </script>
+
+    <script>
+      function toggleNightMode() {
+        document.body.classList.toggle("dark");
+        document.documentElement.classList.toggle("dark");
+        var expires = "";
+        var days = 365;
+        var date = new Date();
+        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+        expires = "; expires=" + date.toUTCString();
+        document.cookie =
+          "nightMode=" +
+          (document.body.classList.contains("dark") ? "on" : "off") +
+          expires +
+          "; path=/";
+        console.log("Cookie after set:", document.cookie);
+      }
+    </script>
+
+    <!-- All JS scripts at the end for best performance -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../views/js/script.js"></script>
+    <script src="../views/js/admin/mall-mangement.js"></script>
+  </body>
 </html>
-
-<script>
-// كود للتعامل مع النافذة المنبثقة
-const modal = document.getElementById("mallDetailsModal");
-const closeBtn = document.getElementsByClassName("close")[0];
-
-// إغلاق النافذة عند النقر على زر الإغلاق
-closeBtn.onclick = function() {
-  modal.style.display = "none";
-}
-
-// إغلاق النافذة عند النقر خارجها
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
-
-// دالة لعرض بيانات المجمع في النافذة المنبثقة
-function showMallDetails(mallData) {
-  const detailsContent = document.getElementById("mallDetailsContent");
-  
-  // تفريغ المحتوى السابق
-  detailsContent.innerHTML = "";
-  
-  // إضافة بيانات المجمع
-  detailsContent.innerHTML += `<p><strong>اسم المجمع:</strong> ${mallData.name}</p>`;
-  detailsContent.innerHTML += `<p><strong>المالك:</strong> ${mallData.owner}</p>`;
-  detailsContent.innerHTML += `<p><strong>الموقع:</strong> ${mallData.location}</p>`;
-  detailsContent.innerHTML += `<p><strong>عدد الطوابق:</strong> ${mallData.floors}</p>`;
-  detailsContent.innerHTML += `<p><strong>المدينة:</strong> ${mallData.city}</p>`;
-  
-  // تخزين معرف المجمع للاستخدام في زر تغيير المالك
-  document.getElementById("changeOwnerBtn").setAttribute("data-mall-id", mallData.id);
-  
-  // عرض النافذة
-  modal.style.display = "block";
-}
-
-// دالة لتغيير مالك المجمع
-document.getElementById("changeOwnerBtn").onclick = function() {
-  document.getElementById("changeOwnerForm").style.display = "block";
-  this.style.display = "none";
-};
-
-// دالة لإلغاء تغيير المالك
-function cancelOwnerChange() {
-  document.getElementById("changeOwnerForm").style.display = "none";
-  document.getElementById("changeOwnerBtn").style.display = "block";
-  document.getElementById("newOwnerName").value = "";
-  document.getElementById("newOwnerEmail").value = "";
-}
-
-// دالة لحفظ تغييرات المالك الجديد
-function submitOwnerChange() {
-  const mallId = document.getElementById("changeOwnerBtn").getAttribute("data-mall-id");
-  const newOwnerName = document.getElementById("newOwnerName").value;
-  const newOwnerEmail = document.getElementById("newOwnerEmail").value;
-  
-  if (!newOwnerName || !newOwnerEmail) {
-    alert("الرجاء إدخال جميع البيانات المطلوبة");
-    return;
-  }
-  
-  // هنا يمكن إضافة كود للتحقق من صحة البريد الإلكتروني وإرسال البيانات إلى الخادم
-  alert(`تم تغيير مالك المجمع بنجاح\nالمالك الجديد: ${newOwnerName}\nالبريد الإلكتروني: ${newOwnerEmail}`);
-  
-  // إعادة تعيين النموذج
-  cancelOwnerChange();
-  
-  // إغلاق النافذة المنبثقة
-  document.getElementById("mallDetailsModal").style.display = "none";
-}
-
-function closeMallDetailsModal() {
-  document.getElementById('mallDetailsModal').style.display = 'none';
-}
-</script>
