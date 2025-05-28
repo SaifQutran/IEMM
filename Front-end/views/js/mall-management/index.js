@@ -15,6 +15,7 @@
           plugins: {
             legend: { position: 'bottom' }
           }
+          
         }
       });
 
@@ -203,7 +204,6 @@
             <span>${shop.area} م²</span>
           </div>
           <div class="shop-actions" style="display: none;">
-            <button class="btn-icon" title="تعديل" onclick="editStore(${shop.id})">✏️</button>
             <button class="btn-icon" title="عرض التفاصيل" onclick="viewStoreDetails(${shop.id})">🔍</button>
           </div>
         `;
@@ -230,43 +230,36 @@
       });
     }
 
-    // Add viewStoreDetails function
+    // تحديث دالة viewStoreDetails لتستقبل جميع البيانات المطلوبة
     function viewStoreDetails(storeId) {
-      // Here you would typically load the store and tenant data from the server
-      const storeData = {
-        number: 'A101',
-        area: '120 م²',
-        activity: 'مطعم',
-        floor: 'الأرضي',
-        location: 'X: 1, Y: 1',
-        dimensions: '2 × 2',
-        tenant: {
-          name: 'أحمد محمد',
-          phone: '0501234567',
-          email: 'ahmed@example.com',
-          id: '1234567890',
-          contractStart: '2024-01-01',
-          contractEnd: '2024-12-31'
-        }
+      // جلب بيانات المحل والمرفق من مصدر البيانات (مثال توضيحي)
+      const shop = shops.find(s => s.id === storeId);
+      if (!shop) return;
+      // بيانات المرفق
+      const facility = {
+        rent: shop.rent || '-',
+        waterMeter: shop.waterMeter || '-',
+        electricityMeter: shop.electricityMeter || '-',
+        width: shop.width || '-',
+        height: shop.height || '-'
       };
-
-      // Update the view modal with store data
-      document.getElementById('view-store-number').textContent = storeData.number;
-      document.getElementById('view-store-area').textContent = storeData.area;
-      document.getElementById('view-store-activity').textContent = storeData.activity;
-      document.getElementById('view-store-floor').textContent = storeData.floor;
-      document.getElementById('view-store-location').textContent = storeData.location;
-      document.getElementById('view-store-dimensions').textContent = storeData.dimensions;
-
-      // Update the view modal with tenant data
-      document.getElementById('view-tenant-name').textContent = storeData.tenant.name;
-      document.getElementById('view-tenant-phone').textContent = storeData.tenant.phone;
-      document.getElementById('view-tenant-email').textContent = storeData.tenant.email;
-      document.getElementById('view-tenant-id').textContent = storeData.tenant.id;
-      document.getElementById('view-tenant-contract-start').textContent = storeData.tenant.contractStart;
-      document.getElementById('view-tenant-contract-end').textContent = storeData.tenant.contractEnd;
-
-      // Show the modal
+      // بيانات المالك
+      const owner = shop.owner || {
+        name: '-',
+        phone: '-',
+        email: '-',
+        gender: '-',
+        birthdate: '-'
+      };
+      // بيانات المحل
+      const store = {
+        storeName: shop.name || '-',
+        activity: shop.activity || '-',
+        contractStart: shop.contractStart || '-',
+        workingHours: shop.workingHours || '-'
+      };
+      // تعبئة نافذة العرض الجديدة
+      fillStoreDetailsModal(facility, owner, store);
       openModal('storeDetailsModal');
     }
 
@@ -620,43 +613,22 @@
       openModal('editInvoiceModal');
     }
 
-    function setCookie(name, value, days) {
-      var expires = "";
-      if (days) {
-        var date = new Date();
-        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-        expires = "; expires=" + date.toUTCString();
-      }
-      document.cookie = name + "=" + (value || "") + expires + "; path=/";
-    }
+    // دالة تعبئة نافذة تفاصيل المحل والمرفق
+    function fillStoreDetailsModal(facility, owner, store) {
+      document.getElementById('view-facility-rent').textContent = facility.rent;
+      document.getElementById('view-facility-water-meter').textContent = facility.waterMeter;
+      document.getElementById('view-facility-electricity-meter').textContent = facility.electricityMeter;
+      document.getElementById('view-facility-width').textContent = facility.width;
+      document.getElementById('view-facility-height').textContent = facility.height;
 
-    function getCookie(name) {
-      var nameEQ = name + "=";
-      var ca = document.cookie.split(';');
-      for (var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-      }
-      return null;
-    }
+      document.getElementById('view-owner-name').textContent = owner.name;
+      document.getElementById('view-owner-phone').textContent = owner.phone;
+      document.getElementById('view-owner-email').textContent = owner.email;
+      document.getElementById('view-owner-gender').textContent = owner.gender;
+      document.getElementById('view-owner-birthdate').textContent = owner.birthdate;
 
-    function applyNightModeFromCookie() {
-      const nightMode = getCookie('nightMode');
-      if (nightMode === 'on') {
-        document.body.classList.add('dark');
-      } else {
-        document.body.classList.remove('dark');
-      }
+      document.getElementById('view-store-name').textContent = store.storeName;
+      document.getElementById('view-store-activity').textContent = store.activity;
+      document.getElementById('view-store-contract-start').textContent = store.contractStart;
+      document.getElementById('view-store-working-hours').textContent = store.workingHours;
     }
-
-    document.addEventListener('DOMContentLoaded', function () {
-      applyNightModeFromCookie();
-      const nightModeBtn = document.querySelector('.btn-dark');
-      if (nightModeBtn) {
-        nightModeBtn.onclick = function () {
-          document.body.classList.toggle('dark');
-          setCookie('nightMode', document.body.classList.contains('dark') ? 'on' : 'off', 365);
-        };
-      }
-    });

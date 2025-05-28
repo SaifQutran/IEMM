@@ -70,8 +70,68 @@ class ProfileManager {
       return;
     }
 
+    // إذا كان الحقل هو كلمة السر، لا تستخدم prompt بل اعتمد على نافذة التغيير المخصصة
+    if (field === 'password') {
+      if (typeof openPasswordModal === 'function') {
+        openPasswordModal();
+      }
+      return;
+    }
+
+    // إذا كان الحقل هو رقم الهاتف، فعّل التعديل المباشر في نفس الحقل
+    if (field === 'phone') {
+      const phoneSpan = document.getElementById('profile-phone');
+      const editBtn = Array.from(this.editButtons).find(btn => btn.dataset.field === 'phone');
+      if (!phoneSpan || !editBtn) return;
+      // أنشئ input جديد بنفس القيمة
+      const input = document.createElement('input');
+      input.type = 'tel';
+      input.value = currentValue;
+      input.style.fontSize = '1rem';
+      input.style.width = '140px';
+      input.style.direction = 'ltr';
+      input.style.marginLeft = '8px';
+      // غيّر الأيقونة إلى حفظ
+      const icon = editBtn.querySelector('i');
+      icon.classList.remove('fa-edit');
+      icon.classList.add('fa-save');
+      // عند الضغط على زر الحفظ
+      function save() {
+        const newVal = input.value.trim();
+        if (newVal && newVal !== currentValue) {
+          phoneSpan.textContent = newVal;
+          window.profileManager.profileData.phone = newVal;
+          window.profileManager.updateNotificationDot();
+        } else {
+          phoneSpan.textContent = currentValue;
+        }
+        // إعادة الأيقونة لوضع التعديل
+        icon.classList.remove('fa-save');
+        icon.classList.add('fa-edit');
+        // إعادة تفعيل زر التعديل
+        editBtn.onclick = null;
+        editBtn.addEventListener('click', () => window.profileManager.handleEdit('phone'));
+      }
+      // عند فقدان التركيز أو الضغط Enter يتم الحفظ
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          save();
+        }
+      });
+      // عند الضغط على زر الحفظ
+      editBtn.onclick = function(e) {
+        e.preventDefault();
+        save();
+      };
+      // استبدل العنصر النصي بالinput
+      phoneSpan.textContent = '';
+      phoneSpan.appendChild(input);
+      input.focus();
+      return;
+    }
+
+    // باقي الحقول تستخدم prompt
     newValue = prompt(`تعديل ${field}:`, currentValue);
-    
     if (newValue && newValue !== currentValue) {
       this.updateField(field, newValue);
     }
@@ -111,45 +171,4 @@ class ProfileManager {
 // Initialize the profile manager when the document is loaded
 document.addEventListener('DOMContentLoaded', () => {
   window.profileManager = new ProfileManager();
-});
-
-function setCookie(name, value, days) {
-  var expires = "";
-  if (days) {
-    var date = new Date();
-    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-    expires = "; expires=" + date.toUTCString();
-  }
-  document.cookie = name + "=" + (value || "") + expires + "; path=/";
-}
-
-function getCookie(name) {
-  var nameEQ = name + "=";
-  var ca = document.cookie.split(';');
-  for (var i = 0; i < ca.length; i++) {
-    var c = ca[i];
-    while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-  }
-  return null;
-}
-
-function applyNightModeFromCookie() {
-  const nightMode = getCookie('nightMode');
-  if (nightMode === 'on') {
-    document.body.classList.add('dark');
-  } else {
-    document.body.classList.remove('dark');
-  }
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-  applyNightModeFromCookie();
-  const nightModeBtn = document.querySelector('.btn-dark');
-  if (nightModeBtn) {
-    nightModeBtn.onclick = function () {
-      document.body.classList.toggle('dark');
-      setCookie('nightMode', document.body.classList.contains('dark') ? 'on' : 'off', 365);
-    };
-  }
 });

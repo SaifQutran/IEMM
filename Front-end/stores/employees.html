@@ -14,15 +14,15 @@
 <body>
   <!-- Header Section -->
   <header>
+
     <div class="container navbar">
       <h1>IEMM</h1>
       <nav>
-        <a href="shop-dashboard.html" id="dashboard-link">📊 لوحة التحكم</a>
-        <a href="products-management.html" id="products-link">🛍️ إدارة المنتجات</a>
-        <a href="inventory.html" id="inventory-link">📦 المخزون</a>
-
-        <a href="employees.html" id="staff-link" class="active">👥 إدارة العاملين</a>
-        <a href="bills-stores.html" id="bills-link">💰 الفواتير</a>
+        <a href="shop-dashboard.html" id="dashboard-link"><i class="fas fa-chart-line"></i> لوحة التحكم</a>
+        <a href="products-management.html" id="products-link"><i class="fas fa-shopping-bag"></i> إدارة المنتجات</a>
+        <a href="inventory.html" id="inventory-link"><i class="fas fa-box"></i> المخزون</a>
+        <a href="employees.html" id="staff-link" class="active"><i class="fas fa-users"></i> إدارة العاملين</a>
+        <a href="bills-stores.html" id="bills-link"><i class="fas fa-file-invoice-dollar"></i> الفواتير</a>
       </nav>
       <div style="display: flex; align-items: center; gap: 12px;">
         <button class="btn-dark" onclick="document.body.classList.toggle('dark')">الوضع الليلي</button>
@@ -60,104 +60,40 @@
     <!-- Staff Management Section -->
     <div class="section active" id="staff-section">
       <div class="section-header">
-        <h2 class="section-title">👥 إدارة العاملين</h2>
-        <button class="btn-green" onclick="document.getElementById('newStaffFormContainer').style.display = document.getElementById('newStaffFormContainer').style.display === 'none' ? 'block' : 'none'">➕ إضافة موظف جديد</button>
+        <h2 class="section-title"><i class="fas fa-users"></i> إدارة العاملين</h2>
+        <button class="btn-green" onclick="document.getElementById('newStaffFormContainer').style.display = document.getElementById('newStaffFormContainer').style.display === 'none' ? 'block' : 'none'"><i class="fas fa-plus"></i> إضافة موظف جديد</button>
       </div>
 
       <div class="form-container" id="newStaffFormContainer" style="display:none;">
         <div class="form card">
           <h3>إضافة موظف جديد</h3>
           <div class="form-sections">
-            <!-- المعلومات الشخصية -->
             <div class="form-section">
-              <h4>المعلومات الشخصية</h4>
+              <h4>بيانات العامل</h4>
               <div class="form-grid">
                 <div class="form-group">
-                  <label>الاسم الكامل</label>
-                  <input type="text" required />
+                  <label>الاسم</label>
+                  <input type="text" id="staff-name-input" required />
                 </div>
                 <div class="form-group">
-                  <label>رقم الهوية</label>
-                  <input type="text" required />
-                </div>
-                <div class="form-group">
-                  <label>تاريخ الميلاد</label>
-                  <input type="date" required />
-                </div>
-                <div class="form-group">
-                  <label>الجنسية</label>
-                  <input type="text" required />
-                </div>
-              </div>
-            </div>
-
-            <!-- معلومات الاتصال -->
-            <div class="form-section">
-              <h4>معلومات الاتصال</h4>
-              <div class="form-grid">
-                <div class="form-group">
-                  <label>رقم الجوال</label>
-                  <input type="tel" required />
+                  <label>الرقم</label>
+                  <input type="text" id="staff-id-input" required />
                 </div>
                 <div class="form-group">
                   <label>البريد الإلكتروني</label>
-                  <input type="email" />
+                  <input type="email" id="staff-email-input" required />
                 </div>
                 <div class="form-group">
-                  <label>العنوان</label>
-                  <textarea></textarea>
+                  <label>تاريخ الميلاد</label>
+                  <input type="date" id="staff-birthdate-input" required />
                 </div>
-              </div>
-            </div>
-
-            <!-- معلومات العمل -->
-            <div class="form-section">
-              <h4>معلومات العمل</h4>
-              <div class="form-grid">
                 <div class="form-group">
-                  <label>الوظيفة</label>
-                  <select required>
-                    <option value="">اختر الوظيفة</option>
-                    <option value="sales">مندوب مبيعات</option>
-                    <option value="cashier">كاشير</option>
-                    <option value="manager">مدير</option>
-                    <option value="inventory">مسؤول مخزون</option>
+                  <label>الجنس</label>
+                  <select id="staff-gender-input" required>
+                    <option value="">اختر الجنس</option>
+                    <option value="ذكر">ذكر</option>
+                    <option value="أنثى">أنثى</option>
                   </select>
-                </div>
-                <div class="form-group">
-                  <label>تاريخ التعيين</label>
-                  <input type="date" required />
-                </div>
-                <div class="form-group">
-                  <label>الراتب</label>
-                  <input type="number" required />
-                </div>
-                <div class="form-group">
-                  <label>الصلاحيات</label>
-                  <select required>
-                    <option value="">اختر الصلاحيات</option>
-                    <option value="basic">صلاحيات أساسية</option>
-                    <option value="advanced">صلاحيات متقدمة</option>
-                    <option value="admin">صلاحيات إدارية</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <!-- معلومات إضافية -->
-            <div class="form-section">
-              <h4>معلومات إضافية</h4>
-              <div class="form-grid">
-                <div class="form-group">
-                  <label>الحالة</label>
-                  <select required>
-                    <option value="active">نشط</option>
-                    <option value="inactive">غير نشط</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label>ملاحظات</label>
-                  <textarea></textarea>
                 </div>
               </div>
             </div>
@@ -175,10 +111,10 @@
             <thead>
               <tr>
                 <th>الاسم</th>
-                <th>الوظيفة</th>
-                <th>الصلاحيات</th>
-                <th>تاريخ التعيين</th>
-                <th>الحالة</th>
+                <th>الرقم</th>
+                <th>البريد الإلكتروني</th>
+                <th>تاريخ الميلاد</th>
+                <th>الجنس</th>
                 <th>الإجراءات</th>
               </tr>
             </thead>
@@ -187,6 +123,87 @@
             </tbody>
           </table>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة عرض تفاصيل العامل -->
+  <div id="staffDetailsModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>تعديل بيانات العامل</h3>
+        <button class="close-modal" onclick="closeStaffDetailsModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="staff-details-grid">
+          <div class="detail-group">
+            <div class="detail-item"><span class="detail-label">الاسم:</span> <span id="staff-name"></span></div>
+            <div class="detail-item"><span class="detail-label">الرقم:</span> <span id="staff-id"></span></div>
+            <div class="detail-item"><span class="detail-label">البريد الإلكتروني:</span> <span id="staff-email"></span></div>
+            <div class="detail-item"><span class="detail-label">تاريخ الميلاد:</span> <span id="staff-birthdate"></span></div>
+            <div class="detail-item"><span class="detail-label">الجنس:</span> <span id="staff-gender"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة التعديل المنبثقة للموظف -->
+  <div id="edit-staff-modal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeEditStaffModal()">&times;</span>
+      <h3>تعديل بيانات الموظف</h3>
+      <form id="edit-staff-form" onsubmit="submitEditStaffModal(event)">
+        <div class="form-section">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>الاسم</label>
+              <input type="text" id="edit-staff-name" required />
+            </div>
+            <div class="form-group">
+              <label>الرقم</label>
+              <input type="text" id="edit-staff-id" required />
+            </div>
+            <div class="form-group">
+              <label>البريد الإلكتروني</label>
+              <input type="email" id="edit-staff-email" required />
+            </div>
+            <div class="form-group">
+              <label>تاريخ الميلاد</label>
+              <input type="date" id="edit-staff-birthdate" required />
+            </div>
+            <div class="form-group">
+              <label>الجنس</label>
+              <select id="edit-staff-gender" required>
+                <option value="">اختر الجنس</option>
+                <option value="ذكر">ذكر</option>
+                <option value="أنثى">أنثى</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="form-actions" style="margin-top:1.5rem;">
+          <button type="submit" class="btn-green">حفظ التعديلات</button>
+          <button type="button" class="btn-secondary" onclick="closeEditStaffModal()">إلغاء</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- نافذة تأكيد الحذف -->
+  <div id="delete-confirm-modal" class="modal" style="display:none;">
+    <div class="modal-content" style="max-width: 400px;">
+      <span class="close-modal" onclick="closeDeleteModal()">&times;</span>
+      <h3 id="delete-modal-title">تأكيد الحذف</h3>
+      <div class="delete-message" style="text-align: center; margin: 20px 0;">
+        <i class="fas fa-exclamation-triangle" style="color: #f59e0b; font-size: 3em; margin-bottom: 15px;"></i>
+        <p id="delete-confirm-message" style="color: #4b5563; font-size: 1.1em; line-height: 1.5;"></p>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" onclick="confirmDelete()">حذف</button>
+        <button type="button" class="btn-green" onclick="closeDeleteModal()">إلغاء</button>
       </div>
     </div>
   </div>
@@ -311,6 +328,294 @@
     body.dark .btn-secondary:hover {
       background-color: #475569;
     }
+
+    /* تنسيق النافذة المنبثقة */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      overflow-y: auto;
+    }
+
+    .modal-content {
+      position: relative;
+      background-color: #fff;
+      margin: 20px auto;
+      padding: 20px;
+      width: 90%;
+      max-width: 800px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      max-height: calc(100vh - 40px);
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      position: sticky;
+      top: 0;
+      background-color: #fff;
+      z-index: 1;
+      padding: 10px 0;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .modal-header h3 {
+      margin: 0;
+      color: #1e3a8a;
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #64748b;
+    }
+
+    .close-modal:hover {
+      color: #1e3a8a;
+    }
+
+    .staff-details-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      padding: 10px;
+    }
+
+    .detail-group {
+      background: #f8fafc;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .detail-group h4 {
+      margin: 0 0 15px 0;
+      color: #1e3a8a;
+      font-size: 1.1rem;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .detail-item {
+      margin-bottom: 10px;
+    }
+
+    .detail-label {
+      font-weight: 600;
+      color: #64748b;
+      margin-left: 8px;
+    }
+
+    .detail-value {
+      color: #1e293b;
+    }
+
+    /* الوضع الليلي للنافذة المنبثقة */
+    body.dark .modal-content {
+      background-color: #1e293b;
+    }
+
+    body.dark .modal-header {
+      background-color: #1e293b;
+      border-bottom-color: #334155;
+    }
+
+    body.dark .modal-header h3 {
+      color: #f8fafc;
+    }
+
+    body.dark .close-modal {
+      color: #94a3b8;
+    }
+
+    body.dark .close-modal:hover {
+      color: #f8fafc;
+    }
+
+    body.dark .detail-group {
+      background: #0f172a;
+    }
+
+    body.dark .detail-group h4 {
+      color: #f8fafc;
+      border-bottom-color: #334155;
+    }
+
+    body.dark .detail-label {
+      color: #94a3b8;
+    }
+
+    body.dark .detail-value {
+      color: #f8fafc;
+    }
+
+    .detail-group-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .edit-section {
+      background: none;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+
+    .edit-section:hover {
+      color: #1e3a8a;
+      background-color: #f1f5f9;
+    }
+
+    .edit-input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      margin-top: 4px;
+    }
+
+    .edit-input:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+    }
+
+    .edit-actions {
+      position: sticky;
+      bottom: 0;
+      background-color: #f8fafc;
+      padding: 15px 0;
+      margin-top: 15px;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    /* الوضع الليلي */
+    body.dark .detail-group-header {
+      border-bottom-color: #334155;
+    }
+
+    body.dark .edit-section {
+      color: #94a3b8;
+    }
+
+    body.dark .edit-section:hover {
+      color: #f8fafc;
+      background-color: #1e293b;
+    }
+
+    body.dark .edit-input {
+      background-color: #0f172a;
+      border-color: #334155;
+      color: #f8fafc;
+    }
+
+    body.dark .edit-actions {
+      background-color: #1e293b;
+      border-top-color: #334155;
+    }
+
+    /* تنسيق شريط التمرير */
+    .modal-content::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .modal-content::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 4px;
+    }
+
+    .modal-content::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+
+    .modal-content::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    /* الوضع الليلي */
+    body.dark .modal-content {
+      background-color: #1e293b;
+    }
+
+    body.dark .modal-header {
+      background-color: #1e293b;
+      border-bottom-color: #334155;
+    }
+
+    body.dark .modal-content::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+
+    body.dark .modal-content::-webkit-scrollbar-thumb {
+      background: #334155;
+    }
+
+    body.dark .modal-content::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .btn-icon {
+      background: none;
+      border: none;
+      padding: 6px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: #64748b;
+    }
+
+    .btn-icon:hover {
+      background-color: #f1f5f9;
+    }
+
+    .view-btn:hover {
+      color: #3b82f6;
+    }
+
+    .delete-btn:hover {
+      color: #ef4444;
+    }
+
+    body.dark .btn-icon {
+      color: #94a3b8;
+    }
+
+    body.dark .btn-icon:hover {
+      background-color: #1e293b;
+    }
+
+    body.dark .view-btn:hover {
+      color: #60a5fa;
+    }
+
+    body.dark .delete-btn:hover {
+      color: #f87171;
+    }
   </style>
 
   <script>
@@ -324,66 +629,237 @@
       const staffData = [
         {
           name: 'أحمد محمد',
-          position: 'مدير',
-          permissions: 'صلاحيات إدارية',
-          hireDate: '2022-05-15',
-          status: 'نشط'
+          id: '1234567890',
+          birthdate: '1990-05-15',
+          gender: 'ذكر',
+          email: 'ahmed@example.com',
         },
         {
           name: 'سارة خالد',
-          position: 'كاشير',
-          permissions: 'صلاحيات أساسية',
-          hireDate: '2023-01-10',
-          status: 'نشط'
+          id: '0987654321',
+          birthdate: '1995-08-20',
+          gender: 'أنثى',
+          email: 'sara@example.com',
         },
         {
           name: 'محمد علي',
-          position: 'مندوب مبيعات',
-          permissions: 'صلاحيات متقدمة',
-          hireDate: '2022-11-20',
-          status: 'نشط'
+          id: '1122334455',
+          birthdate: '1988-03-10',
+          gender: 'ذكر',
+          email: 'mohammed@example.com',
         },
         {
           name: 'فاطمة عبدالله',
-          position: 'مسؤول مخزون',
-          permissions: 'صلاحيات متقدمة',
-          hireDate: '2023-03-05',
-          status: 'غير نشط'
+          id: '5544332211',
+          birthdate: '1992-11-25',
+          gender: 'أنثى',
+          email: 'fatima@example.com',
         }
       ];
 
-      const tbody = document.getElementById('staff-table-body');
-      staffData.forEach(employee => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${employee.name}</td>
-          <td>${employee.position}</td>
-          <td>${employee.permissions}</td>
-          <td>${employee.hireDate}</td>
-          <td><span class="${employee.status === 'نشط' ? 'badge-success' : 'badge-danger'}">${employee.status}</span></td>
-          <td>
-            <button class="btn-icon" title="عرض التفاصيل" onclick="viewStaffDetails('${employee.name}')">👁️</button>
-            <button class="btn-icon" title="تعديل" onclick="editStaff('${employee.name}')">✏️</button>
-            <button class="btn-icon" title="حذف" onclick="deleteStaff('${employee.name}')">🗑️</button>
-          </td>
-        `;
-        tbody.appendChild(row);
-      });
+      window.staffData = staffData;
+      renderStaffTable();
     });
 
     // وظائف إدارة الموظفين
     function viewStaffDetails(name) {
-      alert(`عرض تفاصيل الموظف: ${name}`);
+      const employee = window.staffData.find(emp => emp.name === name);
+      if (employee) {
+        window.currentEmployee = employee; // تخزين الموظف الحالي
+        updateDisplayedValues(employee);
+        document.getElementById('staffDetailsModal').style.display = 'block';
+      }
+    }
+
+    function closeStaffDetailsModal() {
+      document.getElementById('staffDetailsModal').style.display = 'none';
+    }
+
+    // إغلاق النافذة المنبثقة عند النقر خارجها
+    window.onclick = function(event) {
+      const modal = document.getElementById('staffDetailsModal');
+      if (event.target === modal) {
+        modal.style.display = 'none';
+      }
     }
 
     function editStaff(name) {
       alert(`تعديل بيانات الموظف: ${name}`);
     }
 
+    // متغيرات لتتبع عملية الحذف
+    let deleteStaffName = null;
+
     function deleteStaff(name) {
-      if(confirm(`هل أنت متأكد من حذف الموظف: ${name}؟`)) {
-        alert(`تم حذف الموظف: ${name}`);
+      deleteStaffName = name;
+      document.getElementById('delete-modal-title').textContent = 'تأكيد حذف الموظف';
+      document.getElementById('delete-confirm-message').innerHTML = 
+        `هل أنت متأكد من حذف الموظف <strong>${name}</strong>؟<br>
+         سيتم حذف جميع بيانات هذا الموظف.`;
+      document.getElementById('delete-confirm-modal').style.display = 'block';
+    }
+
+    // تأكيد عملية الحذف
+    function confirmDelete() {
+      if (deleteStaffName) {
+        const index = window.staffData.findIndex(emp => emp.name === deleteStaffName);
+        if (index !== -1) {
+          window.staffData.splice(index, 1);
+          renderStaffTable();
+        }
       }
+      closeDeleteModal();
+    }
+
+    // إغلاق نافذة تأكيد الحذف
+    function closeDeleteModal() {
+      document.getElementById('delete-confirm-modal').style.display = 'none';
+      deleteStaffName = null;
+    }
+
+    // وظائف التعديل
+    function toggleEditMode(sectionId) {
+      const section = document.getElementById(sectionId + '-actions');
+      const inputs = document.querySelectorAll(`#${sectionId} .edit-input`);
+      const values = document.querySelectorAll(`#${sectionId} .detail-value`);
+
+      // إظهار حقول التعديل وإخفاء القيم
+      inputs.forEach(input => input.style.display = 'block');
+      values.forEach(value => value.style.display = 'none');
+      section.style.display = 'flex';
+
+      // تعبئة حقول التعديل بالقيم الحالية
+      const currentEmployee = window.currentEmployee;
+      if (currentEmployee) {
+        switch(sectionId) {
+          case 'personal-info':
+            document.getElementById('edit-staff-name').value = currentEmployee.name;
+            document.getElementById('edit-staff-id').value = currentEmployee.id;
+            document.getElementById('edit-staff-birthdate').value = currentEmployee.birthdate;
+            document.getElementById('edit-staff-gender').value = currentEmployee.gender;
+            break;
+          case 'contact-info':
+            document.getElementById('edit-staff-email').value = currentEmployee.email;
+            break;
+          case 'work-info':
+            document.getElementById('edit-staff-position').value = currentEmployee.position;
+            document.getElementById('edit-staff-hire-date').value = currentEmployee.hireDate;
+            document.getElementById('edit-staff-salary').value = currentEmployee.salary;
+            document.getElementById('edit-staff-permissions').value = currentEmployee.permissions;
+            break;
+          case 'additional-info':
+            document.getElementById('edit-staff-status').value = currentEmployee.status;
+            document.getElementById('edit-staff-notes').value = currentEmployee.notes;
+            break;
+        }
+      }
+    }
+
+    function cancelEditMode(sectionId) {
+      const section = document.getElementById(sectionId + '-actions');
+      const inputs = document.querySelectorAll(`#${sectionId} .edit-input`);
+      const values = document.querySelectorAll(`#${sectionId} .detail-value`);
+
+      // إخفاء حقول التعديل وإظهار القيم
+      inputs.forEach(input => input.style.display = 'none');
+      values.forEach(value => value.style.display = 'inline');
+      section.style.display = 'none';
+    }
+
+    function saveSectionChanges(sectionId) {
+      const currentEmployee = window.currentEmployee;
+      if (currentEmployee) {
+        switch(sectionId) {
+          case 'personal-info':
+            currentEmployee.name = document.getElementById('edit-staff-name').value;
+            currentEmployee.id = document.getElementById('edit-staff-id').value;
+            currentEmployee.birthdate = document.getElementById('edit-staff-birthdate').value;
+            currentEmployee.gender = document.getElementById('edit-staff-gender').value;
+            break;
+          case 'contact-info':
+            currentEmployee.email = document.getElementById('edit-staff-email').value;
+            break;
+          case 'work-info':
+            currentEmployee.position = document.getElementById('edit-staff-position').value;
+            currentEmployee.hireDate = document.getElementById('edit-staff-hire-date').value;
+            currentEmployee.salary = document.getElementById('edit-staff-salary').value;
+            currentEmployee.permissions = document.getElementById('edit-staff-permissions').value;
+            break;
+          case 'additional-info':
+            currentEmployee.status = document.getElementById('edit-staff-status').value;
+            currentEmployee.notes = document.getElementById('edit-staff-notes').value;
+            break;
+        }
+
+        // تحديث القيم المعروضة
+        updateDisplayedValues(currentEmployee);
+        cancelEditMode(sectionId);
+      }
+    }
+
+    function updateDisplayedValues(employee) {
+      document.getElementById('staff-name').textContent = employee.name;
+      document.getElementById('staff-id').textContent = employee.id;
+      document.getElementById('staff-birthdate').textContent = employee.birthdate;
+      document.getElementById('staff-email').textContent = employee.email;
+      document.getElementById('staff-gender').textContent = employee.gender;
+    }
+
+    let editStaffIndex = null;
+    function openEditStaffModal(index) {
+      editStaffIndex = index;
+      const employee = window.staffData[index];
+      document.getElementById('edit-staff-name').value = employee.name;
+      document.getElementById('edit-staff-id').value = employee.id;
+      document.getElementById('edit-staff-email').value = employee.email;
+      document.getElementById('edit-staff-birthdate').value = employee.birthdate;
+      document.getElementById('edit-staff-gender').value = employee.gender;
+      document.getElementById('edit-staff-modal').style.display = 'block';
+    }
+
+    function closeEditStaffModal() {
+      document.getElementById('edit-staff-modal').style.display = 'none';
+      editStaffIndex = null;
+    }
+
+    function submitEditStaffModal(e) {
+      e.preventDefault();
+      if (editStaffIndex !== null) {
+        const employee = window.staffData[editStaffIndex];
+        employee.name = document.getElementById('edit-staff-name').value;
+        employee.id = document.getElementById('edit-staff-id').value;
+        employee.email = document.getElementById('edit-staff-email').value;
+        employee.birthdate = document.getElementById('edit-staff-birthdate').value;
+        employee.gender = document.getElementById('edit-staff-gender').value;
+        renderStaffTable();
+        closeEditStaffModal();
+      }
+    }
+
+    function renderStaffTable() {
+      const tbody = document.getElementById('staff-table-body');
+      tbody.innerHTML = '';
+      window.staffData.forEach((emp, idx) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${emp.name}</td>
+          <td>${emp.id}</td>
+          <td>${emp.email}</td>
+          <td>${emp.birthdate}</td>
+          <td>${emp.gender}</td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn-icon view-btn" title="تعديل" onclick="openEditStaffModal(${idx})">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn-icon delete-btn" title="حذف" onclick="deleteStaff('${emp.name}')">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
     }
   </script>
   
