@@ -10,6 +10,7 @@ function fetchMalls() {
     $('#error').hide();
     $('table tbody').hide();
 
+    
     $.ajax({
         url: 'http://localhost:8000/api/malls',
         method: 'GET',
