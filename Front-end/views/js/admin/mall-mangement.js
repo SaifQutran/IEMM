@@ -10,6 +10,7 @@ function fetchMalls() {
     $('#error').hide();
     $('table tbody').hide();
 
+    
     $.ajax({
         url: 'http://localhost/IEMM/Back-end/public/api/malls',
         method: 'GET',
