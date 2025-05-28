@@ -1,189 +1,0 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>IEMM - لوحة تحكم المول</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="../views/css/styles.css">
-    <link rel="stylesheet" href="../views/css/malls-dashbboard/mall.css">
-    <link rel="stylesheet" href="../views/css/chat.css">
-    <script src="../views/js/script.js" defer></script>
-    <script src="../views/js/chat.js" defer></script>
-    <link rel="stylesheet" href="../views/css/profile.css">
-    <script src="../views/js/profile.js" defer></script>
-    <!-- إضافة مكتبة Font Awesome للأيقونات -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  </head>
-<body>
-  <!-- Header Section -->
-  <header>
-    <div class="container navbar">
-      <h1>IEMM</h1>
-      <nav>
-        <a href="mall-dashboard.html" id="dashboard-link" class="active">📊 لوحة التحكم</a>
-        <a href="stores-management.html" id="stores-link">🏪 إدارة المحلات</a>
-        <a href="bills.html" id="bills-link">💰 الفواتير</a>   
-      </nav>
-      <div style="display: flex; align-items: center; gap: 12px;">
-        <button class="btn-dark" onclick="document.body.classList.toggle('dark')">الوضع الليلي</button>
-        <button id="chat-toggle" class="chat-toggle-btn" title="الدردشة مع أصحاب المحلات">
-          <i class="fas fa-comments"></i>
-        </button>
-        <button id="profile-toggle" class="profile-toggle-btn" title="الملف الشخصي">
-          <i class="fas fa-user"></i>
-          <span class="notification-dot" id="profile-notification"></span>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- نافذة الدردشة الجانبية -->
-  <div id="chat-panel" class="chat-panel">
-    <!-- قائمة جهات الاتصال -->
-    <div id="contacts-view">
-      <div class="chat-header">
-        <h3>الدردشة مع أصحاب المحلات</h3>
-        <button id="chat-close" class="chat-close-btn">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
-      <div id="contact-list" class="contact-list">
-        <!-- سيتم إنشاء قائمة جهات الاتصال عبر JavaScript -->
-      </div>
-    </div>
-
-    <!-- نافذة المحادثة -->
-    <div id="chat-conversation" class="chat-conversation">
-      <div class="conversation-header">
-        <button id="back-to-contacts" class="back-to-contacts">
-          <i class="fas fa-arrow-right"></i>
-        </button>
-        <div class="conversation-contact">
-          <div id="conversation-avatar" class="conversation-avatar">أ</div>
-          <div class="conversation-info">
-            <h4 id="conversation-title">أحمد محمد</h4>
-            <p id="conversation-store">مطعم الأصالة</p>
-          </div>
-        </div>
-      </div>
-      <div id="messages-container" class="messages-container">
-        <!-- سيتم إنشاء الرسائل عبر JavaScript -->
-      </div>
-      <form id="message-form" class="message-form">
-        <textarea id="message-input" class="message-input" placeholder="اكتب رسالتك هنا..." rows="1"></textarea>
-        <button type="submit" class="send-message-btn">
-          <i class="fas fa-paper-plane"></i>
-        </button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Main Content -->
-  <div class="main">
-    <!-- Dashboard Section -->
-    <!-- تحديث قسم لوحة التحكم -->
-    <div class="section active" id="dashboard-section">
-      <h2 class="section-title">📊 نظرة عامة على المول</h2>
-      
-      <div class="stats-grid">
-        <div class="stat-card">
-          <h3 class="stat-title">إجمالي المحلات</h3>
-          <p class="stat-value">120</p>
-          <span class="stat-change">نسبة الإشغال 85%</span>
-        </div>
-    
-        <div class="stat-card">
-          <h3 class="stat-title">المحلات المؤجرة</h3>
-          <p class="stat-value">102</p>
-          <span class="stat-change">متبقي 18 محل</span>
-        </div>
-    
-        <div class="stat-card">
-          <h3 class="stat-title">إجمالي الإيجارات الشهرية</h3>
-          <p class="stat-value">420,000 ريال</p>
-          <span class="stat-change">معدل التحصيل 95%</span>
-        </div>
-    
-        <div class="stat-card">
-          <h3 class="stat-title">طلبات الصيانة</h3>
-          <p class="stat-value">5</p>
-          <span class="stat-change negative">تحتاج للمعالجة</span>
-        </div>
-      </div>
-    
-      <div class="charts-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 24px; margin-top: 24px;">
-        <div class="card">
-          <h3>توزيع المحلات حسب النشاط</h3>
-          <canvas id="storeTypesChart" height="200"></canvas>
-        </div>
-    
-        <div class="card">
-          <h3>معدل تحصيل الإيجارات</h3>
-          <canvas id="rentCollectionChart" height="200"></canvas>
-        </div>
-    
-        <div class="card">
-          <h3>مقارنة نسب الإشغال</h3>
-          <canvas id="occupancyChart" height="200"></canvas>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Scripts -->
-  <script src="../views/js/mall-management/index.js"> </script>
-</body>
-</html>
-
-<!-- نافذة الملف الشخصي المنبثقة -->
-<div id="profile-modal" class="profile-modal">
-  <div class="profile-content">
-    <div class="profile-header">
-      <h3>الملف الشخصي</h3>
-      <button id="profile-close" class="profile-close-btn">
-        <i class="fas fa-times"></i>
-      </button>
-    </div>
-    <div class="profile-body">
-      <div class="profile-image-container">
-        <img id="profile-image" src="../assets/default-profile.png" alt="صورة الملف الشخصي">
-        <button class="edit-btn" data-field="image">
-          <i class="fas fa-edit"></i>
-        </button>
-      </div>
-      <div class="profile-info">
-        <div class="info-item">
-          <label>الاسم:</label>
-          <span id="profile-name">أحمد محمد</span>
-          <button class="edit-btn" data-field="name">
-            <i class="fas fa-edit"></i>
-          </button>
-        </div>
-        <div class="info-item">
-          <label>البريد الإلكتروني:</label>
-          <span id="profile-email">ahmed@example.com</span>
-          <button class="edit-btn" data-field="email">
-            <i class="fas fa-edit"></i>
-          </button>
-        </div>
-        <div class="info-item">
-          <label>رقم الهاتف:</label>
-          <span id="profile-phone">+966 50 123 4567</span>
-          <button class="edit-btn" data-field="phone">
-            <i class="fas fa-edit"></i>
-          </button>
-        </div>
-        <div class="info-item">
-          <label>العنوان:</label>
-          <span id="profile-address">الرياض، المملكة العربية السعودية</span>
-          <button class="edit-btn" data-field="address">
-            <i class="fas fa-edit"></i>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
