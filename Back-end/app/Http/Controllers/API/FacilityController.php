@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Facility;
+use App\Models\Floor;
 use Illuminate\Http\Request;
 
 class FacilityController extends Controller
@@ -35,6 +36,8 @@ class FacilityController extends Controller
     {
         $facility = Facility::find($id);
 
+        $facility->floor_number = $facility->floor ? $facility->floor->floor_number : null;
+        unset($facility->floor);
         if (!$facility) {
             return response()->json([
                 'status' => 'error',
@@ -54,8 +57,13 @@ class FacilityController extends Controller
 
     public function store(Request $request)
     {
+        $floor = Floor::where(['floor_number' => $request['floor_number'],'mall_id' =>$request['mall_id']])->first();
+        $request['floor_id'] = $floor->id;
+        unset($request['floor_number']);
         try {
+            
             $facility = Facility::create($request->all());
+            // var_dump("dsadsadas");
 
             return response()->json([
                 'status' => 'success',
@@ -68,7 +76,8 @@ class FacilityController extends Controller
                 'status' => 'error',
                 'code' => 400,
                 'message' => 'فشل في إنشاء المرفق',
-                'data' => null
+                'data' => null,
+                'exception' =>$e->getMessage()
             ], 400);
         }
     }

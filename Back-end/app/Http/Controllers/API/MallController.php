@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Mall;
 use App\Models\Facility;
 use App\Models\Shop;
+use App\Models\Floor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 
@@ -168,11 +169,11 @@ class MallController extends Controller
     public function facilities($id)
     {
         $mall = Mall::find($id);
-        $facilities = Facility::with(['shop.owner', 'floor'])->where(['mall_id'])->get()->map(function ($facility) {
+        $facilities = Facility::with(['shop.owner', 'floor'])->where(['mall_id' => $id])->get()->map(function ($facility) {
             // Tenant name
-            $facility->owner_name = $facility->shop && $facility->shop->owner ? $facility->shop->owner->f_name . ' ' . $facility->shop->owner->l_name : null;
+            $facility->owner_name = $facility->shop && $facility->shop->owner ? $facility->shop->owner->f_name . ' ' . $facility->shop->owner->l_name : "لا يوجد مالك ";
             // Shop name
-            $facility->shop_name = $facility->shop ? $facility->shop->name : null;
+            $facility->shop_name = $facility->shop ? $facility->shop->name : "غير مستأجر";
             // Space
             $facility->space = ($facility->width && $facility->length) ? ($facility->width * $facility->length) : null;
             // Floor number
@@ -221,7 +222,7 @@ class MallController extends Controller
     public function show($id)
     {
         $mall = Mall::find($id);
-
+        $mall->floors_count = Floor::where(['mall_id'=>$id])->count();
         if (!$mall) {
             return response()->json([
                 'status' => 'error',

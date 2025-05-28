@@ -76,6 +76,5 @@ class ThemeManager {
 
 // Initialize theme manager when document is ready
 document.addEventListener('DOMContentLoaded', () => {
-    window.themeManager = new ThemeManager();
-   
+    window.themeManager = new ThemeManager();   
 }); 

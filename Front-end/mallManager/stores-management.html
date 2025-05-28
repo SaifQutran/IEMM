@@ -5,12 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>IEMM - إدارة المحلات</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="../views/css/styles.css">
     <link rel="stylesheet" href="../views/css/malls-dashbboard/mall.css">
     <link rel="stylesheet" href="../views/css/chat.css">
     <script src="../views/js/script.js" defer></script>
     <script src="../views/js/chat.js" defer></script>
     <script src="../views/js/theme-manager.js" defer></script>
+    <!-- <script src="../views/js/mall-management/sotores-management.js" defer></script> -->
     <!-- إضافة مكتبة Font Awesome للأيقونات -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -801,64 +803,64 @@
       });
 
       // دالة فتح نافذة العرض/تعديل الحقل
-      function openViewModal(data, type) {
-        const modal = document.getElementById('viewEditModal');
-        const title = document.getElementById('viewEditModalTitle');
-        const fieldsContainer = document.getElementById('viewEditFields');
-        fieldsContainer.innerHTML = '';
+      // function openViewModal(data, type) {
+      //   const modal = document.getElementById('viewEditModal');
+      //   const title = document.getElementById('viewEditModalTitle');
+      //   const fieldsContainer = document.getElementById('viewEditFields');
+      //   fieldsContainer.innerHTML = '';
 
-        // تعريف الحقول حسب النوع
-        let fields = [];
-        if (type === 'facilities') {
-          title.textContent = 'بيانات المرفق';
-          fields = [
-            {label: 'مبلغ الإيجار', key: 'rent', type: 'number'},
-            {label: 'رقم عداد الماء', key: 'waterMeter', type: 'text'},
-            {label: 'رقم عداد الكهرباء', key: 'electricityMeter', type: 'text'},
-            {label: 'الدور', key: 'floor', type: 'text'},
-            {label: 'الموقع X', key: 'x', type: 'number'},
-            {label: 'الموقع Y', key: 'y', type: 'number'},
-            {label: 'العرض', key: 'width', type: 'number'},
-            {label: 'الطول', key: 'height', type: 'number'}
-          ];
-        } else if (type === 'tenants') {
-          title.textContent = 'بيانات صاحب المحل';
-          fields = [
-            {label: 'الاسم', key: 'name', type: 'text'},
-            {label: 'رقم الجوال', key: 'phone', type: 'tel'},
-            {label: 'البريد الإلكتروني', key: 'email', type: 'email'},
-            {label: 'المحلات المستأجرة', key: 'stores', type: 'text'},
-            {label: 'النوع', key: 'gender', type: 'select', options: [{value:'male',label:'ذكر'},{value:'female',label:'أنثى'}]},
-            {label: 'تاريخ الميلاد', key: 'birthdate', type: 'date'}
-          ];
-        } else if (type === 'stores') {
-          title.textContent = 'بيانات المحل';
-          fields = [
-            {label: 'اسم المالك', key: 'owner', type: 'text'},
-            {label: 'اسم المحل', key: 'storeName', type: 'text'},
-            {label: 'النشاط', key: 'activity', type: 'text'},
-            {label: 'تاريخ بدء العقد', key: 'contractStart', type: 'date'},
-            {label: 'أوقات الدوام', key: 'workingHours', type: 'text'}
-          ];
-        }
+      //   // تعريف الحقول حسب النوع
+      //   let fields = [];
+      //   if (type === 'facilities') {
+      //     title.textContent = 'بيانات المرفق';
+      //     fields = [
+      //       {label: 'مبلغ الإيجار', key: 'rent', type: 'number'},
+      //       {label: 'رقم عداد الماء', key: 'waterMeter', type: 'text'},
+      //       {label: 'رقم عداد الكهرباء', key: 'electricityMeter', type: 'text'},
+      //       {label: 'الدور', key: 'floor', type: 'text'},
+      //       {label: 'الموقع X', key: 'x', type: 'number'},
+      //       {label: 'الموقع Y', key: 'y', type: 'number'},
+      //       {label: 'العرض', key: 'width', type: 'number'},
+      //       {label: 'الطول', key: 'height', type: 'number'}
+      //     ];
+      //   } else if (type === 'tenants') {
+      //     title.textContent = 'بيانات صاحب المحل';
+      //     fields = [
+      //       {label: 'الاسم', key: 'name', type: 'text'},
+      //       {label: 'رقم الجوال', key: 'phone', type: 'tel'},
+      //       {label: 'البريد الإلكتروني', key: 'email', type: 'email'},
+      //       {label: 'المحلات المستأجرة', key: 'stores', type: 'text'},
+      //       {label: 'النوع', key: 'gender', type: 'select', options: [{value:'male',label:'ذكر'},{value:'female',label:'أنثى'}]},
+      //       {label: 'تاريخ الميلاد', key: 'birthdate', type: 'date'}
+      //     ];
+      //   } else if (type === 'stores') {
+      //     title.textContent = 'بيانات المحل';
+      //     fields = [
+      //       {label: 'اسم المالك', key: 'owner', type: 'text'},
+      //       {label: 'اسم المحل', key: 'storeName', type: 'text'},
+      //       {label: 'النشاط', key: 'activity', type: 'text'},
+      //       {label: 'تاريخ بدء العقد', key: 'contractStart', type: 'date'},
+      //       {label: 'أوقات الدوام', key: 'workingHours', type: 'text'}
+      //     ];
+      //   }
 
-        // توليد الحقول
-        fields.forEach(field => {
-          const value = data[field.key] || '';
-          const fieldId = `view-field-${field.key}`;
-          const fieldDiv = document.createElement('div');
-          fieldDiv.className = 'form-group';
-          fieldDiv.style.position = 'relative';
-          fieldDiv.innerHTML = `
-            <label>${field.label}</label>
-            <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
-            <button type="button" class="btn-icon edit-field-btn" title="تعديل" onclick="enableFieldEdit('${fieldId}', '${field.key}', '${field.type}', '${type}')" style="position:absolute; left:0; top:50%; transform:translateY(-50%);"><i class='fas fa-edit'></i></button>
-          `;
-          fieldsContainer.appendChild(fieldDiv);
-        });
+      //   // توليد الحقول
+      //   fields.forEach(field => {
+      //     const value = data[field.key] || '';
+      //     const fieldId = `view-field-${field.key}`;
+      //     const fieldDiv = document.createElement('div');
+      //     fieldDiv.className = 'form-group';
+      //     fieldDiv.style.position = 'relative';
+      //     fieldDiv.innerHTML = `
+      //       <label>${field.label}</label>
+      //       <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
+      //       <button type="button" class="btn-icon edit-field-btn" title="تعديل" onclick="enableFieldEdit('${fieldId}', '${field.key}', '${field.type}', '${type}')" style="position:absolute; left:0; top:50%; transform:translateY(-50%);"><i class='fas fa-edit'></i></button>
+      //     `;
+      //     fieldsContainer.appendChild(fieldDiv);
+      //   });
 
-        modal.style.display = 'block';
-      }
+      //   modal.style.display = 'block';
+      // }
 
       // دالة تفعيل التعديل لحقل معين
       function enableFieldEdit(fieldId, key, type, dataType) {
@@ -981,7 +983,7 @@
               </button>
             </div>
             <div class="action-buttons">
-                <button class="btn-green" onclick="toggleForm('newStoreForm')">
+                <button class="btn-green form-facility" onclick="toggleForm('newFacilityFormContainer')">
                   <i class="fas fa-plus"></i>
                   إضافة مرفق جديد
                 </button>
@@ -993,25 +995,25 @@
             </div>
           </div>
           <!-- نموذج إضافة مرفق جديد -->
-          <div id="newStoreForm" class="form-container" style="display:none;">
+          <form id="newFacilityFormContainer" class="form-container" style="display:none;">
                   <div class="form card">
                     <h3>إضافة مرفق جديد</h3>
                     <div class="form-grid">
-                      <input type="number" placeholder="مبلغ الإيجار" required />
-                      <input type="text" placeholder="رقم عداد الكهرباء" required />
-                       <input type="text" placeholder="رقم عداد الماء" required />
-                      <input type="number" placeholder="رقم الدور" required />
-                      <input type="number" placeholder="الموقع X" required />
-                      <input type="number" placeholder="الموقع Y" required />
-                      <input type="number" placeholder="العرض" required />
-                      <input type="number" placeholder="الطول" required />
+                      <input type="number" name="rant_price" id="rant_price" placeholder="مبلغ الإيجار" required />
+                      <input type="text" name="electricity_number" id="electricity_number" placeholder="رقم عداد الكهرباء" required />
+                      <input type="text" name="water_number" id="water_number" placeholder="رقم عداد الماء" required />
+                      <input type="number" name="floor_number" id="floor_number" placeholder="رقم الدور" required />
+                      <input type="number" name="X_Coordinates" id="X_Coordinates" placeholder="الموقع X" required />
+                      <input type="number" name="Y_Coordinates" id="Y_Coordinates" placeholder="الموقع Y" required />
+                      <input type="number" name="width" id="width" placeholder="العرض" required />
+                      <input type="number" name="length" id="length" placeholder="الطول" required />
                     </div>
-              <div class="form-actions">
-                    <button class="btn-green">حفظ</button>
-                <button type="button" class="btn-secondary" onclick="toggleForm('newStoreForm')">إلغاء</button>
+                    <div class="form-actions">
+                      <button type="submit" class="btn-green">حفظ</button>
+                      <button type="button" class="btn-secondary" onclick="toggleForm('newFacilityFormContainer')">إلغاء</button>
+                    </div>
                   </div>
-                </div>
-              </div>
+              </form>
 
           <!-- نموذج إضافة صاحب محل -->
           <div id="newTenantForm" class="form-container" style="display:none;">
@@ -1098,22 +1100,8 @@
                         <th>الإجراءات</th>
                       </tr>
                     </thead>
-                    <tbody>
-                      <tr><td>A101</td><td>الأرضي</td><td>120 م²</td><td>مؤجر</td><td>أحمد محمد</td><td>زمن التوفير</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>A102</td><td>الأرضي</td><td>85 م²</td><td>متاح</td><td>-</td><td>-</td><td><button class="btn-green btn-sm">تعيين مستأجر</button></td></tr>
-                      <tr><td>A103</td><td>الأرضي</td><td>150 م²</td><td>مؤجر</td><td>محمد علي</td><td>مطعم الأصالة</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>B101</td><td>الأول</td><td>100 م²</td><td>مؤجر</td><td>سارة أحمد</td><td>صالون الجمال</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>B102</td><td>الأول</td><td>90 م²</td><td>متاح</td><td>-</td><td>-</td><td><button class="btn-green btn-sm">تعيين مستأجر</button></td></tr>
-                      <tr><td>B103</td><td>الأول</td><td>110 م²</td><td>مؤجر</td><td>خالد عبدالله</td><td>محل الأزياء</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>C101</td><td>الثاني</td><td>130 م²</td><td>مؤجر</td><td>فاطمة محمد</td><td>مكتبة المعرفة</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>C102</td><td>الثاني</td><td>95 م²</td><td>متاح</td><td>-</td><td>-</td><td><button class="btn-green btn-sm">تعيين مستأجر</button></td></tr>
-                      <tr><td>C103</td><td>الثاني</td><td>140 م²</td><td>مؤجر</td><td>عبدالرحمن سعيد</td><td>مطعم الشرق</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>D101</td><td>الثالث</td><td>160 م²</td><td>مؤجر</td><td>نورة خالد</td><td>صالون السيدات</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>D102</td><td>الثالث</td><td>120 م²</td><td>متاح</td><td>-</td><td>-</td><td><button class="btn-green btn-sm">تعيين مستأجر</button></td></tr>
-                      <tr><td>D103</td><td>الثالث</td><td>145 م²</td><td>مؤجر</td><td>عمر محمد</td><td>محل الإلكترونيات</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>E101</td><td>الرابع</td><td>180 م²</td><td>مؤجر</td><td>ريم عبدالله</td><td>صالون التجميل</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>E102</td><td>الرابع</td><td>150 م²</td><td>متاح</td><td>-</td><td>-</td><td><button class="btn-green btn-sm">تعيين مستأجر</button></td></tr>
-                      <tr><td>E103</td><td>الرابع</td><td>170 م²</td><td>مؤجر</td><td>عبدالله محمد</td><td>مطعم البحر</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
+                    <tbody class="facilities-table">
+                      
                     </tbody>
                   </table>
                 </div>
@@ -1139,22 +1127,7 @@
                       <th>الإجراءات</th>
                     </tr>
                   </thead>
-                  <tbody>
-                      <tr><td>أحمد محمد</td><td>0501234567</td><td>ahmed@example.com</td><td>A101, B203</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>محمد علي</td><td>0551234567</td><td>mohammed@example.com</td><td>A103</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>سارة أحمد</td><td>0561234567</td><td>sara@example.com</td><td>B101</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>خالد عبدالله</td><td>0571234567</td><td>khaled@example.com</td><td>B103</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>فاطمة محمد</td><td>0581234567</td><td>fatima@example.com</td><td>C101</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>عبدالرحمن سعيد</td><td>0591234567</td><td>abdulrahman@example.com</td><td>C103</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>نورة خالد</td><td>0511234567</td><td>noura@example.com</td><td>D101</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>عمر محمد</td><td>0521234567</td><td>omar@example.com</td><td>D103</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>ريم عبدالله</td><td>0531234567</td><td>reem@example.com</td><td>E101</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>عبدالله محمد</td><td>0541234567</td><td>abdullah@example.com</td><td>E103</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>سلمى أحمد</td><td>0551234568</td><td>salma@example.com</td><td>A102</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>يوسف علي</td><td>0561234568</td><td>yousef@example.com</td><td>B102</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>ليلى محمد</td><td>0571234568</td><td>layla@example.com</td><td>C102</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>عبدالعزيز خالد</td><td>0581234568</td><td>abdulaziz@example.com</td><td>D102</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>منى عبدالله</td><td>0591234568</td><td>muna@example.com</td><td>E102</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
+                  <tbody class="owner-table">
                     </tbody>
                   </table>
                 </div>
@@ -1183,22 +1156,7 @@
                         <th>الإجراءات</th>
                     </tr>
                     </thead>
-                    <tbody>
-                      <tr><td>أحمد محمد</td><td>زمن التوفير</td><td>بقالة</td><td>الأرضي</td><td>نشط</td><td>2024/01/01</td><td>08:00 - 22:00</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>محمد علي</td><td>مطعم الأصالة</td><td>مطعم</td><td>الأرضي</td><td>نشط</td><td>2024/02/01</td><td>10:00 - 23:00</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>سارة أحمد</td><td>صالون الجمال</td><td>تجميل</td><td>الأول</td><td>نشط</td><td>2024/01/15</td><td>09:00 - 21:00</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>خالد عبدالله</td><td>محل الأزياء</td><td>ملابس</td><td>الأول</td><td>نشط</td><td>2024/02/15</td><td>10:00 - 22:00</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>فاطمة محمد</td><td>مكتبة المعرفة</td><td>كتب</td><td>الثاني</td><td>نشط</td><td>2024/01/20</td><td>09:00 - 20:00</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>عبدالرحمن سعيد</td><td>مطعم الشرق</td><td>مطعم</td><td>الثاني</td><td>نشط</td><td>2024/02/20</td><td>11:00 - 23:00</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>نورة خالد</td><td>صالون السيدات</td><td>تجميل</td><td>الثالث</td><td>نشط</td><td>2024/01/25</td><td>10:00 - 21:00</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>عمر محمد</td><td>محل الإلكترونيات</td><td>إلكترونيات</td><td>الثالث</td><td>نشط</td><td>2024/02/25</td><td>10:00 - 22:00</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>ريم عبدالله</td><td>صالون التجميل</td><td>تجميل</td><td>الرابع</td><td>نشط</td><td>2024/01/30</td><td>09:00 - 21:00</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>عبدالله محمد</td><td>مطعم البحر</td><td>مطعم</td><td>الرابع</td><td>نشط</td><td>2024/02/28</td><td>12:00 - 23:00</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>سلمى أحمد</td><td>محل الحلويات</td><td>حلويات</td><td>الأرضي</td><td>نشط</td><td>2024/03/01</td><td>08:00 - 22:00</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>يوسف علي</td><td>محل الألعاب</td><td>ألعاب</td><td>الأول</td><td>نشط</td><td>2024/03/05</td><td>10:00 - 22:00</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>ليلى محمد</td><td>محل العطور</td><td>عطور</td><td>الثاني</td><td>نشط</td><td>2024/03/10</td><td>10:00 - 21:00</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>عبدالعزيز خالد</td><td>محل الساعات</td><td>ساعات</td><td>الثالث</td><td>نشط</td><td>2024/03/15</td><td>10:00 - 22:00</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>منى عبدالله</td><td>محل الهدايا</td><td>هدايا</td><td>الرابع</td><td>نشط</td><td>2024/03/20</td><td>10:00 - 21:00</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
+                    <tbody class="stores-table">
                   </tbody>
                 </table>
                 </div>
@@ -1216,7 +1174,6 @@
             </div>
             <div id="mall-map"></div>
           </div>
-        
         </div>
             <!-- نافذة تعديل المحل -->
         <div id="editStoreModal" class="modal">
@@ -1353,7 +1310,6 @@
             </div>
           </div>
         </div>
-
         <!-- نافذة عرض/تعديل ديناميكية -->
         <div id="viewEditModal" class="modal">
           <div class="modal-content" style="max-width: 600px;">
@@ -1368,6 +1324,7 @@
         </div>
     </div>
 <script src="../views/js/mall-management/index.js"></script>
+<script src="../views/js/mall-management/sotores-management.js"></script>
 <script>
   function toggleForm(formId) {
     const form = document.getElementById(formId);
@@ -1390,14 +1347,16 @@
     const buttons = document.querySelectorAll('.list-toggle-bar .btn-dark');
     buttons.forEach(btn => btn.classList.remove('active'));
     event.target.classList.add('active');
-
     // إخفاء جميع القوائم
     const lists = document.querySelectorAll('.list-section');
     lists.forEach(list => list.style.display = 'none');
 
     // إظهار القائمة المطلوبة
     document.getElementById(listId).style.display = 'block';
-  }
+    if (typeof StoreManagement === 'function') {
+        window.storeManagement = new StoreManagement();
+    } 
+   }
 
   // تهيئة القوائم عند تحميل الصفحة
   document.addEventListener('DOMContentLoaded', function() {
@@ -1434,64 +1393,64 @@
   }
 
   // دالة فتح نافذة العرض/تعديل الحقل
-  function openViewModal(data, type) {
-    const modal = document.getElementById('viewEditModal');
-    const title = document.getElementById('viewEditModalTitle');
-    const fieldsContainer = document.getElementById('viewEditFields');
-    fieldsContainer.innerHTML = '';
+  // function openViewModal(data, type) {
+  //   const modal = document.getElementById('viewEditModal');
+  //   const title = document.getElementById('viewEditModalTitle');
+  //   const fieldsContainer = document.getElementById('viewEditFields');
+  //   fieldsContainer.innerHTML = '';
 
-    // تعريف الحقول حسب النوع
-    let fields = [];
-    if (type === 'facilities') {
-      title.textContent = 'بيانات المرفق';
-      fields = [
-        {label: 'مبلغ الإيجار', key: 'rent', type: 'number'},
-        {label: 'رقم عداد الماء', key: 'waterMeter', type: 'text'},
-        {label: 'رقم عداد الكهرباء', key: 'electricityMeter', type: 'text'},
-        {label: 'الدور', key: 'floor', type: 'text'},
-        {label: 'الموقع X', key: 'x', type: 'number'},
-        {label: 'الموقع Y', key: 'y', type: 'number'},
-        {label: 'العرض', key: 'width', type: 'number'},
-        {label: 'الطول', key: 'height', type: 'number'}
-      ];
-    } else if (type === 'tenants') {
-      title.textContent = 'بيانات صاحب المحل';
-      fields = [
-        {label: 'الاسم', key: 'name', type: 'text'},
-        {label: 'رقم الجوال', key: 'phone', type: 'tel'},
-        {label: 'البريد الإلكتروني', key: 'email', type: 'email'},
-        {label: 'المحلات المستأجرة', key: 'stores', type: 'text'},
-        {label: 'النوع', key: 'gender', type: 'select', options: [{value:'male',label:'ذكر'},{value:'female',label:'أنثى'}]},
-        {label: 'تاريخ الميلاد', key: 'birthdate', type: 'date'}
-      ];
-    } else if (type === 'stores') {
-      title.textContent = 'بيانات المحل';
-      fields = [
-        {label: 'اسم المالك', key: 'owner', type: 'text'},
-        {label: 'اسم المحل', key: 'storeName', type: 'text'},
-        {label: 'النشاط', key: 'activity', type: 'text'},
-        {label: 'تاريخ بدء العقد', key: 'contractStart', type: 'date'},
-        {label: 'أوقات الدوام', key: 'workingHours', type: 'text'}
-      ];
-    }
+  //   // تعريف الحقول حسب النوع
+  //   let fields = [];
+  //   if (type === 'facilities') {
+  //     title.textContent = 'بيانات المرفق';
+  //     fields = [
+  //       {label: 'مبلغ الإيجار', key: 'rent', type: 'number'},
+  //       {label: 'رقم عداد الماء', key: 'waterMeter', type: 'text'},
+  //       {label: 'رقم عداد الكهرباء', key: 'electricityMeter', type: 'text'},
+  //       {label: 'الدور', key: 'floor', type: 'text'},
+  //       {label: 'الموقع X', key: 'x', type: 'number'},
+  //       {label: 'الموقع Y', key: 'y', type: 'number'},
+  //       {label: 'العرض', key: 'width', type: 'number'},
+  //       {label: 'الطول', key: 'height', type: 'number'}
+  //     ];
+  //   } else if (type === 'tenants') {
+  //     title.textContent = 'بيانات صاحب المحل';
+  //     fields = [
+  //       {label: 'الاسم', key: 'name', type: 'text'},
+  //       {label: 'رقم الجوال', key: 'phone', type: 'tel'},
+  //       {label: 'البريد الإلكتروني', key: 'email', type: 'email'},
+  //       {label: 'المحلات المستأجرة', key: 'stores', type: 'text'},
+  //       {label: 'النوع', key: 'gender', type: 'select', options: [{value:'male',label:'ذكر'},{value:'female',label:'أنثى'}]},
+  //       {label: 'تاريخ الميلاد', key: 'birthdate', type: 'date'}
+  //     ];
+  //   } else if (type === 'stores') {
+  //     title.textContent = 'بيانات المحل';
+  //     fields = [
+  //       {label: 'اسم المالك', key: 'owner', type: 'text'},
+  //       {label: 'اسم المحل', key: 'storeName', type: 'text'},
+  //       {label: 'النشاط', key: 'activity', type: 'text'},
+  //       {label: 'تاريخ بدء العقد', key: 'contractStart', type: 'date'},
+  //       {label: 'أوقات الدوام', key: 'workingHours', type: 'text'}
+  //     ];
+  //   }
 
-    // توليد الحقول
-    fields.forEach(field => {
-      const value = data[field.key] || '';
-      const fieldId = `view-field-${field.key}`;
-      const fieldDiv = document.createElement('div');
-      fieldDiv.className = 'form-group';
-      fieldDiv.style.position = 'relative';
-      fieldDiv.innerHTML = `
-        <label>${field.label}</label>
-        <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
-        <button type="button" class="btn-icon edit-field-btn" title="تعديل" onclick="enableFieldEdit('${fieldId}', '${field.key}', '${field.type}', '${type}')" style="position:absolute; left:0; top:50%; transform:translateY(-50%);"><i class='fas fa-edit'></i></button>
-      `;
-      fieldsContainer.appendChild(fieldDiv);
-    });
+  //   // توليد الحقول
+  //   fields.forEach(field => {
+  //     const value = data[field.key] || '';
+  //     const fieldId = `view-field-${field.key}`;
+  //     const fieldDiv = document.createElement('div');
+  //     fieldDiv.className = 'form-group';
+  //     fieldDiv.style.position = 'relative';
+  //     fieldDiv.innerHTML = `
+  //       <label>${field.label}</label>
+  //       <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
+  //       <button type="button" class="btn-icon edit-field-btn" title="تعديل" onclick="enableFieldEdit('${fieldId}', '${field.key}', '${field.type}', '${type}')" style="position:absolute; left:0; top:50%; transform:translateY(-50%);"><i class='fas fa-edit'></i></button>
+  //     `;
+  //     fieldsContainer.appendChild(fieldDiv);
+  //   });
 
-    modal.style.display = 'block';
-  }
+  //   modal.style.display = 'block';
+  // }
 
   // دالة تفعيل التعديل لحقل معين
   function enableFieldEdit(fieldId, key, type, dataType) {
