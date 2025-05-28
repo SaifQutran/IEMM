@@ -11,6 +11,11 @@ return new class extends Migration
         Schema::create('stocks', function (Blueprint $table) {
             $table->id();
             $table->integer('quantity')->default(0);
+            $table->integer('minimum_quantity')->nullable();
+            $table->date('expiration_date')->nullable();
+            $table->date('production_date')->nullable();
+            // $table->date('quantity')->default(0);
+            // $table->integer('quantity')->default(0);
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->foreignId('warehouse_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();

@@ -63,7 +63,8 @@ Route::apiResource('governorates', GovernorateController::class);
 // put : /categories/{id}
 
 Route::apiResource('categories', CategoryController::class);
-Route::get('/categories/{category}/products', [CategoryController::class, 'products']);
+Route::get('/categories/{category}/products', [CategoryController::class, 'pro
+ducts']);
 // For Admin Page
 Route::get('/admin', [AdminPageController::class, 'index']);
 
@@ -135,10 +136,16 @@ Route::apiResource('facilities', FacilityController::class);
 // Shops
 // get : /shops
 // get : /shops/{id}
+// get : /shops/{id}/users
+// get : /shops/{id}/products
+// get : /shops/{id}/bills
 // post : /shops
 // delete : /shops/{id}
 // put : /shops/{id}
 Route::apiResource('shops', ShopController::class);
+Route::get('/shops/{id}/users', [ShopController::class, 'shopUsers']);
+Route::get('/shops/{id}/products', [ShopController::class, 'shopProducts']);
+Route::get('/shops/{id}/bills', [ShopController::class, 'shopBills']);
 
 // Money Logs
 // get : /money-logs

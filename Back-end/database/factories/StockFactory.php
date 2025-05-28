@@ -31,6 +31,7 @@ class StockFactory extends Factory
 
         return [
             'quantity' => $this->faker->numberBetween(0, 1000),
+            'minimum_quantity' => $this->faker->numberBetween(0, 30),
             'product_id' => $product->id,
             'warehouse_id' => $warehouse->id,
         ];

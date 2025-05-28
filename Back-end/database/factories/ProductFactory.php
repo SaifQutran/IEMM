@@ -35,15 +35,15 @@ class ProductFactory extends Factory
         ];
 
         $product = $this->faker->randomElement(array_keys($yemeniProducts));
-        $category = $yemeniProducts[$product];
+        
 
         return [
             'name' => $product,
             'description' => 'منتج يمني أصيل ' . $this->faker->text(),
             'price' => $this->faker->randomFloat(2, 1, 1000),
-            'category' => $category,
+            'category_id' => $this->faker->numberBetween(1, 23),
             'barcode' => $this->faker->ean13(),
-            'Manufact_country_id' => 1, // Yemen
+            'Manufact_country_id' => $this->faker->numberBetween(1, 22), 
             'company_id' => $this->faker->numberBetween(1, 50),
             'shop_id' => $this->faker->numberBetween(1, 40),
             'is_showed_online' => $this->faker->boolean(),

@@ -35,7 +35,19 @@ class BillController extends Controller
 
     public function show($id)
     {
-        $bill = Bill::find($id);
+        $bill = Bill::find($id)->with(['shop', 'user', 'customer', 'sales'])->get()->map(function ($data) {
+            // $data->shop_name = $data->shop ? $data->shop->name  : null;
+            $data->user_name = $data->user ? $data->user->f_name . ' ' . $data->user->l_name : null;
+            $data->customer_name = $data->customer ? $data->customer->f_name . ' ' . $data->customer->l_name : null;
+            $data->sales = $data->sales->map(function ($sale) {
+                // $sale->product_name = $sale->product ? $sale->product->name : null;
+                $sale->total = $sale->quantity * $sale->unit_price;
+                // unset($sale->product);
+                return $sale;
+            });
+            unset( $data->user );
+            return $data;
+        });
 
         if (!$bill) {
             return response()->json([

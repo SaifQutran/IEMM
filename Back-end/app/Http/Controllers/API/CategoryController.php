@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Warehouse;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -100,7 +101,34 @@ class CategoryController extends Controller
 
     public function products(Category $category)
     {
-        $products = $category->products()->with(['shop', 'manufacturerCountry', 'company'])->get();
-        return response()->json($products);
+        $products = $category->products()->with(['shop', 'manufacturerCountry', 'company' , 'stocks.warehouse'])->get();
+        $products = $products->map(function ($product) {
+            $product->total_stock = $product->stocks->sum('quantity');
+
+            $product->in_primary_stock = $product->stocks->filter(function ($stock) {
+                if (Warehouse::find($stock->warehouse_id)->is_primary) {
+                    return $stock->quantity;
+                }
+                return 0;
+            })->sum('quantity');
+            $product->in_secondary_stock = $product->stocks->filter(function ($stock) {
+                if (!Warehouse::find($stock->warehouse_id)->is_primary) {
+                    return $stock->quantity;
+                }
+                return 0;
+            })->sum('quantity');
+
+            // Get secondary warehouse stock
+
+
+            return $product;
+        });
+        
+        return response()->json([
+            'status' => 'success',
+            'code' => 200,
+            'message' => 'تم استرجاع المنتجات بنجاح',
+            'data' => $products
+        ]);
     }
 }

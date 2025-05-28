@@ -113,6 +113,9 @@ CREATE TABLE `stocks` (
   `id` BIGINT PRIMARY KEY AUTO_INCREMENT,
   `quantity` INT NOT NULL DEFAULT 0,
   `product_id` BIGINT NOT NULL,
+  `production_date` date,
+  `expiration_date` date,
+  `minimum_quant` BIGINT,
   `warehouse_id` BIGINT,
   `created_at` TIMESTAMP,
   `updated_at` TIMESTAMP
