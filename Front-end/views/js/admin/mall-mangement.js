@@ -45,14 +45,20 @@ async function displayMalls(malls) {
 
             const locationCell = document.createElement("td");
             locationCell.innerHTML = `
-                            ${m.city_name + ' - ' + m.location|| '-'}
-                <br>
-                <a href="https://www.google.com/maps?q=${m.Y_Coordinates},${m.X_Coordinates}" target="_blank">
-                    عرض على الخريطة
-                </a>
+                <div class="location-info">
+                  <div class="location-main">
+                    <span class="city-name">${m.city_name || '-'}</span>
+                    <span class="location-sep">-</span>
+                    <span class="location-address">${m.location || '-'}</span>
+                  </div>
+                  <a class="map-link" href="https://www.google.com/maps?q=${m.Y_Coordinates},${m.X_Coordinates}" target="_blank" title="عرض على الخريطة">
+                    <i class="fa-solid fa-location-dot"></i> <span>عرض على الخريطة</span>
+                  </a>
+                </div>
             `;
 
             const floorsCell = document.createElement("td");
+            floorsCell.className = "floors-col";
             floorsCell.textContent = m.floors_count || '0';
 
             const cityCell = document.createElement("td");
@@ -71,14 +77,14 @@ async function displayMalls(malls) {
             // View button
             const viewBtn = document.createElement("button");
             viewBtn.className = "btn-icon";
-            viewBtn.innerHTML = "👁️";
+            viewBtn.innerHTML = '<i class="fa-solid fa-eye"></i>';
             viewBtn.title = "عرض التفاصيل";
             viewBtn.onclick = () => showMallDetails(m);
 
             // Delete button
             const deleteBtn = document.createElement("button");
             deleteBtn.className = "btn-icon";
-            deleteBtn.innerHTML = "🗑️";
+            deleteBtn.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
             deleteBtn.title = "حذف المجمع";
             deleteBtn.onclick = () => deleteMall(m.id);
 
@@ -396,4 +402,29 @@ function showMallDetails(mallData) {
           };
         }
       });
+
+// دالة البحث في المجمعات
+function searchMalls(searchTerm) {
+    const tbody = document.querySelector('table tbody');
+    const rows = tbody.getElementsByTagName('tr');
+    
+    searchTerm = searchTerm.toLowerCase();
+    
+    for (let row of rows) {
+        const cells = row.getElementsByTagName('td');
+        let found = false;
+        
+        // البحث في جميع الخلايا ما عدا خلية الإجراءات
+        for (let i = 0; i < cells.length - 1; i++) {
+            const cellText = cells[i].textContent.toLowerCase();
+            if (cellText.includes(searchTerm)) {
+                found = true;
+                break;
+            }
+        }
+        
+        // إظهار أو إخفاء الصف بناءً على نتيجة البحث
+        row.style.display = found ? '' : 'none';
+    }
+}
       
