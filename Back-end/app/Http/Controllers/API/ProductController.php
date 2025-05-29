@@ -4,17 +4,44 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\Stock;
+use App\Models\Warehouse;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
     public function index()
     {
+        $data = Product::with(['stocks.warehouse' , 'stocks'])->get();
+        $data = $data->map(function ($product) {
+            $product->total_stock = $product->stocks->sum('quantity');
+            
+            $product->in_primary_stock = $product->stocks->filter(function ($stock) {
+                if(Warehouse::find($stock->warehouse_id)->is_primary){
+                    return $stock->quantity;
+                }
+                return 0;
+                
+            })->sum('quantity');
+            $product->in_secondary_stock = $product->stocks->filter(function ($stock) {
+                if(!Warehouse::find($stock->warehouse_id)->is_primary){
+                    return $stock->quantity;
+                }
+                return 0;
+                
+            })->sum('quantity');
+
+            // Get secondary warehouse stock
+            
+
+            return $product;
+        });
+
         return response()->json([
             'status' => 'success',
             'code' => 200,
             'message' => 'تم استرجاع المنتجات بنجاح',
-            'data' => Product::all()
+            'data' => $data
         ]);
     }
 

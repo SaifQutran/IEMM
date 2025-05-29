@@ -16,10 +16,24 @@ class StockFactory extends Factory
      */
     public function definition(): array
     {
+        $product = \App\Models\Product::inRandomOrder()->first();
+        if (!$product) {
+            throw new \Exception('No products found in the database');
+        }
+
+        $warehouse = \App\Models\Warehouse::where('shop_id', $product->shop_id)->inRandomOrder()->first();
+        if (!$warehouse) {
+            // Create a warehouse for the shop if none exists
+            $warehouse = \App\Models\Warehouse::factory()->create([
+                'shop_id' => $product->shop_id
+            ]);
+        }
+
         return [
             'quantity' => $this->faker->numberBetween(0, 1000),
-            'product_id' => $this->faker->numberBetween(1, 200),
-            'warehouse_id' => $this->faker->numberBetween(1, 10),
+            'minimum_quantity' => $this->faker->numberBetween(0, 30),
+            'product_id' => $product->id,
+            'warehouse_id' => $warehouse->id,
         ];
     }
 }

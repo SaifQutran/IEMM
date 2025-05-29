@@ -16,13 +16,32 @@ class ReservationFactory extends Factory
      */
     public function definition(): array
     {
+        $user = \App\Models\User::inRandomOrder()->first();
+        if (!$user) {
+            throw new \Exception('No users found in the database');
+        }
+
+        if (!$user->shop_id) {
+            // Create a shop for the user if none exists
+            $shop = \App\Models\Shop::factory()->create();
+            $user->update(['shop_id' => $shop->id]);
+        }
+
+        $product = \App\Models\Product::where('shop_id', $user->shop_id)->inRandomOrder()->first();
+        if (!$product) {
+            // Create a product for the shop if none exists
+            $product = \App\Models\Product::factory()->create([
+                'shop_id' => $user->shop_id
+            ]);
+        }
+
         return [
             'date' => $this->faker->dateTime(),
             'quantity' => $this->faker->numberBetween(1, 10),
-            'user_id' => $this->faker->numberBetween(1, 50),
-            'product_id' => $this->faker->numberBetween(1, 200),
+            'user_id' => $user->id,
+            'product_id' => $product->id,
             'is_recieved' => $this->faker->boolean(),
-            'unit_price' => $this->faker->randomFloat(2, 1, 1000),
+            'unit_price' => $product->price,
             'recieved_at' => $this->faker->dateTime(),
         ];
     }

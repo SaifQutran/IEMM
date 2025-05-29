@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Category>
  */
+
+
+
 class CategoryFactory extends Factory
 {
     /**
@@ -16,9 +19,36 @@ class CategoryFactory extends Factory
      */
     public function definition(): array
     {
+        $name = $this->faker->unique()->randomElement([
+            'إلكترونيات',
+            'ملابس',
+            'أثاث',
+            'ألعاب',
+            'أدوات منزلية',
+            'كتب',
+            'منتجات رياضية',
+            'مجوهرات',
+            'أغذية',
+            'مستلزمات طبية',
+            'هواتف ذكية',
+            'أجهزة كمبيوتر',
+            'عطور',
+            'مستحضرات تجميل',
+            'معدات صناعية',
+            'معدات زراعية',
+            'قرطاسية',
+            'خدمات رقمية',
+            'برمجيات',
+            'مستلزمات مكتبية',
+            'ملابس أطفال',
+            'أحذية',
+            'إكسسوارات سيارات',
+            'معدات تصوير',
+        ]);
+
         return [
-            'name' => $this->faker->unique()->words(2, true),
-            'description' => $this->faker->sentence(),
+            'name' => $name,
+            'description' => 'تصنيف يحتوي على منتجات ' . $name . ' متنوعة.',
         ];
     }
 }

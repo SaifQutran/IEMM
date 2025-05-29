@@ -12,6 +12,9 @@ class Stock extends Model
 
     protected $fillable = [
         'quantity',
+        'minimum_quantity',
+        'production_date',
+        'expiration_date',
         'product_id',
         'wearhouse_id',
     ];

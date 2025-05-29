@@ -27,7 +27,13 @@ class FacilityFactory extends Factory
     public function definition(): array
     {
         $mall = Mall::factory()->create();
-        $floor = Floor::factory()->create(['mall_id' => $mall->id]);
+        $floor = Floor::factory()->create([
+            'mall_id' => $mall->id
+        ]);
+
+        if (!$floor) {
+            throw new \Exception('Failed to create floor for facility');
+        }
 
         return [
             'mall_id' => $mall->id,

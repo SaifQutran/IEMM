@@ -16,11 +16,24 @@ class SaleFactory extends Factory
      */
     public function definition(): array
     {
+        $bill = \App\Models\Bill::inRandomOrder()->first();
+        if (!$bill) {
+            throw new \Exception('No bills found in the database');
+        }
+
+        $product = \App\Models\Product::where('shop_id', $bill->shop_id)->inRandomOrder()->first();
+        if (!$product) {
+            // Create a product for the shop if none exists
+            $product = \App\Models\Product::factory()->create([
+                'shop_id' => $bill->shop_id
+            ]);
+        }
+
         return [
             'quantity' => $this->faker->numberBetween(1, 100),
-            'unit_price' => $this->faker->randomFloat(2, 1, 1000),
-            'product_id' => $this->faker->numberBetween(1, 200),
-            'bill_id' => $this->faker->numberBetween(1, 300),
+            'unit_price' => $product->price,
+            'product_id' => $product->id,
+            'bill_id' => $bill->id,
             'is_reserved' => $this->faker->boolean(),
         ];
     }

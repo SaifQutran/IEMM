@@ -20,20 +20,41 @@
  <button class="btn-dark convert" ></button>
         <!-- <button class="btn-dark " onclick="document.body.classList.toggle('dark')">الوضع الليلي</button> -->    </div>
   </header>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IEMM - الإعدادات العامة</title>
+    <link rel="stylesheet" href="../views/css/styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  </head>
+  <body>
+    <header>
+      <div class="container navbar">
+        <h1>IEMM</h1>
+        <nav>
+          <a href="admin-dashboard.html" id="dashboard-link"><i class="fa-solid fa-chart-bar"></i> لوحة التحكم</a>
+          <a href="mall-management.html" id="malls-link"><i class="fa-solid fa-city"></i> إدارة المجمعات</a>
+          <a href="settings.html" id="settings-link" class="active"><i class="fa-solid fa-gear"></i> الإعدادات العامة</a>
+        </nav>
+        <button class="btn-dark" onclick="toggleNightMode()">
+          الوضع الليلي
+        </button>
+      </div>
+    </header>
 
-  <div class="main">
-    <div class="section active" id="settings-section">
-      <h2 class="section-title">⚙️ الإعدادات العامة</h2>
-      <div class="card">
-        <div class="form">
-          <h3>إعدادات النظام</h3>
-          <input type="text" placeholder="اسم النظام" />
-          <input type="email" placeholder="البريد الإلكتروني للدعم" />
-          <select>
-            <option value="ar">العربية</option>
-            <option value="en">English</option>
-          </select>
-          <button class="btn-green">حفظ التغييرات</button>
+    <div class="main">
+      <div class="section active" id="settings-section">
+        <h2 class="section-title"><i class="fa-solid fa-gear"></i> الإعدادات العامة</h2>
+        <div class="card">
+          <div class="form">
+            <h3>إعدادات النظام</h3>
+            <input type="text" placeholder="اسم النظام" />
+            <input type="email" placeholder="البريد الإلكتروني للدعم" />
+            <select>
+              <option value="ar">العربية</option>
+              <option value="en">English</option>
+            </select>
+            <button class="btn-green">حفظ التغييرات</button>
+          </div>
         </div>
       </div>
     </div>
