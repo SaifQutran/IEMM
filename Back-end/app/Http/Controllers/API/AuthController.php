@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Shop;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -71,9 +72,12 @@ class AuthController extends Controller
                 'data' => null
             ], 401);
         }
-
         $user->update(['signed_in' => true]);
         $token = $user->createToken('auth_token')->plainTextToken;
+        if($user->user_type == 2){
+            $shop = Shop::find($user->shop_id);
+            $shop->update(['state' => true]);
+        }
 
         return response()->json([
             'status' => 'success',
@@ -91,7 +95,10 @@ class AuthController extends Controller
         $user = User::find(Auth::id());
         // $user->update(['signed_in' => false]);
         $user->update(['remember_token' => null]);
-
+        if ($user->user_type == 2) {
+            $shop = Shop::find($user->shop_id);
+            $shop->update(['state' => false]);
+        }
         return response()->json([
             'status' => 'success',
             'code' => 200,

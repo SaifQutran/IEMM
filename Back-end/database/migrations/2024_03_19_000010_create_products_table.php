@@ -15,6 +15,7 @@ return new class extends Migration
             $table->decimal('price', 10, 2)->nullable();
             $table->string('category')->nullable();
             $table->string('barcode')->nullable();
+            $table->json('images')->nullable();
             $table->foreignId('Manufact_country_id')->nullable()->constrained('countries')->nullOnDelete();
             $table->foreignId('company_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignId('shop_id')->constrained()->cascadeOnDelete();
