@@ -171,6 +171,8 @@ Route::get('/floors/{id}/facilities', [FloorController::class, 'facilities']);
 // delete : /products/{id}
 // put : /products/{id}
 Route::apiResource('products', ProductController::class);
+Route::post('/products/{id}/add-image', [ProductController::class, 'addImage']);
+Route::delete('/products/{id}/delete-image', [ProductController::class, 'deleteImage']);
 
 // Warehouses
 // get : /warehouses
@@ -215,11 +217,12 @@ Route::apiResource('reviews', ReviewController::class);
 // Chats
 // get : /chats
 // get : /chats/{id}
+// get : /chats/{id}/messages
 // post : /chats
 // delete : /chats/{id}
 // put : /chats/{id}
 Route::apiResource('chats', ChatController::class);
-
+Route::get('/chats/{id}/messages', [ChatController::class, 'messages']);
 // Messages
 // get : /messages
 // get : /messages/{id}

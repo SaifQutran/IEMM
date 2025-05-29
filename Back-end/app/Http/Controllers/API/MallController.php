@@ -18,6 +18,14 @@ class MallController extends Controller
             $mall->owner_name = $mall->owner ? $mall->owner->f_name . ' ' . $mall->owner->l_name : null;
             $mall->city_name = $mall->city ? $mall->city->name : null;
             $mall->floors_count = $mall->floors->count();
+
+            // Add image URL
+            $mall->image_url = null;
+            $imagePath = storage_path('app/public/malls/' . $mall->id . ' image.png');
+            if (file_exists($imagePath)) {
+                $mall->image_url = 'malls/' . $mall->id . ' image.png';
+            }
+
             unset($mall->owner, $mall->city, $mall->floors);
             return $mall;
         });
@@ -91,6 +99,8 @@ class MallController extends Controller
                 $owners[$ownerId] = [
                     'owner_name' => $shop->owner->f_name . ' ' . $shop->owner->l_name,
                     'owner_email' => $shop->owner->email,
+                    'owner_sex' => $shop->owner->sex,
+                    'owner_birth_date' => $shop->owner->birth_date,
                     'phone' => $shop->owner->phone,
                     'facilities' => []
                 ];
@@ -232,6 +242,13 @@ class MallController extends Controller
             ], 404);
         }
 
+        // Add image URL
+        $mall->image_url = null;
+        $imagePath = storage_path('app/public/malls/' . $mall->id . ' image.png');
+        if (file_exists($imagePath)) {
+            $mall->image_url = 'malls/' . $mall->id . ' image.png';
+        }
+
         return response()->json([
             'status' => 'success',
             'code' => 200,
@@ -248,6 +265,7 @@ class MallController extends Controller
                 'mall_name' => 'required|string|max:255',
                 'owner_name' => 'required|string|max:255',
                 'location' => 'required|string|max:255',
+                'image' => 'required|image|mimes:jpeg,png,jpg',
                 'location_link' => 'nullable|string',
                 'floors_count' => 'required|integer|min:1',
                 'username' => 'required|string|unique:users',
@@ -256,35 +274,30 @@ class MallController extends Controller
                 'password' => 'required|string|min:8',
                 'phone' => 'required|string|max:20',
                 'birth_date' => 'required|date',
-                'city_id' => 'required|exists:cities,id', // Assuming city_id is provided
+                'city_id' => 'required|exists:cities,id',
             ]);
 
             // Create the user (owner)
             $user = \App\Models\User::create([
-                'f_name' => strtok($validatedData['owner_name'], ' '), // Extract first name
-                'l_name' => substr($validatedData['owner_name'], strpos($validatedData['owner_name'], ' ') + 1), // Extract last name
+                'f_name' => strtok($validatedData['owner_name'], ' '),
+                'l_name' => substr($validatedData['owner_name'], strpos($validatedData['owner_name'], ' ') + 1),
                 'username' => $validatedData['username'],
                 'email' => $validatedData['email'],
-                'sex' => $validatedData['sex'] === 'true', // Convert string to boolean
-                'user_type' => 1, // Convert string to boolean
+                'sex' => $validatedData['sex'] === 'true',
+                'user_type' => 1,
                 'password' => bcrypt($validatedData['password']),
                 'phone' => $validatedData['phone'],
                 'birth_date' => $validatedData['birth_date'],
-
             ]);
 
-            // TODO: Convert location_link to coordinates (latitude and longitude)
-            // For now, let's use placeholder values
+            // Handle coordinates
             $latitude = 0.0;
             $longitude = 0.0;
             if ($validatedData['location_link']) {
                 if (preg_match('/@([-.\d]+),([-.\d]+)/', $validatedData['location_link'], $matches)) {
-
                     $latitude = floatval($matches[1]);
                     $longitude = floatval($matches[2]);
                 }
-
-                // Try to match the "!3dlatitude!4dlongitude" format
                 if (preg_match('/!3d([-.\d]+)!4d([-.\d]+)/', $validatedData['location_link'], $matches)) {
                     $latitude = floatval($matches[1]);
                     $longitude = floatval($matches[2]);
@@ -301,12 +314,21 @@ class MallController extends Controller
                 'Y_Coordinates' => $longitude,
             ]);
 
+            // Handle image upload
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $path = storage_path('app/public/malls/');
+                if (!file_exists($path)) {
+                    mkdir($path, 0777, true);
+                }
+                $image->move($path, $mall->id . ' image.png');
+            }
+
             // Create the floors
             for ($i = 1; $i <= $validatedData['floors_count']; $i++) {
                 \App\Models\Floor::create([
                     'mall_id' => $mall->id,
                     'floor_number' => $i,
-
                 ]);
             }
 
@@ -411,7 +433,29 @@ class MallController extends Controller
             ], 404);
         }
 
-        $mall->update($request->all());
+        // Handle image update if provided
+        if ($request->hasFile('image')) {
+            $request->validate([
+                'image' => 'image|mimes:jpeg,png,jpg'
+            ]);
+
+            $image = $request->file('image');
+            $path = storage_path('app/public/malls/');
+            if (!file_exists($path)) {
+                mkdir($path, 0777, true);
+            }
+
+            // Delete old image if exists
+            $oldImagePath = $path . $mall->id . ' image.png';
+            if (file_exists($oldImagePath)) {
+                unlink($oldImagePath);
+            }
+
+            // Store new image
+            $image->move($path, $mall->id . ' image.png');
+        }
+
+        $mall->update($request->except('image'));
 
         return response()->json([
             'status' => 'success',
@@ -432,6 +476,12 @@ class MallController extends Controller
                 'message' => 'المول غير موجود',
                 'data' => null
             ], 404);
+        }
+
+        // Delete mall image if exists
+        $imagePath = storage_path('app/public/malls/' . $mall->id . ' image.png');
+        if (file_exists($imagePath)) {
+            unlink($imagePath);
         }
 
         $mall->delete();
