@@ -1,0 +1,1639 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IEMM - المخزون</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="../views/css/styles.css">
+  <link rel="stylesheet" href="../views/css/chat.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="../views/js/script.js" defer></script>
+  <script src="../views/js/stores/chat.js" defer></script>
+</head>
+<body>
+  
+  <!-- Header Section -->
+  <header>
+    <div class="container navbar">
+      <h1>IEMM</h1>
+      <nav>
+        <a href="shop-dashboard.html" id="dashboard-link"><i class="fas fa-chart-line"></i> لوحة التحكم</a>
+        <a href="products-management.html" id="products-link"><i class="fas fa-shopping-bag"></i> إدارة المنتجات</a>
+        <a href="inventory.html" id="inventory-link" class="active"><i class="fas fa-box"></i> المخزون</a>
+        <a href="employees.html" id="staff-link"><i class="fas fa-users"></i> إدارة العاملين</a>
+        <a href="bills-stores.html" id="bills-link"><i class="fas fa-file-invoice-dollar"></i> الفواتير</a>
+      </nav>
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <button class="btn-dark" onclick="document.body.classList.toggle('dark')">الوضع الليلي</button>
+        <button id="chat-toggle" class="chat-toggle-btn" title="الدردشة مع مدير المول">
+          <i class="fas fa-comments"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- نافذة الدردشة الجانبية -->
+  <div id="chat-panel" class="chat-panel">
+    <div class="chat-header">
+      <div class="mall-logo-container">
+        <img id="mall-logo" alt="شعار المول" class="mall-logo">
+        <h3>الدردشة مع مدير المول</h3>
+      </div>
+      <button id="chat-close" class="chat-close-btn">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div id="messages-container" class="messages-container">
+      <!-- سيتم إنشاء الرسائل عبر JavaScript -->
+    </div>
+    <form id="message-form" class="message-form">
+      <textarea id="message-input" class="message-input" placeholder="اكتب رسالتك هنا..." rows="1"></textarea>
+      <button type="submit" class="send-message-btn">
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </form>
+  </div>
+
+    <!-- Main Content -->
+    <div class="main">
+      <!-- Inventory Management Section -->
+      <div class="section active" id="main-inventory-section">
+        
+
+        <!-- تنبيهات المخزون -->
+        <div class="alerts card">
+          <div class="alerts-columns">
+            <div class="alerts-col">
+              <div class="alerts-header">تنبيهات الكمية <span id="qty-alert-count" class="alert-count"></span></div>
+              <div id="qty-alerts-list" class="alerts-list"></div>
+          </div>
+            <div class="alerts-divider"></div>
+            <div class="alerts-col">
+              <div class="alerts-header">تنبيهات الصلاحية <span id="exp-alert-count" class="alert-count"></span></div>
+              <div id="exp-alerts-list" class="alerts-list"></div>
+        </div>
+          </div>
+          </div>
+
+        <!-- شريط الأزرار -->
+        <div class="action-bar-modern">
+          <div class="action-bar-group action-bar-left">
+            <button class="action-btn view-btn" id="show-warehouses-btn" onclick="showSection('warehouses')">
+              <span>عرض المخازن</span> <i class="fas fa-warehouse"></i>
+            </button>
+            <button class="action-btn view-btn" id="show-inventory-btn" onclick="showSection('inventory')">
+              <span>عرض المخزون</span> <i class="fas fa-boxes"></i>
+            </button>
+                    </div>
+          <div class="action-bar-spacer"></div>
+          <div class="action-bar-group action-bar-right">
+            <button class="action-btn add-btn" id="add-warehouse-btn" onclick="toggleFormSection('add-warehouse-section')">
+              <span>إضافة مخزن</span> <i class="fas fa-plus"></i>
+            </button>
+            <button class="action-btn add-btn" id="add-inventory-btn" onclick="toggleFormSection('add-inventory-section')">
+              <span>إضافة مخزون</span> <i class="fas fa-plus"></i>
+            </button>
+                    </div>
+                    </div>
+
+        <!-- قائمة المخازن -->
+        <div class="table card" id="warehouses-section">
+          <div class="table-header">
+            <h3>قائمة المخازن</h3>
+            <div class="search-box">
+              <input type="text" id="warehouse-search" class="search-input" placeholder="ابحث باسم المخزن أو المدينة..." onkeyup="filterWarehousesTable()">
+              <i class="fas fa-search search-icon"></i>
+                    </div>
+                    </div>
+
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>اسم المخزن</th>
+                  <th>المدينة</th>
+                  <th>العنوان</th>
+                  <th>الإجراءات</th>
+                </tr>
+              </thead>
+              <tbody id="warehouses-table-body">
+                <!-- سيتم ملؤها بواسطة JavaScript -->
+              </tbody>
+            </table>
+                    </div>
+                    </div>
+
+        <!-- قائمة المخزون -->
+        <div class="table card" id="inventory-section" style="display: none;">
+          <div class="table-header">
+            <h3>قائمة المخزون</h3>
+            <div class="inventory-controls-row">
+              <div class="inventory-warehouse-select">
+                <i class="fas fa-warehouse select-icon"></i>
+                <select id="warehouse-selector" class="warehouse-select" onchange="onWarehouseChange()">
+                  <!-- سيتم ملؤها بواسطة JavaScript -->
+                </select>
+                  </div>
+              <div class="inventory-search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="inventory-search" class="search-input" placeholder="ابحث باسم المنتج..." onkeyup="filterInventoryTable()">
+              </div>
+            </div>
+          </div>
+
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>اسم المنتج</th>
+                  <th>الكمية</th>
+                  <th>الحد الأدنى</th>
+                  <th>آخر تحديث</th>
+                  <th>الإجراءات</th>
+                </tr>
+              </thead>
+              <tbody id="inventory-table-body">
+                <!-- سيتم ملؤها بواسطة JavaScript -->
+              </tbody>
+            </table>
+          </div>
+          </div>
+
+        <!-- نموذج إضافة مخزن -->
+        <div class="form-container card" id="add-warehouse-section" style="display: none;">
+          <div class="form">
+              <h3>إضافة مخزن جديد</h3>
+              <div class="form-sections">
+                <div class="form-section">
+                  <h4>معلومات المخزن</h4>
+                  <div class="form-grid">
+                    <div class="form-group">
+                      <label>اسم المخزن</label>
+                    <input type="text" id="new-warehouse-name" required />
+                    </div>
+                    <div class="form-group">
+                    <label>المدينة</label>
+                    <input type="text" id="new-warehouse-city" list="cities-list" required autocomplete="off" oninput="validateCityInput()" />
+                    <datalist id="cities-list">
+                      <!-- سيتم ملؤها بواسطة جافاسكريبت -->
+                    </datalist>
+                    <div id="city-error" style="color:red; font-size:0.9em; display:none;">المدينة غير موجودة في القائمة</div>
+                    </div>
+                    <div class="form-group">
+                    <label>العنوان</label>
+                    <input type="text" id="new-warehouse-address" required />
+                    </div>
+                    <div class="form-group">
+                    <label for="is-main-warehouse">مخزن رئيسي</label>
+                    <label class="switch">
+                      <input type="checkbox" id="is-main-warehouse">
+                      <span class="slider round"></span>
+                    </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn-green">حفظ</button>
+              <button type="button" class="btn-secondary" onclick="showSection('warehouses')">إلغاء</button>
+              </div>
+            </div>
+          </div>
+
+        <!-- نموذج إضافة مخزون -->
+        <div class="form-container card" id="add-inventory-section" style="display: none;">
+          <div class="form">
+            <h3>إضافة مخزون جديد</h3>
+            <div class="form-sections">
+              <div class="form-section">
+                <h4>معلومات المخزون</h4>
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label>المنتج</label>
+                    <input type="text" id="product-search" list="products-list" placeholder="ابدأ بكتابة اسم المنتج..." required autocomplete="off" oninput="validateProductInput()" />
+                    <datalist id="products-list">
+                      <!-- سيتم ملؤها بواسطة جافاسكريبت -->
+                    </datalist>
+                    <div id="product-error" style="color:red; font-size:0.9em; display:none;">المنتج غير موجود في القائمة</div>
+          </div>
+                  <div class="form-group">
+                    <label>المخزن</label>
+                    <input type="text" id="inventory-warehouse-input" list="inventory-warehouses-list" required autocomplete="off" oninput="validateInventoryWarehouseInput()" placeholder="اختر أو اكتب اسم المخزن..." />
+                    <datalist id="inventory-warehouses-list">
+                      <!-- سيتم ملؤها بواسطة جافاسكريبت -->
+                    </datalist>
+                    <div id="inventory-warehouse-error" style="color:red; font-size:0.9em; display:none;">المخزن غير موجود في القائمة</div>
+        </div>
+                  <div class="form-group">
+                    <label>الكمية</label>
+                    <input type="number" id="inventory-quantity" required />
+                  </div>
+                  <div class="form-group">
+                    <label>الحد الأدنى</label>
+                    <input type="number" id="inventory-min" required />
+                  </div>
+                  <div class="form-group">
+                    <label>تاريخ الإنتاج</label>
+                    <input type="date" id="inventory-prod-date" required />
+                  </div>
+                  <div class="form-group">
+                    <label>تاريخ الانتهاء</label>
+                    <input type="date" id="inventory-exp-date" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn-green">حفظ</button>
+              <button type="button" class="btn-secondary" onclick="showSection('inventory')">إلغاء</button>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- إضافة ستايلات CSS المطلوبة -->
+    <style>
+      /* تنسيق التنبيهات */
+      .alerts-container {
+        display: grid;
+        gap: 1rem;
+        padding: 1rem;
+      }
+
+      .alert {
+        padding: 1rem;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .alert.warning {
+        background-color: #fff3cd;
+        border: 1px solid #ffeeba;
+        color: #856404;
+      }
+
+      .alert.success {
+        background-color: #d4edda;
+        border: 1px solid #c3e6cb;
+        color: #155724;
+      }
+
+      /* تنسيق اختيار المخزن */
+      .warehouse-selection {
+        margin: 1rem 0;
+        padding: 1rem;
+      }
+
+      .warehouse-selector {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .warehouse-select {
+        padding: 0.5rem 1rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        font-size: 1rem;
+        min-width: 200px;
+      }
+
+      /* تنسيق الجداول */
+      .table-wrapper {
+        overflow-x: auto;
+        max-height: 340px;
+        min-height: 120px;
+        overflow-y: auto;
+        border-radius: 10px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+      }
+
+      th, td {
+        padding: 1rem;
+        text-align: right;
+        border-bottom: 1px solid #e2e8f0;
+        height: 56px;
+        font-size: 1.01rem;
+      }
+
+      th {
+        background-color: #f8fafc;
+        font-weight: 600;
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+      }
+
+      /* تنسيق المخزن الرئيسي */
+      .main-warehouse {
+        background-color: #e6f3ff;
+        font-weight: 600;
+      }
+
+      /* تنسيق الأزرار */
+      .btn-icon {
+        background: none;
+        border: none;
+        padding: 6px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s;
+        color: #64748b;
+      }
+
+      .btn-icon:hover {
+        background-color: #f1f5f9;
+      }
+
+      .view-btn:hover {
+        color: #3b82f6;
+      }
+
+      .delete-btn:hover {
+        color: #ef4444;
+      }
+
+      body.dark .btn-icon {
+        color: #94a3b8;
+      }
+
+      body.dark .btn-icon:hover {
+        background-color: #1e293b;
+      }
+
+      body.dark .view-btn:hover {
+        color: #60a5fa;
+      }
+
+      body.dark .delete-btn:hover {
+        color: #f87171;
+      }
+
+      /* تنسيق للوضع الليلي */
+      .dark .alert.warning {
+        background-color: #332701;
+        border-color: #665201;
+        color: #fcd34d;
+      }
+
+      .dark .alert.success {
+        background-color: #022c22;
+        border-color: #065f46;
+        color: #6ee7b7;
+      }
+
+      .dark .warehouse-select {
+        background-color: var(--dark-card);
+        color: var(--dark-text);
+        border-color: #334155;
+      }
+
+      .dark th {
+        background-color: var(--dark-chart);
+      }
+
+      .dark .main-warehouse {
+        background-color: #1e3a8a;
+      }
+
+      /* شريط الأزرار العصري */
+      .action-bar-modern {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #fff;
+        border-radius: 14px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        padding: 1.1rem 0.7rem;
+        margin: 2rem 0 1.5rem 0;
+      }
+      .action-bar-group {
+        display: flex;
+        gap: 1.2rem;
+        align-items: center;
+      }
+      .action-bar-left {
+        justify-content: flex-start;
+      }
+      .action-bar-right {
+        justify-content: flex-end;
+      }
+      .action-bar-spacer {
+        flex: 1;
+      }
+      .action-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-size: 1.08rem;
+        font-weight: 500;
+        border: none;
+        border-radius: 10px;
+        padding: 0.7rem 2.1rem;
+        cursor: pointer;
+        transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+      }
+      .add-btn {
+        background: #22c55e;
+        color: #fff;
+      }
+      .add-btn:hover {
+        background: #16a34a;
+      }
+      .view-btn {
+        background: #f3f4f6;
+        color: #222;
+        transition: background 0.18s, color 0.18s;
+      }
+      .view-btn.active {
+        background: #2563eb;
+        color: #fff;
+      }
+      .view-btn.secondary {
+        background: #f3f4f6;
+        color: #222;
+      }
+      .view-btn:hover:not(.active) {
+        background: #e5e7eb;
+      }
+      .action-btn i {
+        font-size: 1.15em;
+        margin-right: 0.3em;
+      }
+      .action-btn span {
+        margin-left: 0.2em;
+      }
+      @media (max-width: 900px) {
+        .action-bar-modern {
+        flex-direction: column;
+          gap: 1.2rem;
+        }
+        .action-bar-group {
+          width: 100%;
+          justify-content: center;
+        }
+        .action-bar-spacer {
+          display: none;
+        }
+      }
+      /* وضع ليلي */
+      .dark .action-bar-modern {
+        background: var(--dark-card);
+      }
+      .dark .add-btn {
+        background: #15803d;
+        color: #fff;
+      }
+      .dark .add-btn:hover {
+        background: #166534;
+      }
+      .dark .view-btn {
+        background: #1e40af;
+        color: #fff;
+      }
+      .dark .view-btn:hover {
+        background: #1e3a8a;
+      }
+
+      /* بحث جدول المخازن */
+      .search-box {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+      .search-input {
+        padding: 0.5rem 1rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        font-size: 1rem;
+        min-width: 200px;
+      }
+      .search-icon {
+        color: #94a3b8;
+        font-size: 1.1rem;
+      }
+
+      /* دمج اختيار المخزن مع الجدول */
+      .inventory-controls-row {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        margin-bottom: 0.5rem;
+      }
+      .inventory-warehouse-select {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: #f8fafc;
+        border-radius: 6px;
+        padding: 0.3rem 0.8rem;
+        border: 1px solid #e2e8f0;
+      }
+      .inventory-warehouse-select .select-icon {
+        color: #3b82f6;
+        font-size: 1.1rem;
+      }
+      .inventory-search-box {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: #f8fafc;
+        border-radius: 6px;
+        padding: 0.3rem 0.8rem;
+        border: 1px solid #e2e8f0;
+      }
+      .inventory-search-box .search-icon {
+        color: #94a3b8;
+        font-size: 1.1rem;
+      }
+
+      /* تصميم السويتش */
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 46px;
+        height: 24px;
+        margin-right: 8px;
+      }
+      .switch input {display:none;}
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 24px;
+      }
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+      }
+      input:checked + .slider {
+        background-color: #22c55e;
+      }
+      input:checked + .slider:before {
+        transform: translateX(22px);
+      }
+
+      /* تنسيقات بطاقات التنبيه */
+      .alert-card {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        padding: 1rem 1.2rem;
+        margin-bottom: 1rem;
+        border-right: 6px solid #e2e8f0;
+        font-size: 1rem;
+        min-width: 220px;
+        max-width: 420px;
+        transition: box-shadow 0.2s;
+      }
+      .alert-card i {
+        font-size: 1.7rem;
+        margin-top: 2px;
+      }
+      .alert-warning { border-color: #fbbf24; background: #fffbea; }
+      .alert-warning i { color: #f59e42; }
+      .alert-expiring { border-color: #f87171; background: #fff1f2; }
+      .alert-expiring i { color: #ef4444; }
+      .alert-success { border-color: #22c55e; background: #f0fdf4; }
+      .alert-success i { color: #22c55e; }
+      .alert-title { font-weight: bold; margin-bottom: 2px; }
+      .alert-desc { font-size: 0.97em; color: #334155; }
+
+      /* تصميم أعمدة التنبيهات */
+      .alerts-columns {
+        display: flex;
+        gap: 0;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+      }
+      .alerts-col {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+      }
+      .alerts-header {
+        font-weight: bold;
+        font-size: 1.08rem;
+        background: #f8fafc;
+        padding: 0.7rem 1rem;
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .alert-count {
+        background: #3b82f6;
+        color: #fff;
+        border-radius: 12px;
+        font-size: 0.95em;
+        padding: 0.1em 0.7em;
+        margin-right: 0.5em;
+      }
+      .alerts-list {
+        max-height: 350px;
+        min-height: 120px;
+        overflow-y: auto;
+        padding: 1rem 0.7rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .alerts-divider {
+        width: 1.5px;
+        background: #e2e8f0;
+        margin: 0.5rem 0;
+      }
+
+      /* نافذة التعديل المنبثقة */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        overflow: auto;
+      }
+
+      .modal-content {
+        background-color: #fefefe;
+        margin: 3% auto;
+        padding: 25px;
+        border: 1px solid #888;
+        width: 90%;
+        max-width: 600px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        position: relative;
+      }
+
+      .close-modal {
+        color: #666;
+        float: left;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+        position: absolute;
+        left: 20px;
+        top: 15px;
+        transition: color 0.2s;
+      }
+
+      .close-modal:hover {
+        color: #f44336;
+      }
+
+      .modal h3 {
+        margin: 0 0 25px 0;
+        color: #333;
+        text-align: center;
+        font-size: 1.5em;
+        font-weight: 600;
+      }
+
+      .modal .form-section {
+        background: #f8fafc;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+
+      .modal .form-section h4 {
+        margin: 0 0 15px 0;
+        color: #444;
+        font-size: 1.1em;
+      }
+
+      .modal .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+      }
+
+      .modal .form-group {
+        margin-bottom: 15px;
+      }
+
+      .modal label {
+        display: block;
+        margin-bottom: 8px;
+        color: #555;
+        font-weight: 500;
+        font-size: 0.95em;
+      }
+
+      .modal input,
+      .modal select {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        font-size: 0.95em;
+        background-color: white;
+        transition: border-color 0.2s, box-shadow 0.2s;
+      }
+
+      .modal input:focus,
+      .modal select:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        outline: none;
+      }
+
+      .modal .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 25px;
+        padding-top: 20px;
+        border-top: 1px solid #e2e8f0;
+      }
+
+      .modal .btn-green,
+      .modal .btn-secondary {
+        padding: 10px 24px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.95em;
+        font-weight: 500;
+        transition: all 0.2s;
+      }
+
+      .modal .btn-green {
+        background-color: #22c55e;
+        color: white;
+      }
+
+      .modal .btn-secondary {
+        background-color: #f3f4f6;
+        color: #374151;
+      }
+
+      .modal .btn-green:hover {
+        background-color: #16a34a;
+      }
+
+      .modal .btn-secondary:hover {
+        background-color: #e5e7eb;
+      }
+
+      /* Dark mode styles */
+      .dark .modal-content {
+        background-color: #1e293b;
+        border-color: #334155;
+      }
+
+      .dark .modal h3 {
+        color: #e2e8f0;
+      }
+
+      .dark .modal .form-section {
+        background: #0f172a;
+      }
+
+      .dark .modal .form-section h4 {
+        color: #e2e8f0;
+      }
+
+      .dark .modal label {
+        color: #cbd5e0;
+      }
+
+      .dark .modal input,
+      .dark .modal select {
+        background-color: #1e293b;
+        border-color: #334155;
+        color: #e2e8f0;
+      }
+
+      .dark .modal input:focus,
+      .dark .modal select:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+      }
+
+      .dark .modal .form-actions {
+        border-top-color: #334155;
+      }
+
+      .dark .modal .btn-secondary {
+        background-color: #334155;
+        color: #e2e8f0;
+      }
+
+      .dark .modal .btn-secondary:hover {
+        background-color: #475569;
+      }
+
+      .dark .close-modal {
+        color: #94a3b8;
+      }
+
+      .dark .close-modal:hover {
+        color: #ef4444;
+      }
+
+      /* تنسيقات نافذة تأكيد الحذف */
+      .delete-message {
+        padding: 20px;
+        background: #fff7ed;
+        border-radius: 8px;
+        margin: 20px 0;
+      }
+
+      .delete-message .highlight {
+        color: #dc2626;
+        font-weight: 700;
+        font-size: 1.1em;
+      }
+
+      .dark .delete-message {
+        background: #431407;
+      }
+
+      .dark .delete-message p {
+        color: #fcd34d;
+      }
+
+      .dark .delete-message .highlight {
+        color: #ef4444;
+      }
+
+      .modal .btn-secondary {
+        background-color: #dc2626;
+        color: white;
+      }
+
+      .modal .btn-secondary:hover {
+        background-color: #b91c1c;
+      }
+
+      .dark .modal .btn-secondary {
+        background-color: #dc2626;
+        color: white;
+      }
+
+      .dark .modal .btn-secondary:hover {
+        background-color: #b91c1c;
+      }
+
+      .btn-icon:hover i {
+        color: inherit;
+      }
+      .btn-icon.delete-btn:hover i {
+        color: #ef4444;
+      }
+      .btn-icon.view-btn:hover i {
+        color: #22c55e;
+      }
+      body.dark .btn-icon:hover i {
+        color: inherit;
+      }
+      body.dark .btn-icon.delete-btn:hover i {
+        color: #f87171;
+      }
+      body.dark .btn-icon.view-btn:hover i {
+        color: #4ade80;
+      }
+      /* هوفر مخصص لأيقونات الإجراءات (يجب أن يكون في نهاية الستايلات) */
+      .btn-icon.view-btn:hover i {
+        color: #22c55e !important;
+      }
+      .btn-icon.delete-btn:hover i {
+        color: #ef4444 !important;
+      }
+      body.dark .btn-icon.view-btn:hover i {
+        color: #4ade80 !important;
+      }
+      body.dark .btn-icon.delete-btn:hover i {
+        color: #f87171 !important;
+      }
+    </style>
+
+    <script>
+        // بيانات تجريبية للمخازن
+        const warehouses = [
+        { id: 1, name: 'المخزن الرئيسي', city: 'الرياض', address: 'شارع الملك فهد', isMain: true },
+        { id: 2, name: 'مخزن الشمال', city: 'الرياض', address: 'شارع العليا', isMain: false },
+        { id: 3, name: 'مخزن الجنوب', city: 'الرياض', address: 'شارع التحلية', isMain: false },
+        { id: 4, name: 'مخزن الشرق', city: 'جدة', address: 'شارع فلسطين', isMain: false },
+        { id: 5, name: 'مخزن الغرب', city: 'مكة', address: 'حي العزيزية', isMain: false },
+        { id: 6, name: 'مخزن الشروق', city: 'الدمام', address: 'حي الشروق', isMain: false },
+        { id: 7, name: 'مخزن النسيم', city: 'الرياض', address: 'حي النسيم', isMain: false },
+        { id: 8, name: 'مخزن الجنوب 2', city: 'جدة', address: 'حي الجامعة', isMain: false },
+        { id: 9, name: 'مخزن العليا', city: 'الرياض', address: 'شارع العليا', isMain: false },
+        { id: 10, name: 'مخزن البديعة', city: 'الرياض', address: 'حي البديعة', isMain: false }
+      ];
+
+      // بيانات تجريبية للمخزون
+      const inventoryItems = {
+        1: [
+          { id: 1, name: 'قميص رجالي', quantity: 45, minQuantity: 10, lastUpdate: '2024-04-25', expDate: '2025-06-10' },
+          { id: 2, name: 'بنطلون جينز', quantity: 8, minQuantity: 15, lastUpdate: '2024-04-20', expDate: '2025-07-15' },
+          { id: 3, name: 'حذاء رياضي', quantity: 12, minQuantity: 5, lastUpdate: '2024-04-22', expDate: '2025-08-20' },
+          { id: 4, name: 'ساعة يد', quantity: 3, minQuantity: 5, lastUpdate: '2024-04-21', expDate: '2025-09-01' },
+          { id: 5, name: 'حقيبة ظهر', quantity: 18, minQuantity: 8, lastUpdate: '2024-04-24' },
+          { id: 6, name: 'جاكيت شتوي', quantity: 22, minQuantity: 7, lastUpdate: '2024-04-19' },
+          { id: 7, name: 'نظارة شمسية', quantity: 30, minQuantity: 10, lastUpdate: '2024-04-18', expDate: '2024-08-25' },
+          { id: 8, name: 'محفظة جلدية', quantity: 15, minQuantity: 5, lastUpdate: '2024-04-17' },
+          { id: 9, name: 'حزام رجالي', quantity: 20, minQuantity: 6, lastUpdate: '2024-04-16' },
+          { id: 10, name: 'قبعة صيفية', quantity: 25, minQuantity: 8, lastUpdate: '2024-04-15', expDate: '2024-10-05' }
+        ],
+        2: [
+          { id: 11, name: 'قميص رجالي', quantity: 10, minQuantity: 5, lastUpdate: '2024-04-25' },
+          { id: 12, name: 'بنطلون جينز', quantity: 7, minQuantity: 3, lastUpdate: '2024-04-20' },
+          { id: 13, name: 'حذاء رياضي', quantity: 5, minQuantity: 2, lastUpdate: '2024-04-22' },
+          { id: 14, name: 'ساعة يد', quantity: 2, minQuantity: 1, lastUpdate: '2024-04-21' },
+          { id: 15, name: 'حقيبة ظهر', quantity: 8, minQuantity: 3, lastUpdate: '2024-04-24' },
+          { id: 16, name: 'جاكيت شتوي', quantity: 12, minQuantity: 4, lastUpdate: '2024-04-19' },
+          { id: 17, name: 'نظارة شمسية', quantity: 13, minQuantity: 5, lastUpdate: '2024-04-18' },
+          { id: 18, name: 'محفظة جلدية', quantity: 6, minQuantity: 2, lastUpdate: '2024-04-17' },
+          { id: 19, name: 'حزام رجالي', quantity: 9, minQuantity: 3, lastUpdate: '2024-04-16' },
+          { id: 20, name: 'قبعة صيفية', quantity: 11, minQuantity: 4, lastUpdate: '2024-04-15' }
+        ],
+        3: [
+          { id: 21, name: 'قميص رجالي', quantity: 5, minQuantity: 2, lastUpdate: '2024-04-25' },
+          { id: 22, name: 'بنطلون جينز', quantity: 4, minQuantity: 2, lastUpdate: '2024-04-20' },
+          { id: 23, name: 'حذاء رياضي', quantity: 3, minQuantity: 1, lastUpdate: '2024-04-22' },
+          { id: 24, name: 'ساعة يد', quantity: 1, minQuantity: 1, lastUpdate: '2024-04-21' },
+          { id: 25, name: 'حقيبة ظهر', quantity: 6, minQuantity: 2, lastUpdate: '2024-04-24' },
+          { id: 26, name: 'جاكيت شتوي', quantity: 8, minQuantity: 3, lastUpdate: '2024-04-19' },
+          { id: 27, name: 'نظارة شمسية', quantity: 7, minQuantity: 2, lastUpdate: '2024-04-18' },
+          { id: 28, name: 'محفظة جلدية', quantity: 2, minQuantity: 1, lastUpdate: '2024-04-17' },
+          { id: 29, name: 'حزام رجالي', quantity: 4, minQuantity: 2, lastUpdate: '2024-04-16' },
+          { id: 30, name: 'قبعة صيفية', quantity: 9, minQuantity: 3, lastUpdate: '2024-04-15' }
+        ]
+      };
+
+      // دالة تحديث جدول المخازن
+      function updateWarehousesTable() {
+        const warehousesTableBody = document.getElementById('warehouses-table-body');
+        if (!warehousesTableBody) return;
+        
+        warehousesTableBody.innerHTML = '';
+
+        warehouses.forEach(warehouse => {
+          const row = document.createElement('tr');
+          if (warehouse.isMain) {
+            row.classList.add('main-warehouse');
+          }
+          row.innerHTML = `
+            <td>${warehouse.name}</td>
+            <td>${warehouse.city}</td>
+            <td>${warehouse.address}</td>
+            <td>
+              <button class="btn-icon view-btn" title="تعديل" onclick="editWarehouse(${warehouse.id})"><i class='fas fa-edit'></i></button>
+              <button class="btn-icon delete-btn" title="حذف" onclick="deleteWarehouse(${warehouse.id})"><i class='fas fa-trash'></i></button>
+            </td>
+          `;
+          warehousesTableBody.appendChild(row);
+        });
+      }
+
+      // تحديث قائمة اختيار المخازن مع دعم البحث
+      function updateWarehouseSelector(selectedId) {
+        const selector = document.getElementById('warehouse-selector');
+        if (!selector) return;
+        selector.innerHTML = '';
+        warehouses.forEach(warehouse => {
+          const option = document.createElement('option');
+          option.value = warehouse.id;
+          option.textContent = warehouse.name + (warehouse.isMain ? ' (المخزن الرئيسي)' : '');
+          if (selectedId && warehouse.id == selectedId) option.selected = true;
+        selector.appendChild(option);
+        });
+        // دعم البحث في القائمة
+        $(selector).select2({
+          width: '200px',
+          placeholder: 'اختر المخزن',
+          dir: 'rtl',
+          dropdownAutoWidth: true
+        });
+      }
+
+      // عند تغيير المخزن من القائمة
+      function onWarehouseChange() {
+        const selector = document.getElementById('warehouse-selector');
+        if (selector && selector.value) {
+          updateInventoryTable(selector.value);
+        } else {
+          // إذا لم يتم اختيار مخزن، اختر الرئيسي تلقائياً
+          const mainWarehouse = warehouses.find(w => w.isMain);
+          if (mainWarehouse) {
+            updateInventoryTable(mainWarehouse.id);
+          }
+        }
+      }
+
+      // عند تحميل الصفحة: عرض المخزن الرئيسي تلقائياً
+      document.addEventListener('DOMContentLoaded', function() {
+        // ...
+        // تحديد المخزن الرئيسي تلقائياً
+        const mainWarehouse = warehouses.find(w => w.isMain);
+        if (mainWarehouse) {
+          updateWarehouseSelector(mainWarehouse.id);
+          updateInventoryTable(mainWarehouse.id);
+        } else {
+          updateWarehouseSelector();
+        }
+      });
+
+      // دالة تحديث جدول المخزون
+      function updateInventoryTable(warehouseId) {
+        const inventoryTableBody = document.getElementById('inventory-table-body');
+        const inventorySection = document.getElementById('inventory-section');
+        
+        if (!inventoryTableBody || !inventorySection) return;
+
+        if (!warehouseId) {
+          inventorySection.style.display = 'none';
+          return;
+        }
+
+        inventorySection.style.display = 'block';
+        inventoryTableBody.innerHTML = '';
+
+        const items = inventoryItems[warehouseId] || [];
+        items.forEach(item => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${item.name}</td>
+            <td>${item.quantity}</td>
+            <td>${item.minQuantity}</td>
+            <td>${item.lastUpdate}</td>
+            <td>
+              <button class="btn-icon view-btn" title="تعديل" onclick="editInventoryItem(${item.id})"><i class='fas fa-edit'></i></button>
+              <button class="btn-icon delete-btn" title="حذف" onclick="deleteInventoryItem(${item.id})"><i class='fas fa-trash'></i></button>
+            </td>
+          `;
+          inventoryTableBody.appendChild(row);
+        });
+      }
+
+      // دالة تحديث التنبيهات
+      function updateAlerts() {
+        const qtyList = document.getElementById('qty-alerts-list');
+        const expList = document.getElementById('exp-alerts-list');
+        const qtyCount = document.getElementById('qty-alert-count');
+        const expCount = document.getElementById('exp-alert-count');
+        if (!qtyList || !expList || !qtyCount || !expCount) return;
+
+        qtyList.innerHTML = '';
+        expList.innerHTML = '';
+
+        const now = new Date();
+        let qtyAlerts = [];
+        let expAlerts = [];
+
+        Object.values(inventoryItems).forEach(items => {
+          items.forEach(item => {
+            if (item.quantity <= item.minQuantity) {
+              qtyAlerts.push({
+                name: item.name,
+                quantity: item.quantity,
+                min: item.minQuantity
+              });
+            }
+            if (item.expDate) {
+              const expDate = new Date(item.expDate);
+              const diffMonths = (expDate.getFullYear() - now.getFullYear()) * 12 + (expDate.getMonth() - now.getMonth());
+              if (diffMonths <= 3 && expDate > now) {
+                expAlerts.push({
+                  name: item.name,
+                  expDate: item.expDate
+                });
+              }
+            }
+          });
+        });
+
+        qtyCount.textContent = qtyAlerts.length;
+        expCount.textContent = expAlerts.length;
+
+        if (qtyAlerts.length === 0) {
+          qtyList.innerHTML = `<div class='alert-card alert-success'><i class='fas fa-check-circle'></i><div><div class='alert-title'>لا يوجد تنبيهات كمية</div></div></div>`;
+        } else {
+          qtyAlerts.slice(0, 4).forEach(alert => {
+            const el = document.createElement('div');
+            el.className = 'alert-card alert-warning';
+            el.innerHTML = `<i class='fas fa-exclamation-triangle'></i><div><div class='alert-title'>${alert.name}</div><div class='alert-desc'>الكمية المتبقية: <b>${alert.quantity}</b></div></div>`;
+            qtyList.appendChild(el);
+          });
+        }
+
+        if (expAlerts.length === 0) {
+          expList.innerHTML = `<div class='alert-card alert-success'><i class='fas fa-check-circle'></i><div><div class='alert-title'>لا يوجد تنبيهات صلاحية</div></div></div>`;
+        } else {
+          expAlerts.slice(0, 4).forEach(alert => {
+            const el = document.createElement('div');
+            el.className = 'alert-card alert-expiring';
+            el.innerHTML = `<i class='fas fa-hourglass-end'></i><div><div class='alert-title'>${alert.name}</div><div class='alert-desc'>تاريخ الانتهاء: <b>${alert.expDate}</b></div></div>`;
+            expList.appendChild(el);
+          });
+        }
+      }
+
+      // دالة إظهار/إخفاء الأقسام
+      function showSection(sectionId) {
+        // إخفاء جميع الأقسام
+        const sections = [
+          'warehouses-section',
+          'inventory-section',
+          'add-warehouse-section',
+          'add-inventory-section'
+        ];
+
+        sections.forEach(section => {
+          const element = document.getElementById(section);
+          if (element) {
+            element.style.display = 'none';
+          }
+        });
+
+        // تحديث أزرار العرض: الزر المختار أزرق، الآخر رصاصي
+        const viewBtns = [
+          document.getElementById('show-warehouses-btn'),
+          document.getElementById('show-inventory-btn')
+        ];
+        viewBtns.forEach(btn => {
+          if (!btn) return;
+          btn.classList.remove('active', 'secondary');
+        });
+        if (sectionId === 'warehouses') {
+          if (viewBtns[0]) viewBtns[0].classList.add('active');
+          if (viewBtns[1]) viewBtns[1].classList.add('secondary');
+        } else if (sectionId === 'inventory') {
+          if (viewBtns[1]) viewBtns[1].classList.add('active');
+          if (viewBtns[0]) viewBtns[0].classList.add('secondary');
+        }
+
+        // إظهار القسم المطلوب
+        let targetSection = null;
+        if (sectionId === 'warehouses' || sectionId === 'add-warehouse' || sectionId === 'add-inventory') {
+          targetSection = document.getElementById(sectionId + '-section');
+        } else if (sectionId === 'inventory') {
+          targetSection = document.getElementById('inventory-section');
+        }
+        const targetButton = document.getElementById(sectionId + '-btn');
+        
+        if (targetSection) {
+          targetSection.style.display = 'block';
+        }
+        if (targetButton) {
+          targetButton.classList.add('active');
+        }
+
+        // تحديث البيانات عند إظهار الجدول المطلوب
+        if (sectionId === 'warehouses') {
+          updateWarehousesTable();
+        } else if (sectionId === 'inventory') {
+          // عند عرض المخزون، إذا لم يكن هناك مخزن محدد اختر الرئيسي
+          let selectedWarehouseId = null;
+          const selector = document.getElementById('warehouse-selector');
+          if (selector && selector.value) {
+            selectedWarehouseId = selector.value;
+          } else {
+            const mainWarehouse = warehouses.find(w => w.isMain);
+            if (mainWarehouse) {
+              selectedWarehouseId = mainWarehouse.id;
+              updateWarehouseSelector(mainWarehouse.id);
+            } else {
+              updateWarehouseSelector();
+            }
+          }
+          updateInventoryTable(selectedWarehouseId);
+        }
+      }
+
+      // متغيرات لتتبع الصف ونوع الجدول
+      let editModalType = null; // 'inventory' أو 'warehouse'
+      let editModalRowId = null;
+
+      // فتح نافذة التعديل لجدول المخزون
+      function editInventoryItem(id) {
+        editModalType = 'inventory';
+        editModalRowId = id;
+        let item = null;
+        let warehouseId = document.getElementById('warehouse-selector').value;
+        if (inventoryItems[warehouseId]) {
+          item = inventoryItems[warehouseId].find(i => i.id == id);
+        }
+        if (!item) return;
+        document.getElementById('edit-modal-title').textContent = 'تعديل بيانات المنتج';
+        document.getElementById('edit-modal-fields').innerHTML = `
+          <div class="form-section">
+            <h4>معلومات المنتج</h4>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>اسم المنتج</label>
+                <input type="text" id="edit-inv-name" list="edit-products-list" value="${item.name}" required autocomplete="off" oninput="validateEditProductInput()" />
+                <datalist id="edit-products-list">
+                  ${sampleProducts.map(p => `<option value="${p}">`).join('')}
+                </datalist>
+                <div id="edit-product-error" style="color:red; font-size:0.9em; display:none;">المنتج غير موجود في القائمة</div>
+              </div>
+              <div class="form-group">
+                <label>الكمية</label>
+                <input type="number" id="edit-inv-qty" value="${item.quantity}" required min="0" />
+              </div>
+              <div class="form-group">
+                <label>الحد الأدنى</label>
+                <input type="number" id="edit-inv-min" value="${item.minQuantity}" required min="0" />
+              </div>
+            </div>
+          </div>
+        `;
+        document.getElementById('edit-modal').style.display = 'block';
+      }
+
+      // فتح نافذة التعديل لجدول المخازن
+      function editWarehouse(id) {
+        editModalType = 'warehouse';
+        editModalRowId = id;
+        let warehouse = warehouses.find(w => w.id == id);
+        if (!warehouse) return;
+        document.getElementById('edit-modal-title').textContent = 'تعديل بيانات المخزن';
+        document.getElementById('edit-modal-fields').innerHTML = `
+          <div class="form-section">
+            <h4>معلومات المخزن</h4>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>اسم المخزن</label>
+                <input type="text" id="edit-wh-name" value="${warehouse.name}" required />
+              </div>
+              <div class="form-group">
+                <label>المدينة</label>
+                <input type="text" id="edit-wh-city" list="edit-cities-list" value="${warehouse.city}" required autocomplete="off" oninput="validateEditCityInput()" />
+                <datalist id="edit-cities-list">
+                  ${citiesList.map(c => `<option value="${c}">`).join('')}
+                </datalist>
+                <div id="edit-city-error" style="color:red; font-size:0.9em; display:none;">المدينة غير موجودة في القائمة</div>
+              </div>
+              <div class="form-group">
+                <label>العنوان</label>
+                <input type="text" id="edit-wh-address" value="${warehouse.address}" required />
+              </div>
+            </div>
+                </div>
+              `;
+        document.getElementById('edit-modal').style.display = 'block';
+      }
+
+      // إغلاق النافذة
+      function closeEditModal() {
+        document.getElementById('edit-modal').style.display = 'none';
+        editModalType = null;
+        editModalRowId = null;
+      }
+
+      // حفظ التعديلات
+      function submitEditModal(e) {
+        e.preventDefault();
+        if (editModalType === 'inventory') {
+          let warehouseId = document.getElementById('warehouse-selector').value;
+          let items = inventoryItems[warehouseId];
+          let idx = items.findIndex(i => i.id == editModalRowId);
+          if (idx !== -1) {
+            items[idx].name = document.getElementById('edit-inv-name').value;
+            items[idx].quantity = parseInt(document.getElementById('edit-inv-qty').value);
+            items[idx].minQuantity = parseInt(document.getElementById('edit-inv-min').value);
+            updateInventoryTable(warehouseId);
+            updateAlerts();
+          }
+        } else if (editModalType === 'warehouse') {
+          let idx = warehouses.findIndex(w => w.id == editModalRowId);
+          if (idx !== -1) {
+            warehouses[idx].name = document.getElementById('edit-wh-name').value;
+            warehouses[idx].city = document.getElementById('edit-wh-city').value;
+            warehouses[idx].address = document.getElementById('edit-wh-address').value;
+            updateWarehousesTable();
+            fillInventoryWarehousesDatalist();
+          }
+        }
+        closeEditModal();
+      }
+
+      // دالة فلترة جدول المخازن (اسم، مدينة، عنوان)
+      function filterWarehousesTable() {
+        const search = document.getElementById('warehouse-search').value.trim().toLowerCase();
+        const rows = document.querySelectorAll('#warehouses-table-body tr');
+        rows.forEach(row => {
+          const name = row.children[0].textContent.toLowerCase();
+          const city = row.children[1].textContent.toLowerCase();
+          const address = row.children[2].textContent.toLowerCase();
+          if (name.includes(search) || city.includes(search) || address.includes(search)) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        });
+      }
+
+      // دالة فلترة جدول المخزون (اسم المنتج)
+      function filterInventoryTable() {
+        const search = document.getElementById('inventory-search').value.trim().toLowerCase();
+        const rows = document.querySelectorAll('#inventory-table-body tr');
+        rows.forEach(row => {
+          const productName = row.children[0].textContent.toLowerCase();
+          if (productName.includes(search)) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        });
+      }
+
+      // دالة Toggle لعرض/إخفاء نموذج الإضافة
+      function toggleFormSection(formSectionId) {
+        // إخفاء جميع النماذج الأخرى
+        ['add-warehouse-section', 'add-inventory-section'].forEach(id => {
+          if (id !== formSectionId) {
+            const el = document.getElementById(id);
+            if (el) el.style.display = 'none';
+          }
+        });
+        // إخفاء جميع الجداول/القوائم
+        ['warehouses-section', 'inventory-section'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.style.display = 'none';
+        });
+        // إظهار/إخفاء النموذج المطلوب فقط
+        const form = document.getElementById(formSectionId);
+        if (form) {
+          form.style.display = (form.style.display === 'block') ? 'none' : 'block';
+        }
+      }
+
+      // قائمة المدن (محاكاة قاعدة بيانات)
+      const citiesList = [
+        'الرياض', 'جدة', 'مكة', 'الدمام', 'المدينة المنورة', 'الطائف', 'بريدة', 'تبوك', 'أبها', 'حائل', 'عرعر', 'جازان', 'نجران', 'الباحة', 'سكاكا'
+      ];
+
+      // ملء datalist للمدن
+      function fillCitiesDatalist() {
+        const datalist = document.getElementById('cities-list');
+        if (!datalist) return;
+        datalist.innerHTML = '';
+        citiesList.forEach(city => {
+          const option = document.createElement('option');
+          option.value = city;
+          datalist.appendChild(option);
+        });
+      }
+
+      // منع إدخال مدينة غير موجودة
+      function validateCityInput() {
+        const input = document.getElementById('new-warehouse-city');
+        const error = document.getElementById('city-error');
+        if (!input || !error) return;
+        if (input.value && !citiesList.includes(input.value)) {
+          error.style.display = 'block';
+          input.setCustomValidity('المدينة غير موجودة في القائمة');
+          } else {
+          error.style.display = 'none';
+          input.setCustomValidity('');
+        }
+      }
+
+      // عند تحميل الصفحة
+      document.addEventListener('DOMContentLoaded', function() {
+        fillCitiesDatalist();
+        fillInventoryWarehousesDatalist();
+        // عرض قائمة المخازن عند تحميل الصفحة
+        showSection('warehouses');
+        updateAlerts();
+      });
+
+      // ملء datalist للمخازن في فورم إضافة المخزون
+      function fillInventoryWarehousesDatalist() {
+        const datalist = document.getElementById('inventory-warehouses-list');
+        if (!datalist) return;
+        datalist.innerHTML = '';
+        warehouses.forEach(warehouse => {
+          const option = document.createElement('option');
+          option.value = warehouse.name;
+          datalist.appendChild(option);
+        });
+      }
+
+      // منع اختيار مخزن غير موجود
+      function validateInventoryWarehouseInput() {
+        const input = document.getElementById('inventory-warehouse-input');
+        const error = document.getElementById('inventory-warehouse-error');
+        if (!input || !error) return;
+        const warehouseNames = warehouses.map(w => w.name);
+        if (input.value && !warehouseNames.includes(input.value)) {
+          error.style.display = 'block';
+          input.setCustomValidity('المخزن غير موجود في القائمة');
+        } else {
+          error.style.display = 'none';
+          input.setCustomValidity('');
+        }
+      }
+
+      // قائمة المنتجات التجريبية للاقتراح
+      const sampleProducts = [
+        'قميص رجالي', 'بنطلون جينز', 'حذاء رياضي', 'ساعة يد', 'حقيبة ظهر',
+        'جاكيت شتوي', 'نظارة شمسية', 'محفظة جلدية', 'حزام رجالي', 'قبعة صيفية'
+      ];
+
+      // ملء datalist للمنتجات
+      function fillProductsDatalist() {
+        const datalist = document.getElementById('products-list');
+        if (!datalist) return;
+        datalist.innerHTML = '';
+        sampleProducts.forEach(product => {
+          const option = document.createElement('option');
+          option.value = product;
+          datalist.appendChild(option);
+        });
+      }
+
+      // منع اختيار منتج غير موجود
+      function validateProductInput() {
+        const input = document.getElementById('product-search');
+        const error = document.getElementById('product-error');
+        if (!input || !error) return;
+        if (input.value && !sampleProducts.includes(input.value)) {
+          error.style.display = 'block';
+          input.setCustomValidity('المنتج غير موجود في القائمة');
+        } else {
+          error.style.display = 'none';
+          input.setCustomValidity('');
+        }
+      }
+
+      // التحقق من صحة اسم المنتج في نافذة التعديل
+      function validateEditProductInput() {
+        const input = document.getElementById('edit-inv-name');
+        const error = document.getElementById('edit-product-error');
+        if (!input || !error) return;
+        if (input.value && !sampleProducts.includes(input.value)) {
+          error.style.display = 'block';
+          input.setCustomValidity('المنتج غير موجود في القائمة');
+        } else {
+          error.style.display = 'none';
+          input.setCustomValidity('');
+        }
+      }
+
+      // التحقق من صحة المدينة في نافذة التعديل
+      function validateEditCityInput() {
+        const input = document.getElementById('edit-wh-city');
+        const error = document.getElementById('edit-city-error');
+        if (!input || !error) return;
+        if (input.value && !citiesList.includes(input.value)) {
+          error.style.display = 'block';
+          input.setCustomValidity('المدينة غير موجودة في القائمة');
+        } else {
+          error.style.display = 'none';
+          input.setCustomValidity('');
+        }
+      }
+
+      // متغيرات لتتبع عملية الحذف
+      let deleteType = null; // 'inventory' أو 'warehouse'
+      let deleteId = null;
+
+      // فتح نافذة تأكيد حذف المخزن
+      function deleteWarehouse(id) {
+        deleteType = 'warehouse';
+        deleteId = id;
+        const warehouse = warehouses.find(w => w.id == id);
+        if (!warehouse) return;
+
+        document.getElementById('delete-modal-title').textContent = 'تأكيد حذف المخزن';
+        document.getElementById('delete-confirm-message').innerHTML = 
+          `هل أنت متأكد من حذف المخزن <strong>${warehouse.name}</strong>؟<br>
+           سيتم حذف <span class="highlight">جميع المنتجات</span> الموجودة في هذا المخزن.`;
+        document.getElementById('delete-confirm-modal').style.display = 'block';
+      }
+
+      // فتح نافذة تأكيد حذف المنتج
+      function deleteInventoryItem(id) {
+        deleteType = 'inventory';
+        deleteId = id;
+        const warehouseId = document.getElementById('warehouse-selector').value;
+        const item = inventoryItems[warehouseId]?.find(i => i.id == id);
+        if (!item) return;
+
+        document.getElementById('delete-modal-title').textContent = 'تأكيد حذف المنتج';
+        document.getElementById('delete-confirm-message').innerHTML = 
+          `هل أنت متأكد من حذف المنتج <strong>${item.name}</strong>؟<br>
+           سيتم حذف هذا المنتج من المخزن.`;
+        document.getElementById('delete-confirm-modal').style.display = 'block';
+      }
+
+      // تأكيد عملية الحذف
+      function confirmDelete() {
+        // احفظ القيم قبل الإغلاق
+        const type = deleteType;
+        const id = deleteId;
+        closeDeleteModal();
+        console.log('تم استدعاء إغلاق نافذة التأكيد (delete-confirm-modal)');
+        try {
+          if (type === 'warehouse') {
+            // حذف المخزن
+            const index = warehouses.findIndex(w => w.id == id);
+            if (index !== -1) {
+              warehouses.splice(index, 1);
+              // حذف جميع المنتجات في هذا المخزن
+              delete inventoryItems[id];
+              updateWarehousesTable();
+              fillInventoryWarehousesDatalist();
+              // تحديث قائمة اختيار المخازن
+              const mainWarehouse = warehouses.find(w => w.isMain);
+              if (mainWarehouse) {
+                updateWarehouseSelector(mainWarehouse.id);
+                updateInventoryTable(mainWarehouse.id);
+              } else {
+                updateWarehouseSelector();
+                updateInventoryTable(null);
+              }
+            }
+          } else if (type === 'inventory') {
+            const warehouseId = document.getElementById('warehouse-selector').value;
+            if (inventoryItems[warehouseId]) {
+              const index = inventoryItems[warehouseId].findIndex(i => i.id == id);
+              if (index !== -1) {
+                inventoryItems[warehouseId].splice(index, 1);
+                updateInventoryTable(warehouseId);
+                updateAlerts();
+              }
+            }
+          }
+        } catch (err) {
+          console.error('حدث خطأ أثناء حذف العنصر أو تحديث البيانات:', err);
+        }
+      }
+
+      // إغلاق نافذة تأكيد الحذف
+      function closeDeleteModal() {
+        document.getElementById('delete-confirm-modal').style.display = 'none';
+        deleteType = null;
+        deleteId = null;
+      }
+    </script>
+    <script src="../views/js/stores/index.js"> </script>
+    <!-- نافذة التعديل المنبثقة -->
+    <div id="edit-modal" class="modal" style="display:none;">
+      <div class="modal-content">
+        <span class="close-modal" onclick="closeEditModal()">&times;</span>
+        <h3 id="edit-modal-title">تعديل البيانات</h3>
+        <form id="edit-modal-form" onsubmit="submitEditModal(event)">
+          <div id="edit-modal-fields"></div>
+          <div class="form-actions" style="margin-top:1.5rem;">
+            <button type="submit" class="btn-green">حفظ التعديلات</button>
+            <button type="button" class="btn-secondary" onclick="closeEditModal()">إلغاء</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- نافذة تأكيد الحذف -->
+    <div id="delete-confirm-modal" class="modal" style="display:none;">
+      <div class="modal-content" style="max-width: 400px;">
+        <span class="close-modal" onclick="closeDeleteModal()">&times;</span>
+        <h3 id="delete-modal-title">تأكيد الحذف</h3>
+        <div class="delete-message" style="text-align: center; margin: 20px 0;">
+          <i class="fas fa-exclamation-triangle" style="color: #f59e0b; font-size: 3em; margin-bottom: 15px;"></i>
+          <p id="delete-confirm-message" style="color: #4b5563; font-size: 1.1em; line-height: 1.5;"></p>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" onclick="confirmDelete()">حذف</button>
+          <button type="button" class="btn-green" onclick="closeDeleteModal()">إلغاء</button>
+        </div>
+      </div>
+    </div>
+</body>
+</html>
