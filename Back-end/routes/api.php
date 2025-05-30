@@ -105,6 +105,7 @@ Route::get('/user', function (Request $request) {
 // Malls
 // get : /malls
 // get : /malls/{id}
+// get : /malls/{id}/admin
 // post : /malls
 // delete : /malls/{id}
 // put : /malls/{id}
@@ -124,6 +125,7 @@ Route::get('/malls/{id}/chats', [MallController::class, 'facilities']);
 Route::get('/malls/{id}/products', [MallController::class, 'products']);
 Route::get('/malls/{id}/all_products', [MallController::class, 'products']);
 Route::put('/malls/{id}/owner', [MallController::class, 'changeTheOwner']);
+Route::get('/malls/{id}/admin', [MallController::class, 'admin']);
 
 // Facilities
 // get : /facilities

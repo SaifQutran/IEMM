@@ -85,6 +85,7 @@
                   break;
                 case 2:
                   localStorage.setItem("shop_id", response.data.shop_id);
+                  localStorage.setItem("is_owner", response.data.is_owner);
                   redirectPath = "stores/shop-dashboard.html";
                   break;
                 case 4:
@@ -102,6 +103,7 @@
               // Store user data and token in localStorage
 
               localStorage.setItem("token", response.data.token);
+              localStorage.setItem("user_type", response.data.user_type);
 
               // Create and submit a form to handle the redirect
               const redirectForm = document.getElementById("redirectForm");

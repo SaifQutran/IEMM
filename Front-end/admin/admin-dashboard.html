@@ -35,6 +35,92 @@
     <script src="../views/js/admin/admin-dashboard.js" defer></script>
   </head>
   <body>
+    <!-- Authorization Check -->
+    <script>
+      // Check authorization before loading the page
+      function checkAuthorization() {
+        const token = localStorage.getItem('token');
+        const userType = localStorage.getItem('user_type');
+        
+        // Check if token exists
+        if (!token) {
+          window.location.href = '../login.html';
+          return;
+        }
+
+        // Check user type (admin = 4)
+        if (userType !== '4') {
+          // Create and show unauthorized message
+          document.body.innerHTML = `
+            <div style="
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              height: 100vh;
+              background-color: #f8fafc;
+              font-family: Arial, sans-serif;
+              text-align: center;
+              padding: 20px;
+            ">
+              <i class="fas fa-exclamation-triangle" style="
+                font-size: 64px;
+                color: #ef4444;
+                margin-bottom: 20px;
+              "></i>
+              <h1 style="
+                color: #1e293b;
+                font-size: 24px;
+                margin-bottom: 16px;
+              ">غير مصرح لك بالوصول</h1>
+              <p style="
+                color: #64748b;
+                font-size: 16px;
+                margin-bottom: 24px;
+              ">عذراً، ليس لديك الصلاحية للوصول إلى هذه الصفحة</p>
+              <button onclick="window.location.href='../login.html'" style="
+                background-color: #2563eb;
+                color: white;
+                border: none;
+                padding: 12px 24px;
+                border-radius: 8px;
+                font-size: 16px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+              ">العودة إلى صفحة تسجيل الدخول</button>
+            </div>
+          `;
+          return;
+        }
+
+        // Verify token with backend
+        $.ajax({
+          url: 'http://localhost/IEMM/Back-end/public/api/verify-token',
+          method: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function(response) {
+            if (!response.success) {
+              localStorage.removeItem('token');
+              localStorage.removeItem('user_type');
+              window.location.href = '../login.html';
+            }
+          },
+          error: function() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user_type');
+            window.location.href = '../login.html';
+          }
+        });
+      }
+
+      // Run authorization check when page loads
+      $(document).ready(function() {
+        checkAuthorization();
+      });
+    </script>
+
     <header>
       <div class="container navbar">
         <h1>IEMM</h1>

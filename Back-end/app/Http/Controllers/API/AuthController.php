@@ -90,8 +90,9 @@ class AuthController extends Controller
                     'user_name' => $user->f_name . ' ' . $user->l_name,
                     'user_id' => $user->id,
                     'token' => $token,
-                    'shop' => $shop,
-                    'user_type' => $user->user_type
+                    'shop_id' => $shop->id,
+                    'user_type' => $user->user_type,
+                    'is_owner' => $shop->owner_id == $user->id ? true:false
                 ]
             ]);
         } else if ($user->user_type == 1) {
