@@ -3,6 +3,7 @@
   <head>
     <script>
       function getCookie(name) {
+        
         var nameEQ = name + "=";
         var ca = document.cookie.split(";");
         for (var i = 0; i < ca.length; i++) {
@@ -30,18 +31,120 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <link rel="stylesheet" href="../views/css/styles.css" />
     <script src="../views/js/script.js" defer></script>
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+      /* تحسين نافذة تفاصيل المجمع */
+      #mallDetailsModal .modal-content {
+        max-width: 480px;
+        border-radius: 16px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+        padding: 2.5rem 2rem 2rem 2rem;
+        position: relative;
+        background: #fff;
+        max-height: 80vh;
+        overflow-y: auto;
+      }
+      .dark #mallDetailsModal .modal-content {
+        background: #1e293b;
+        color: #e2e8f0;
+      }
+      #mallDetailsModal .modal-title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.7rem;
+        font-size: 1.5rem;
+        color: #2563eb;
+        margin-bottom: 1.5rem;
+        font-weight: bold;
+      }
+      #mallDetailsModal .mall-details-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1.1rem;
+        margin-bottom: 2rem;
+      }
+      #mallDetailsModal .mall-detail-row {
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        background: #f8fafc;
+        border-radius: 8px;
+        padding: 0.7rem 1rem;
+        font-size: 1.08rem;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+      }
+      .dark #mallDetailsModal .mall-detail-row {
+        background: #334155;
+        color: #e2e8f0;
+      }
+      #mallDetailsModal .mall-detail-icon {
+        font-size: 1.2rem;
+        color: #3b82f6;
+        min-width: 24px;
+        text-align: center;
+      }
+      
+      #mallDetailsModal .close {
+        position: absolute;
+        left: 18px;
+        top: 18px;
+        font-size: 1.5rem;
+        color: #64748b;
+        cursor: pointer;
+        transition: color 0.2s;
+      }
+      #mallDetailsModal .close:hover {
+        color: #ef4444;
+      }
+      #changeOwnerForm .form-actions, #mallDetailsModal .form-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+        justify-content: flex-end;
+        align-items: center;
+      }
+      #changeOwnerForm button, #mallDetailsModal .form-actions button {
+        min-width: 140px;
+        height: 48px;
+        line-height: 48px;
+        padding: 0;
+        font-size: 1.08rem;
+        border-radius: 8px;
+        font-weight: 600;
+        box-sizing: border-box;
+        text-align: center;
+        border: none;
+        transition: background 0.2s, color 0.2s;
+        display: inline-block;
+        vertical-align: middle;
+      }
+      .btn-icon {
+        padding: 0.5rem;
+        border: none;
+        background: none;
+        cursor: pointer;
+        transition: all 0.2s;
+        border-radius: 6px;
+        font-size: 1.1rem;
+        color: #64748b;
+        margin: 0 2px;
+      }
+      .btn-icon:hover {
+        background-color: #f1f5f9;
+        color: #2563eb;
+        transform: translateY(-1px);
+      }
+    </style>
   </head>
   <body>
     <header>
       <div class="container navbar">
         <h1>IEMM</h1>
         <nav>
-          <a href="admin-dashboard.html" id="dashboard-link">📊 لوحة التحكم</a>
-          <a href="mall-management.html" id="malls-link" class="active"
-            >🏢 إدارة المجمعات</a
-          >
-          <a href="settings.html" id="settings-link">⚙️ الإعدادات العامة</a>
+          <a href="admin-dashboard.html" id="dashboard-link"><i class="fa-solid fa-chart-bar"></i> لوحة التحكم</a>
+          <a href="mall-management.html" id="malls-link" class="active"><i class="fa-solid fa-city"></i> إدارة المجمعات</a>
+          <a href="settings.html" id="settings-link"><i class="fa-solid fa-gear"></i> الإعدادات العامة</a>
         </nav>
         <button class="btn-dark" onclick="toggleNightMode()">
           الوضع الليلي
@@ -52,10 +155,8 @@
     <div class="main">
       <div class="section active" id="malls-section">
         <div class="section-header">
-          <h2 class="section-title">🏢 إدارة المجمعات</h2>
-          <button class="btn-green" onclick="toggleForm()">
-            ➕ إضافة مجمع
-          </button>
+          <h2 class="section-title"><i class="fa-solid fa-city"></i> إدارة المجمعات</h2>
+          <button class="btn-green" onclick="toggleForm()"><i class="fa-solid fa-circle-plus"></i> إضافة مجمع</button>
         </div>
 
         <form action="" id="mall-form" style="display: none" method="post">
@@ -138,6 +239,13 @@
         </form>
 
         <div class="table card">
+          <div class="table-header">
+            <h3>قائمة المجمعات</h3>
+            <div class="search-box">
+              <input type="text" class="search-input" placeholder="ابحث في المجمعات..." onkeyup="searchMalls(this.value)">
+              <i class="fa-solid fa-search search-icon"></i>
+            </div>
+          </div>
           <div
             id="loading"
             style="display: none; text-align: center; padding: 20px"
@@ -150,13 +258,13 @@
           >
             حدث خطأ أثناء تحميل البيانات
           </div>
-          <table>
+          <table class="scrollable-table">
             <thead>
               <tr>
                 <th>اسم المجمع</th>
                 <th>المالك</th>
                 <th>الموقع</th>
-                <th>عدد الطوابق</th>
+                <th class="floors-col">عدد الطوابق</th>
                 <th>المدينة</th>
                 <th>الإجراءات</th>
               </tr>
@@ -173,8 +281,8 @@
     <div id="mallDetailsModal" class="modal">
       <div class="modal-content">
         <span class="close">&times;</span>
-        <h3>بيانات المجمع</h3>
-        <div class="mall-details" id="mallDetailsContent">
+        <div class="modal-title"><i class="fa-solid fa-city"></i> بيانات المجمع</div>
+        <div class="mall-details mall-details-list" id="mallDetailsContent">
           <!-- سيتم إضافة البيانات ديناميكياً -->
         </div>
         <button class="btn-green" id="changeOwnerBtn">تغيير مالك المجمع</button>
@@ -189,6 +297,7 @@
               id="newUsername"
               name="newUsername"
             />
+            
             <input
               type="text"
               placeholder="الاسم الثنائي"
@@ -247,20 +356,9 @@
               title="الرجاء إدخال تاريخ الميلاد"
             />
           </div>
-          <div
-            style="
-              margin-top: 10px;
-              display: flex;
-              gap: 10px;
-              justify-content: flex-start;
-            "
-          >
-            <button class="btn-green" onclick="submitOwnerChange()">
-              حفظ التغييرات
-            </button>
-            <button class="btn-dark" onclick="cancelOwnerChange()">
-              إلغاء
-            </button>
+          <div style="margin-top: 10px; display: flex; gap: 10px; justify-content: flex-start;">
+            <button class="btn-green" onclick="submitOwnerChange()">حفظ التغييرات</button>
+            <button class="btn-dark" onclick="cancelOwnerChange()">إلغاء</button>
           </div>
         </div>
       </div>

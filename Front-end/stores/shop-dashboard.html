@@ -12,6 +12,7 @@
   <script src="../views/js/stores/chat.js" defer></script>
 </head>
 <body>
+  
   <!-- Header Section -->
   <header>
     <div class="container navbar">
@@ -27,6 +28,10 @@
         <button class="btn-dark" onclick="document.body.classList.toggle('dark')">الوضع الليلي</button>
         <button id="chat-toggle" class="chat-toggle-btn" title="الدردشة مع مدير المول">
           <i class="fas fa-comments"></i>
+        </button>
+        <button id="profile-toggle" class="profile-toggle-btn" title="الملف الشخصي">
+          <i class="fas fa-user"></i>
+          <span class="notification-dot" id="profile-notification"></span>
         </button>
       </div>
     </div>
@@ -53,6 +58,228 @@
       </button>
     </form>
   </div>
+
+  <!-- نافذة الملف الشخصي المنبثقة -->
+  <div id="profile-modal" class="profile-modal">
+    <div class="profile-content">
+      <div class="profile-header">
+        <h3>الملف الشخصي</h3>
+        <button id="profile-close" class="profile-close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="profile-body">
+        <div class="profile-image-container">
+          <img id="profile-image" src="../assets/default-profile.png" alt="صورة الملف الشخصي">
+          <button class="edit-btn" data-field="image">
+            <i class="fas fa-edit"></i>
+          </button>
+        </div>
+        <div class="profile-info">
+          <div class="info-item">
+            <label>اسم المحل:</label>
+            <span id="profile-shopname">متجرك العصري</span>
+          </div>
+          <div class="info-item">
+            <label>اسم العامل:</label>
+            <span id="profile-name">أحمد محمد</span>
+          </div>
+          <div class="info-item">
+            <label>البريد الإلكتروني:</label>
+            <span id="profile-email">ahmed@example.com</span>
+          </div>
+          <div class="info-item">
+            <label>اسم المستخدم:</label>
+            <span id="profile-username">ahmed123</span>
+          </div>
+          <div class="info-item">
+            <label>رقم الهاتف:</label>
+            <span id="profile-phone">+966 50 123 4567</span>
+            <button class="edit-btn" data-field="phone">
+              <i class="fas fa-edit"></i>
+            </button>
+          </div>
+          <div class="info-item">
+            <label>كلمة السر:</label>
+            <input type="password" id="profile-password" value="********" readonly style="background:transparent; border:none; font-size:1rem; width:120px; direction:ltr; letter-spacing:3px;" tabindex="-1">
+            <button class="edit-btn" data-field="password">
+              <i class="fas fa-edit"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة تغيير كلمة السر -->
+  <div id="password-modal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>تغيير كلمة السر</h3>
+        <button class="btn-close" onclick="closeModal('password-modal')">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <form id="password-form" class="form">
+        <div class="form-group">
+          <label>كلمة السر الحالية</label>
+          <div class="password-input-container">
+            <input type="password" id="current-password" required>
+            <button type="button" class="toggle-password" onclick="togglePasswordVisibility('current-password')">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>كلمة السر الجديدة</label>
+          <div class="password-input-container">
+            <input type="password" id="new-password" required 
+                   pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+                   title="يجب أن تحتوي كلمة السر على 8 أحرف على الأقل، وتتضمن حروف وأرقام">
+            <button type="button" class="toggle-password" onclick="togglePasswordVisibility('new-password')">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <small class="password-requirements">
+            يجب أن تحتوي كلمة السر على 8 أحرف على الأقل، وتتضمن حروف وأرقام
+          </small>
+        </div>
+        <div class="form-group">
+          <label>تأكيد كلمة السر الجديدة</label>
+          <div class="password-input-container">
+            <input type="password" id="confirm-password" required>
+            <button type="button" class="toggle-password" onclick="togglePasswordVisibility('confirm-password')">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-green">تغيير كلمة السر</button>
+          <button type="button" class="btn-secondary" onclick="closeModal('password-modal')">إلغاء</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <style>
+    .password-input-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .password-input-container input {
+      width: 100%;
+      padding-right: 40px;
+    }
+    .toggle-password {
+      position: absolute;
+      right: 10px;
+      background: none;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      padding: 5px;
+    }
+    .toggle-password:hover {
+      color: #2563eb;
+    }
+    .password-requirements {
+      display: block;
+      color: #64748b;
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+    }
+    .modal, .profile-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+    }
+    .modal-content, .profile-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      padding: 2rem;
+      width: 90%;
+      max-width: 500px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      max-height: 80vh;
+      overflow-y: auto;
+      margin: 0;
+    }
+  </style>
+
+  <script>
+    // إخفاء نافذة تغيير كلمة السر عند تحميل الصفحة دائماً
+    window.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('password-modal').style.display = 'none';
+    });
+    document.querySelectorAll('.edit-btn').forEach(button => {
+      button.addEventListener('click', function() {
+        const field = this.getAttribute('data-field');
+        if (field === 'password') {
+          openPasswordModal();
+          return false;
+        }
+        // ... باقي الكود للتعامل مع الحقول الأخرى
+      });
+    });
+    function openPasswordModal() {
+      const modal = document.getElementById('password-modal');
+      modal.style.display = 'flex'; // flex لضمان التوسيط
+      document.getElementById('password-form').reset();
+      window.onclick = function(event) {
+        if (event.target === modal) {
+          closeModal('password-modal');
+        }
+      }
+    }
+    function closeModal(modalId) {
+      document.getElementById(modalId).style.display = 'none';
+    }
+    function togglePasswordVisibility(inputId) {
+      const input = document.getElementById(inputId);
+      const icon = input.nextElementSibling.querySelector('i');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    }
+    document.getElementById('password-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const currentPassword = document.getElementById('current-password').value;
+      const newPassword = document.getElementById('new-password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
+      if (newPassword !== confirmPassword) {
+        alert('كلمة السر الجديدة غير متطابقة');
+        return;
+      }
+      const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+      if (!passwordRegex.test(newPassword)) {
+        alert('كلمة السر الجديدة لا تلبي المتطلبات');
+        return;
+      }
+      // هنا يمكنك إضافة كود للتحقق من كلمة السر الحالية وإرسال التغييرات إلى الخادم
+      console.log('تغيير كلمة السر:', {
+        currentPassword,
+        newPassword
+      });
+      closeModal('password-modal');
+      alert('تم تغيير كلمة السر بنجاح');
+    });
+  </script>
 
   <!-- Main Content -->
   <div class="main">
@@ -144,6 +371,8 @@
     </div>
   </div>
   <script src="../views/js/stores/index.js"> </script>
+  <script src="../views/js/profile.js"></script>
+  <link rel="stylesheet" href="../views/css/profile.css">
 </body>
 </html>
 

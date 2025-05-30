@@ -713,10 +713,12 @@
       }
 
       // دالة حذف المحل
-      function deleteStore(storeNumber) {
-        if (confirm('هل أنت متأكد من حذف هذا المحل؟')) {
-          // هنا يتم إضافة كود حذف المحل
-          console.log('تم حذف المحل رقم:', storeNumber);
+      function deleteStore(btn) {
+        if (confirm('هل أنت متأكد من حذف هذا السطر؟')) {
+          // احذف الصف من الجدول
+          const row = btn.closest('tr');
+          if (row) row.remove();
+          // يمكنك هنا إضافة كود حذف من السيرفر إذا أردت
         }
       }
 
@@ -742,9 +744,7 @@
               <button class="btn-icon" title="عرض" onclick='openViewModal(${JSON.stringify(storeData).replace(/'/g, "\\'")}, "facilities")'>
                 <i class="fas fa-eye"></i>
               </button>
-              <button class="btn-icon" title="حذف" onclick="deleteStore('${row.cells[0].textContent}')">
-                <i class="fas fa-trash"></i>
-              </button>
+              <button class="btn-icon" title="حذف" onclick="deleteStore(this)"><i class="fas fa-trash"></i></button>
             `;
           }
         });
@@ -767,9 +767,7 @@
               <button class="btn-icon" title="عرض" onclick='openViewModal(${JSON.stringify(tenantData).replace(/'/g, "\\'")}, "tenants")'>
                 <i class="fas fa-eye"></i>
               </button>
-              <button class="btn-icon" title="حذف" onclick="deleteStore('${row.cells[0].textContent}')">
-                <i class="fas fa-trash"></i>
-              </button>
+              <button class="btn-icon" title="حذف" onclick="deleteStore(this)"><i class="fas fa-trash"></i></button>
             `;
           }
         });
@@ -791,9 +789,7 @@
               <button class="btn-icon" title="عرض" onclick='openViewModal(${JSON.stringify(storeData).replace(/'/g, "\\'")}, "stores")'>
                 <i class="fas fa-eye"></i>
               </button>
-              <button class="btn-icon" title="حذف" onclick="deleteStore('${row.cells[1].textContent}')">
-                <i class="fas fa-trash"></i>
-              </button>
+              <button class="btn-icon" title="حذف" onclick="deleteStore(this)"><i class="fas fa-trash"></i></button>
             `;
           }
         });
@@ -848,54 +844,45 @@
           const fieldDiv = document.createElement('div');
           fieldDiv.className = 'form-group';
           fieldDiv.style.position = 'relative';
-          fieldDiv.innerHTML = `
-            <label>${field.label}</label>
-            <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
-            <button type="button" class="btn-icon edit-field-btn" title="تعديل" onclick="enableFieldEdit('${fieldId}', '${field.key}', '${field.type}', '${type}')" style="position:absolute; left:0; top:50%; transform:translateY(-50%);"><i class='fas fa-edit'></i></button>
-          `;
+          // إذا كان النوع facilities أضف زر التعديل، غير ذلك لا تضف الزر
+          if (type === 'facilities') {
+            fieldDiv.innerHTML = `
+              <label>${field.label}</label>
+              <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
+              <button type="button" class="btn-icon edit-field-btn" title="تعديل" onclick="enableFieldEdit('${fieldId}', '${field.key}', '${field.type}', '${type}')" style="position:absolute; left:0; top:50%; transform:translateY(-50%);"><i class='fas fa-edit'></i></button>
+            `;
+          } else {
+            fieldDiv.innerHTML = `
+              <label>${field.label}</label>
+              <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
+            `;
+          }
           fieldsContainer.appendChild(fieldDiv);
         });
 
         modal.style.display = 'block';
       }
 
-      // دالة تفعيل التعديل لحقل معين
-      function enableFieldEdit(fieldId, key, type, dataType) {
-        const span = document.getElementById(fieldId);
-        const value = span.textContent;
-        let inputHtml = '';
-        if (type === 'select') {
-          inputHtml = `<select id='input-${fieldId}'>
-            <option value='male' ${value==='ذكر'?'selected':''}>ذكر</option>
-            <option value='female' ${value==='أنثى'?'selected':''}>أنثى</option>
-          </select>`;
-        } else {
-          inputHtml = `<input id='input-${fieldId}' type='${type}' value='${value}' style='width:70%;' />`;
-        }
-        span.outerHTML = `
-          <span id="${fieldId}" class="field-value-editing">
-            ${inputHtml}
-            <button type='button' class='btn-icon' title='حفظ' onclick="saveFieldEdit('${fieldId}', '${key}', '${type}', '${dataType}')"><i class='fas fa-check'></i></button>
-            <button type='button' class='btn-icon' title='إلغاء' onclick="cancelFieldEdit('${fieldId}', '${value}')"><i class='fas fa-times'></i></button>
-          </span>
-        `;
-      }
-
-      // دالة حفظ التعديل
-      function saveFieldEdit(fieldId, key, type, dataType) {
-        const input = document.getElementById('input-' + fieldId);
-        let newValue = input.value;
-        if (type === 'select') {
-          newValue = input.options[input.selectedIndex].text;
-        }
-        // هنا يمكنك إرسال القيمة الجديدة للسيرفر إذا أردت
-        cancelFieldEdit(fieldId, newValue);
-      }
-
       // دالة إلغاء التعديل
       function cancelFieldEdit(fieldId, value) {
         const span = document.getElementById(fieldId);
         span.outerHTML = `<span id='${fieldId}' class='field-value'>${value}</span>`;
+      }
+
+      let rowToDelete = null;
+      function deleteStore(btn) {
+        rowToDelete = btn.closest('tr');
+        document.getElementById('delete-modal-title').textContent = 'تأكيد الحذف';
+        document.getElementById('delete-confirm-message').innerHTML = 'هل أنت متأكد من حذف هذا السطر؟';
+        document.getElementById('delete-confirm-modal').style.display = 'block';
+      }
+      function confirmDelete() {
+        if (rowToDelete) rowToDelete.remove();
+        closeDeleteModal();
+      }
+      function closeDeleteModal() {
+        document.getElementById('delete-confirm-modal').style.display = 'none';
+        rowToDelete = null;
       }
     </script>
   </head>
@@ -1095,14 +1082,15 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr><td>A101</td><td>الأرضي</td><td>120 م²</td><td>مؤجر</td><td>أحمد محمد</td><td>زمن التوفير</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
+                      <tr><td>A101</td><td>الأرضي</td><td>120 م²</td><td>مؤجر</td><td>أحمد محمد</td><td>زمن التوفير</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف" onclick="deleteStore(this)"><i class="fas fa-trash"></i></button></td></tr>
                       <tr><td>A102</td><td>الأرضي</td><td>85 م²</td><td>متاح</td><td>-</td><td>-</td><td><button class="btn-green btn-sm">تعيين مستأجر</button></td></tr>
-                      <tr><td>A103</td><td>الأرضي</td><td>150 م²</td><td>مؤجر</td><td>محمد علي</td><td>مطعم الأصالة</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>B101</td><td>الأول</td><td>100 م²</td><td>مؤجر</td><td>سارة أحمد</td><td>صالون الجمال</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
+                      <tr><td>A103</td><td>الأرضي</td><td>150 م²</td><td>مؤجر</td><td>محمد علي</td><td>مطعم الأصالة</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف" onclick="deleteStore(this)"><i class="fas fa-trash"></i></button></td></tr>
+                      <tr><td>B101</td><td>الأول</td><td>100 م²</td><td>مؤجر</td><td>سارة أحمد</td><td>صالون الجمال</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف" onclick="deleteStore(this)"><i class="fas fa-trash"></i></button></td></tr>
                       <tr><td>B102</td><td>الأول</td><td>90 م²</td><td>متاح</td><td>-</td><td>-</td><td><button class="btn-green btn-sm">تعيين مستأجر</button></td></tr>
-                      <tr><td>B103</td><td>الأول</td><td>110 م²</td><td>مؤجر</td><td>خالد عبدالله</td><td>محل الأزياء</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>C101</td><td>الثاني</td><td>130 م²</td><td>مؤجر</td><td>فاطمة محمد</td><td>مكتبة المعرفة</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
+                      <tr><td>B103</td><td>الأول</td><td>110 م²</td><td>مؤجر</td><td>خالد عبدالله</td><td>محل الأزياء</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف" onclick="deleteStore(this)"><i class="fas fa-trash"></i></button></td></tr>
+                      <tr><td>C101</td><td>الثاني</td><td>130 م²</td><td>مؤجر</td><td>فاطمة محمد</td><td>مكتبة المعرفة</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف" onclick="deleteStore(this)"><i class="fas fa-trash"></i></button></td></tr>
                       <tr><td>C102</td><td>الثاني</td><td>95 م²</td><td>متاح</td><td>-</td><td>-</td><td><button class="btn-green btn-sm">تعيين مستأجر</button></td></tr>
+                      <tr><td>C103</td><td>الثاني</td><td>140 م²</td><td>مؤجر</td><td>عبدالرحمن سعيد</td><td>مطعم الشرق</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف" onclick="deleteStore(this)"><i class="fas fa-trash"></i></button></td></tr>
                       <tr><td>C103</td><td>الثاني</td><td>140 م²</td><td>مؤجر</td><td>عبدالرحمن سعيد</td><td>مطعم الشرق</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
                       <tr><td>D101</td><td>الثالث</td><td>160 م²</td><td>مؤجر</td><td>نورة خالد</td><td>صالون السيدات</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
                       <tr><td>D102</td><td>الثالث</td><td>120 م²</td><td>متاح</td><td>-</td><td>-</td><td><button class="btn-green btn-sm">تعيين مستأجر</button></td></tr>
@@ -1362,6 +1350,22 @@
             </form>
                 </div>
         </div>
+
+        <!-- نافذة تأكيد الحذف -->
+        <div id="delete-confirm-modal" class="modal" style="display:none;">
+          <div class="modal-content" style="max-width: 400px;">
+            <span class="close-modal" onclick="closeDeleteModal()">&times;</span>
+            <h3 id="delete-modal-title">تأكيد الحذف</h3>
+            <div class="delete-message" style="text-align: center; margin: 20px 0;">
+              <i class="fas fa-exclamation-triangle" style="color: #f59e0b; font-size: 3em; margin-bottom: 15px;"></i>
+              <p id="delete-confirm-message" style="color: #4b5563; font-size: 1.1em; line-height: 1.5;">هل أنت متأكد من حذف هذا السطر؟</p>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn-secondary" onclick="confirmDelete()">حذف</button>
+              <button type="button" class="btn-green" onclick="closeDeleteModal()">إلغاء</button>
+            </div>
+          </div>
+        </div>
     </div>
 <script src="../views/js/mall-management/index.js"></script>
 <script>
@@ -1478,54 +1482,45 @@
       const fieldDiv = document.createElement('div');
       fieldDiv.className = 'form-group';
       fieldDiv.style.position = 'relative';
-      fieldDiv.innerHTML = `
-        <label>${field.label}</label>
-        <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
-        <button type="button" class="btn-icon edit-field-btn" title="تعديل" onclick="enableFieldEdit('${fieldId}', '${field.key}', '${field.type}', '${type}')" style="position:absolute; left:0; top:50%; transform:translateY(-50%);"><i class='fas fa-edit'></i></button>
-      `;
+      // إذا كان النوع facilities أضف زر التعديل، غير ذلك لا تضف الزر
+      if (type === 'facilities') {
+        fieldDiv.innerHTML = `
+          <label>${field.label}</label>
+          <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
+          <button type="button" class="btn-icon edit-field-btn" title="تعديل" onclick="enableFieldEdit('${fieldId}', '${field.key}', '${field.type}', '${type}')" style="position:absolute; left:0; top:50%; transform:translateY(-50%);"><i class='fas fa-edit'></i></button>
+        `;
+      } else {
+        fieldDiv.innerHTML = `
+          <label>${field.label}</label>
+          <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
+        `;
+      }
       fieldsContainer.appendChild(fieldDiv);
     });
 
     modal.style.display = 'block';
   }
 
-  // دالة تفعيل التعديل لحقل معين
-  function enableFieldEdit(fieldId, key, type, dataType) {
-    const span = document.getElementById(fieldId);
-    const value = span.textContent;
-    let inputHtml = '';
-    if (type === 'select') {
-      inputHtml = `<select id='input-${fieldId}'>
-        <option value='male' ${value==='ذكر'?'selected':''}>ذكر</option>
-        <option value='female' ${value==='أنثى'?'selected':''}>أنثى</option>
-      </select>`;
-    } else {
-      inputHtml = `<input id='input-${fieldId}' type='${type}' value='${value}' style='width:70%;' />`;
-    }
-    span.outerHTML = `
-      <span id="${fieldId}" class="field-value-editing">
-        ${inputHtml}
-        <button type='button' class='btn-icon' title='حفظ' onclick="saveFieldEdit('${fieldId}', '${key}', '${type}', '${dataType}')"><i class='fas fa-check'></i></button>
-        <button type='button' class='btn-icon' title='إلغاء' onclick="cancelFieldEdit('${fieldId}', '${value}')"><i class='fas fa-times'></i></button>
-      </span>
-    `;
-  }
-
-  // دالة حفظ التعديل
-  function saveFieldEdit(fieldId, key, type, dataType) {
-    const input = document.getElementById('input-' + fieldId);
-    let newValue = input.value;
-    if (type === 'select') {
-      newValue = input.options[input.selectedIndex].text;
-    }
-    // هنا يمكنك إرسال القيمة الجديدة للسيرفر إذا أردت
-    cancelFieldEdit(fieldId, newValue);
-  }
-
   // دالة إلغاء التعديل
   function cancelFieldEdit(fieldId, value) {
     const span = document.getElementById(fieldId);
     span.outerHTML = `<span id='${fieldId}' class='field-value'>${value}</span>`;
+  }
+
+  // let rowToDelete = null;
+  // function deleteStore(btn) {
+  //   rowToDelete = btn.closest('tr');
+  //   document.getElementById('delete-modal-title').textContent = 'تأكيد الحذف';
+  //   document.getElementById('delete-confirm-message').innerHTML = 'هل أنت متأكد من حذف هذا السطر؟';
+  //   document.getElementById('delete-confirm-modal').style.display = 'block';
+  // }
+  function confirmDelete() {
+    if (rowToDelete) rowToDelete.remove();
+    closeDeleteModal();
+  }
+  function closeDeleteModal() {
+    document.getElementById('delete-confirm-modal').style.display = 'none';
+    rowToDelete = null;
   }
 </script>
 </body>
