@@ -1,9 +1,9 @@
 // Store Management CRUD Operations
 // const API_URL = 'http://localhost/IEMM/Back-end/public/api/shop';
 
-const API_URL = 'http://127.0.0.1:8000/api/malls/1/shops';
-const facility_API_URL='http://127.0.0.1:8000/api/malls/1/facilities';
-const OWNER_API_URL = 'http://127.0.0.1:8000/api/malls/1/shops/owners';
+const API_URL = 'http://localhost/IEMM/Back-end/public/api/malls/'+localStorage.getItem("mall_id")+'/shops';
+const facility_API_URL='http://localhost/IEMM/Back-end/public/api/malls/'+localStorage.getItem("mall_id")+'/facilities';
+const OWNER_API_URL = 'http://localhost/IEMM/Back-end/public/api/malls/'+localStorage.getItem("mall_id")+'/shops/owners';
 
 class StoreManagement {
     constructor() {
@@ -30,6 +30,9 @@ class StoreManagement {
         $.ajax({
             url: API_URL,
             method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
             success: (response) => {
                 const storesTable = $('table tbody.stores-table');
                 storesTable.empty();
@@ -65,6 +68,9 @@ class StoreManagement {
             url: API_URL,
             method: 'POST',
             data: storeData,
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
             success: (response) => {
                 alert('تم إضافة المحل بنجاح');
                 this.loadStores();
@@ -214,8 +220,11 @@ class StoreManagement {
     deleteStore(storeId) {
         if (confirm('هل أنت متأكد من حذف هذا المحل؟')) {
             $.ajax({
-                url: `${API_URL}/${storeId}`,
+                url: `http://localhost/IEMM/Back-end/public/api/shops/${storeId}`,
                 method: 'DELETE',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
                 success: (response) => {
                     alert('تم حذف المحل بنجاح');
                     this.loadStores();
@@ -231,8 +240,11 @@ class StoreManagement {
     // Toggle store status
     toggleStoreStatus(storeId) {
         $.ajax({
-            url: `${API_URL}/${storeId}/toggle-status`,
+            url: `http://localhost/IEMM/Back-end/public/api/shops/${storeId}/toggle-status`,
             method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
             success: (response) => {
                 alert('تم تغيير حالة المحل بنجاح');
                 this.loadStores();
@@ -275,6 +287,9 @@ class StoreOwnerManagement {
         $.ajax({
             url: OWNER_API_URL,
             method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
             success: (response) => {
                 const ownersTable = $('table tbody.owner-table');
                 ownersTable.empty();
@@ -286,7 +301,7 @@ class StoreOwnerManagement {
                             <td>${owner.owner_email}</td>
                             <td>${owner.facilities}</td>
                             <td>
-                            <button class="btn-icon view-btn" title="عرض" onclick="StoreOwnerManagement.openViewModal(${JSON.stringify(owner).replace(/"/g, '&quot;')})"><i class="fas fa-eye"></i></button>
+                            <button class="btn-icon view-btn" title="عرض" onclick="StoreOwnerManagement.openOwnerViewModal(${JSON.stringify(owner).replace(/"/g, '&quot;')})"><i class="fas fa-eye"></i></button>
                             <button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button>
                             </td>
                         </tr>
@@ -307,6 +322,9 @@ class StoreOwnerManagement {
             url: OWNER_API_URL,
             method: 'POST',
             data: ownerData,
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
             success: (response) => {
                 alert('تم إضافة صاحب المحل بنجاح');
                 this.loadStoreOwners();
@@ -318,7 +336,7 @@ class StoreOwnerManagement {
             }
         });
     }
-    static openViewModal(data) {
+    static openOwnerViewModal(data) {
         const modal = document.getElementById('viewEditModal');
         if (!modal) {
             console.error('Modal element not found! Make sure you have an element with id="viewEditModal"');
@@ -341,7 +359,7 @@ class StoreOwnerManagement {
 
         // تعريف الحقول حسب النوع
         let fields = [];
-        title.textContent = 'بيانات المحل';
+        title.textContent = 'بيانات صاحب المحل';
         fields = [
             {label: 'الاسم', key: 'owner_name', type: 'text'},
             {label: 'رقم الجوال', key: 'phone', type: 'tel'},
@@ -439,8 +457,11 @@ class StoreOwnerManagement {
     deleteStoreOwner(ownerId) {
         if (confirm('هل أنت متأكد من حذف صاحب المحل؟')) {
             $.ajax({
-                url: `${OWNER_API_URL}/${ownerId}`,
+                url: `http://localhost/IEMM/Back-end/public/api/owners/${ownerId}`,
                 method: 'DELETE',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
                 success: (response) => {
                     alert('تم حذف صاحب المحل بنجاح');
                     this.loadStoreOwners();
@@ -491,10 +512,86 @@ class FacilitiesManagement {
             $(this).closest('.modal').hide();
         });
     }
+
+    static openViewModal(data) {
+        const modal = document.getElementById('viewEditModal');
+        if (!modal) {
+            console.error('Modal element not found! Make sure you have an element with id="viewEditModal"');
+            return;
+        }
+
+        const title = document.getElementById('viewEditModalTitle');
+        if (!title) {
+            console.error('Modal title element not found! Make sure you have an element with id="viewEditModalTitle"');
+            return;
+        }
+
+        const fieldsContainer = document.getElementById('viewEditFields');
+        if (!fieldsContainer) {
+            console.error('Fields container not found! Make sure you have an element with id="viewEditFields"');
+            return;
+        }
+
+        fieldsContainer.innerHTML = '';
+        title.textContent = 'بيانات المرفق';
+        
+        const fields = [
+            {label: 'مبلغ الإيجار', key: 'rent', type: 'number'},
+            {label: 'رقم عداد الماء', key: 'waterMeter', type: 'text'},
+            {label: 'رقم عداد الكهرباء', key: 'electricityMeter', type: 'text'},
+            {label: 'الدور', key: 'floor', type: 'text'},
+            {label: 'الموقع X', key: 'x', type: 'number'},
+            {label: 'الموقع Y', key: 'y', type: 'number'},
+            {label: 'العرض', key: 'width', type: 'number'},
+            {label: 'الطول', key: 'height', type: 'number'}
+        ];
+
+        // توليد الحقول
+        fields.forEach(field => {
+            const value = data[field.key] || '';
+            const fieldId = `view-field-${field.key}`;
+            const fieldDiv = document.createElement('div');
+            fieldDiv.className = 'form-group';
+            fieldDiv.style.position = 'relative';
+            fieldDiv.innerHTML = `
+                <label>${field.label}</label>
+                <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
+                <button type="button" class="btn-icon edit-field-btn" title="تعديل" onclick="FacilitiesManagement.enableFieldEdit('${fieldId}', '${field.key}', '${field.type}')" style="position:absolute; left:0; top:50%; transform:translateY(-50%);"><i class='fas fa-edit'></i></button>
+            `;
+            fieldsContainer.appendChild(fieldDiv);
+        });
+
+        // Show the modal
+        modal.style.display = 'block';
+        
+        // Add close button functionality if not already present
+        const closeBtn = modal.querySelector('.close-modal');
+        if (closeBtn) {
+            closeBtn.onclick = function() {
+                modal.style.display = 'none';
+            };
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        };
+    }
+
+    static enableFieldEdit(fieldId, fieldKey, fieldType) {
+        // Add your field editing logic here
+        console.log('Editing field:', fieldId, fieldKey, fieldType);
+    }
+
     importEvents() {
         return $.ajax({
-            url: 'http://127.0.0.1:8000/api/malls/1/',
+            url: 'http://localhost/IEMM/Back-end/public/api/malls/'+localStorage.getItem("mall_id")+'/',
             method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
             success: (response) => {
                 // Set floor constraints based on mall data
                 console.log(response.data.floors_count);
@@ -513,11 +610,15 @@ class FacilitiesManagement {
             }
         });
     }
+
     // Load all facilities
     loadFacilities() {
         $.ajax({
             url: facility_API_URL,
             method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
             success: (response) => {
                 const facilitiesTable = $('table tbody.facilities-table');
                 facilitiesTable.empty();
@@ -551,8 +652,11 @@ class FacilitiesManagement {
     addFacility(facilityData) {
         alert("Enter in Post");
         $.ajax({
-            url: 'http://127.0.0.1:8000/api/facilities',
+            url: 'http://localhost/IEMM/Back-end/public/api/facilities',
             method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
             data: JSON.stringify(facilityData),
             contentType: 'application/json',
             success: (response) => {
@@ -574,8 +678,11 @@ class FacilitiesManagement {
         if (confirm(`هل أنت متأكد من حذف هذا المرفق ${facilityId} ؟`)) {
             alert(facilityId);
             $.ajax({
-                url: `http://127.0.0.1:8000/api/facilities/${facilityId}`,
+                url: `http://localhost/IEMM/Back-end/public/api/facilities/${facilityId}`,
                 method: 'DELETE',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
                 success: (response) => {
                     alert('تم حذف المرفق بنجاح');
                     this.loadFacilities();
@@ -592,130 +699,6 @@ class FacilitiesManagement {
     closeModal(modalId) {
         $(`#${modalId}`).hide();
     }
-
-    // static openViewModal(data) {
-    //     const modal = document.getElementById('viewEditModal');
-    //     if (!modal) {
-    //         console.error('Modal element not found! Make sure you have an element with id="viewEditModal"');
-    //         return;
-    //     }
-
-    //     const title = document.getElementById('viewEditModalTitle');
-    //     if (!title) {
-    //         console.error('Modal title element not found! Make sure you have an element with id="viewEditModalTitle"');
-    //         return;
-    //     }
-
-    //     const fieldsContainer = document.getElementById('viewEditFields');
-    //     if (!fieldsContainer) {
-    //         console.error('Fields container not found! Make sure you have an element with id="viewEditFields"');
-    //         return;
-    //     }
-
-    //     fieldsContainer.innerHTML = '';
-    //     title.textContent = 'بيانات المرفق';
-        
-    //     const fields = [
-    //         {label: 'اسم المرفق', key: 'name', type: 'text'},
-    //         {label: 'الدور', key: 'floor', type: 'number'},
-    //         {label: 'مبلغ الإيجار', key: 'rent', type: 'number'},
-    //         {label: 'رقم عداد الماء', key: 'water_meter', type: 'text'},
-    //         {label: 'رقم عداد الكهرباء', key: 'electricity_meter', type: 'text'},
-    //         {label: 'الحالة', key: 'state', type: 'text'}
-    //     ];
-
-    //     // Create view mode elements
-    //     fields.forEach(field => {
-    //         const value = data[field.key] || '';
-    //         const fieldId = `view-field-${field.key}`;
-    //         const fieldDiv = document.createElement('div');
-    //         fieldDiv.className = 'form-group';
-    //         fieldDiv.innerHTML = `
-    //             <label>${field.label}</label>
-    //             <span id="${fieldId}" class="field-value">${value}</span>
-    //         `;
-    //         fieldsContainer.appendChild(fieldDiv);
-    //     });
-
-    //     // Add edit button
-    //     const editButton = document.createElement('button');
-    //     editButton.className = 'btn btn-primary';
-    //     editButton.textContent = 'تعديل البيانات';
-    //     editButton.onclick = () => {
-    //         // Switch to edit mode
-    //         fieldsContainer.innerHTML = '';
-    //         const form = document.createElement('form');
-    //         form.id = 'editFacilityForm';
-
-    //         fields.forEach(field => {
-    //             const value = data[field.key] || '';
-    //             const fieldDiv = document.createElement('div');
-    //             fieldDiv.className = 'form-group';
-                
-    //             const label = document.createElement('label');
-    //             label.textContent = field.label;
-                
-    //             const input = document.createElement('input');
-    //             input.type = field.type;
-    //             input.name = field.key;
-    //             input.value = value;
-    //             input.className = 'form-control';
-                
-    //             fieldDiv.appendChild(label);
-    //             fieldDiv.appendChild(input);
-    //             form.appendChild(fieldDiv);
-    //         });
-
-    //         // Add update button
-    //         const updateButton = document.createElement('button');
-    //         updateButton.type = 'submit';
-    //         updateButton.className = 'btn btn-success';
-    //         updateButton.textContent = 'حفظ التغييرات';
-    //         form.appendChild(updateButton);
-
-    //         // Add cancel button
-    //         const cancelButton = document.createElement('button');
-    //         cancelButton.type = 'button';
-    //         cancelButton.className = 'btn btn-secondary';
-    //         cancelButton.textContent = 'إلغاء';
-    //         cancelButton.onclick = () => {
-    //             // Return to view mode
-    //             FacilitiesManagement.openViewModal(data);
-    //         };
-    //         form.appendChild(cancelButton);
-
-    //         // Handle form submission
-    //         form.onsubmit = (e) => {
-    //             e.preventDefault();
-    //             const formData = new FormData(form);
-    //             const updateData = {};
-    //             formData.forEach((value, key) => {
-    //                 updateData[key] = value;
-    //             });
-
-    //             // Call API to update facility
-    //             $.ajax({
-    //                 url: `${facility_API_URL}/${data.id}`,
-    //                 method: 'PUT',
-    //                 data: updateData,
-    //                 success: (response) => {
-    //                     alert('تم تحديث البيانات بنجاح');
-    //                     modal.style.display = 'none';
-    //                     window.facilitiesManagement.loadFacilities();
-    //                 },
-    //                 error: (xhr, status, error) => {
-    //                     alert('حدث خطأ أثناء تحديث البيانات');
-    //                     console.error(error);
-    //                 }
-    //             });
-    //         };
-
-    //         fieldsContainer.appendChild(form);
-    //     };
-
-    //     fieldsContainer.appendChild(editButton);
-    //     modal.style.display = 'block';
-    // }
 }
 
 // Initialize all management instances when document is ready

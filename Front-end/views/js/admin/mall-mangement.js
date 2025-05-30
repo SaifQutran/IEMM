@@ -11,10 +11,14 @@ function fetchMalls() {
     $('table tbody').hide();
 
     $.ajax({
-        url: 'http://localhost:8000/api/malls',
+        url: 'http://localhost/IEMM/Back-end/public/api/malls',
         method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
         dataType: 'json',
         success: function(data) {
+            
             displayMalls(data);
             $('#loading').hide();
             $('table tbody').show();
@@ -33,10 +37,11 @@ function fetchMalls() {
 async function displayMalls(malls) {
     const tbody = $('table tbody');
     tbody.empty(); // Clear existing data
-
+    
     try {
-        for (const m of malls.data) {
-            const row = document.createElement("tr");
+      for (const m of malls.data) {
+        const row = document.createElement("tr");
+        
 
             // Create data cells
             const nameCell = document.createElement("td");
@@ -93,6 +98,7 @@ async function displayMalls(malls) {
             actionsCell.appendChild(viewBtn);
             actionsCell.appendChild(deleteBtn);
             row.appendChild(actionsCell);
+            tbody.append(row);
         }
     } catch (error) {
         console.error('Error displaying malls:', error);
@@ -110,8 +116,11 @@ function editMall(id) {
 function deleteMall(id) {
     if (confirm('هل أنت متأكد من حذف هذا المجمع؟')) {
         $.ajax({
-            url: `http://localhost:8000/api/malls/${id}`,
+            url: `http://localhost/IEMM/Back-end/public/api/malls/${id}`,
             method: 'DELETE',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
             success: function() {
                 // Refresh the mall list
                 fetchMalls();
@@ -129,6 +138,27 @@ $(document).ready(function() {
     fetchMalls();
     loadCities();
 });
+function loadCities() {
+    $.ajax({
+        url: 'http://localhost/IEMM/Back-end/public/api/cities',
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
+        success: function(response) {
+            const citySelect = $('select[name="city_id"]');
+            citySelect.find('option:not(:first)').remove();
+            
+            response.data.forEach(city => {
+                citySelect.append(`<option value="${city.id}">${city.name}</option>`);
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error('Error loading cities:', error);
+        }
+    });
+}
+
 function showMallDetails(mallData) {
         const detailsContent = document.getElementById("mallDetailsContent");
 
