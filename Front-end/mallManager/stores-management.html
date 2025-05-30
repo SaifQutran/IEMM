@@ -716,7 +716,6 @@
       }
 
       // دالة حذف المحل
-
       function deleteStore(btn) {
         if (confirm('هل أنت متأكد من حذف هذا السطر؟')) {
           // احذف الصف من الجدول
@@ -748,7 +747,6 @@
               <button class="btn-icon" title="عرض" onclick='openViewModal(${JSON.stringify(storeData).replace(/'/g, "\\'")}, "facilities")'>
                 <i class="fas fa-eye"></i>
               </button>
-
               <button class="btn-icon" title="حذف" onclick="deleteStore(this)"><i class="fas fa-trash"></i></button>
             `;
           }
@@ -772,7 +770,6 @@
               <button class="btn-icon" title="عرض" onclick='openViewModal(${JSON.stringify(tenantData).replace(/'/g, "\\'")}, "tenants")'>
                 <i class="fas fa-eye"></i>
               </button>
-
               <button class="btn-icon" title="حذف" onclick="deleteStore(this)"><i class="fas fa-trash"></i></button>
             `;
           }
@@ -795,7 +792,6 @@
               <button class="btn-icon" title="عرض" onclick='openViewModal(${JSON.stringify(storeData).replace(/'/g, "\\'")}, "stores")'>
                 <i class="fas fa-eye"></i>
               </button>
-
               <button class="btn-icon" title="حذف" onclick="deleteStore(this)"><i class="fas fa-trash"></i></button>
             `;
           }
@@ -869,7 +865,6 @@
         });
 
         modal.style.display = 'block';
-
       }
 
       // دالة إلغاء التعديل
@@ -1165,8 +1160,23 @@
                         <th>الإجراءات</th>
                       </tr>
                     </thead>
-
-                    <tbody class="facilities-table">
+                    <tbody>
+                      <tr><td>A101</td><td>الأرضي</td><td>120 م²</td><td>مؤجر</td><td>أحمد محمد</td><td>زمن التوفير</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف" onclick="deleteStore(this)"><i class="fas fa-trash"></i></button></td></tr>
+                      <tr><td>A102</td><td>الأرضي</td><td>85 م²</td><td>متاح</td><td>-</td><td>-</td><td><button class="btn-green btn-sm">تعيين مستأجر</button></td></tr>
+                      <tr><td>A103</td><td>الأرضي</td><td>150 م²</td><td>مؤجر</td><td>محمد علي</td><td>مطعم الأصالة</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف" onclick="deleteStore(this)"><i class="fas fa-trash"></i></button></td></tr>
+                      <tr><td>B101</td><td>الأول</td><td>100 م²</td><td>مؤجر</td><td>سارة أحمد</td><td>صالون الجمال</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف" onclick="deleteStore(this)"><i class="fas fa-trash"></i></button></td></tr>
+                      <tr><td>B102</td><td>الأول</td><td>90 م²</td><td>متاح</td><td>-</td><td>-</td><td><button class="btn-green btn-sm">تعيين مستأجر</button></td></tr>
+                      <tr><td>B103</td><td>الأول</td><td>110 م²</td><td>مؤجر</td><td>خالد عبدالله</td><td>محل الأزياء</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف" onclick="deleteStore(this)"><i class="fas fa-trash"></i></button></td></tr>
+                      <tr><td>C101</td><td>الثاني</td><td>130 م²</td><td>مؤجر</td><td>فاطمة محمد</td><td>مكتبة المعرفة</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف" onclick="deleteStore(this)"><i class="fas fa-trash"></i></button></td></tr>
+                      <tr><td>C102</td><td>الثاني</td><td>95 م²</td><td>متاح</td><td>-</td><td>-</td><td><button class="btn-green btn-sm">تعيين مستأجر</button></td></tr>
+                      <tr><td>C103</td><td>الثاني</td><td>140 م²</td><td>مؤجر</td><td>عبدالرحمن سعيد</td><td>مطعم الشرق</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف" onclick="deleteStore(this)"><i class="fas fa-trash"></i></button></td></tr>
+                      <tr><td>C103</td><td>الثاني</td><td>140 م²</td><td>مؤجر</td><td>عبدالرحمن سعيد</td><td>مطعم الشرق</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
+                      <tr><td>D101</td><td>الثالث</td><td>160 م²</td><td>مؤجر</td><td>نورة خالد</td><td>صالون السيدات</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
+                      <tr><td>D102</td><td>الثالث</td><td>120 م²</td><td>متاح</td><td>-</td><td>-</td><td><button class="btn-green btn-sm">تعيين مستأجر</button></td></tr>
+                      <tr><td>D103</td><td>الثالث</td><td>145 م²</td><td>مؤجر</td><td>عمر محمد</td><td>محل الإلكترونيات</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
+                      <tr><td>E101</td><td>الرابع</td><td>180 م²</td><td>مؤجر</td><td>ريم عبدالله</td><td>صالون التجميل</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
+                      <tr><td>E102</td><td>الرابع</td><td>150 م²</td><td>متاح</td><td>-</td><td>-</td><td><button class="btn-green btn-sm">تعيين مستأجر</button></td></tr>
+                      <tr><td>E103</td><td>الرابع</td><td>170 م²</td><td>مؤجر</td><td>عبدالله محمد</td><td>مطعم البحر</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
                     </tbody>
                   </table>
                 </div>
@@ -1435,7 +1445,6 @@
               <button type="button" class="btn-secondary" onclick="confirmDelete()">حذف</button>
               <button type="button" class="btn-green" onclick="closeDeleteModal()">إلغاء</button>
             </div>
-
           </div>
         </div>
     </div>
@@ -1557,39 +1566,37 @@
   //     ];
   //   }
 
-  //   // توليد الحقول
-  //   fields.forEach(field => {
-  //     const value = data[field.key] || '';
-  //     const fieldId = `view-field-${field.key}`;
-  //     const fieldDiv = document.createElement('div');
-  //     fieldDiv.className = 'form-group';
-  //     fieldDiv.style.position = 'relative';
-  //     // إذا كان النوع facilities أضف زر التعديل، غير ذلك لا تضف الزر
-  //     if (type === 'facilities') {
-  //       fieldDiv.innerHTML = `
-  //         <label>${field.label}</label>
-  //         <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
-  //         <button type="button" class="btn-icon edit-field-btn" title="تعديل" onclick="enableFieldEdit('${fieldId}', '${field.key}', '${field.type}', '${type}')" style="position:absolute; left:0; top:50%; transform:translateY(-50%);"><i class='fas fa-edit'></i></button>
-  //       `;
-  //     } else {
-  //       fieldDiv.innerHTML = `
-  //         <label>${field.label}</label>
-  //         <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
-  //       `;
-  //     }
-  //     fieldsContainer.appendChild(fieldDiv);
-  //   });
+    // توليد الحقول
+    fields.forEach(field => {
+      const value = data[field.key] || '';
+      const fieldId = `view-field-${field.key}`;
+      const fieldDiv = document.createElement('div');
+      fieldDiv.className = 'form-group';
+      fieldDiv.style.position = 'relative';
+      // إذا كان النوع facilities أضف زر التعديل، غير ذلك لا تضف الزر
+      if (type === 'facilities') {
+        fieldDiv.innerHTML = `
+          <label>${field.label}</label>
+          <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
+          <button type="button" class="btn-icon edit-field-btn" title="تعديل" onclick="enableFieldEdit('${fieldId}', '${field.key}', '${field.type}', '${type}')" style="position:absolute; left:0; top:50%; transform:translateY(-50%);"><i class='fas fa-edit'></i></button>
+        `;
+      } else {
+        fieldDiv.innerHTML = `
+          <label>${field.label}</label>
+          <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
+        `;
+      }
+      fieldsContainer.appendChild(fieldDiv);
+    });
 
-  //   modal.style.display = 'block';
-
-  // }
+    modal.style.display = 'block';
+  }
 
   // دالة إلغاء التعديل
   function cancelFieldEdit(fieldId, value) {
     const span = document.getElementById(fieldId);
     span.outerHTML = `<span id='${fieldId}' class='field-value'>${value}</span>`;
   }
-
 
   // let rowToDelete = null;
   // function deleteStore(btn) {
@@ -1606,7 +1613,6 @@
     document.getElementById('delete-confirm-modal').style.display = 'none';
     rowToDelete = null;
   }
-
 </script>
 </body>
 </html>

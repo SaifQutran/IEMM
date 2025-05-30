@@ -248,6 +248,20 @@
         </div>
         <button id="chat-close" class="chat-close-btn">
           <i class="fas fa-times"></i>
+                </button>
+      </div>
+    </div>
+  </header>
+
+    <!-- نافذة الدردشة الجانبية -->
+    <div id="chat-panel" class="chat-panel">
+      <div class="chat-header">
+        <div class="mall-logo-container">
+          <img id="mall-logo" alt="شعار المول" class="mall-logo" />
+          <h3>الدردشة مع مدير المول</h3>
+        </div>
+        <button id="chat-close" class="chat-close-btn">
+          <i class="fas fa-times"></i>
         </button>
       </div>
       <div id="messages-container" class="messages-container">
@@ -266,108 +280,73 @@
       </form>
     </div>
 
-    <!-- Main Content -->
-    <div class="main">
-      <!-- بطاقة سجل المبيعات -->
-      <div class="section active" id="bills-section">
-        <div class="section-header">
-          <h2 class="section-title">💰 المبيعات والفواتير</h2>
-        </div>
+  <!-- Main Content -->
+  <div class="main">
+    <!-- Top Action Bar -->
+    <div class="top-action-bar">
+      <div class="action-group-left">
+        <button class="action-btn btn-green" id="new-sale-btn">
+          <i class="fas fa-plus"></i>
+          عملية بيع جديدة
+        </button>
+      </div>
+      <div class="action-group-right">
+        <button class="action-btn btn-gray" id="show-sales-btn">
+          <i class="fas fa-table"></i>
+          عرض سجل المبيعات
+        </button>
+        <button class="action-btn btn-blue" id="show-bills-btn">
+          <i class="fas fa-file-invoice-dollar"></i>
+          عرض الفواتير
+        </button>
+      </div>
+      </div>
 
-        <div class="bills-grid">
-          <!-- بطاقة سجل المبيعات -->
-          <div class="table card">
-            <div class="table-header">
-              <h3>سجل المبيعات</h3>
-              <div class="table-actions">
-                <div class="table-controls">
-                  <div class="search-box">
-                    <input
-                      type="text"
-                      id="sales-search"
-                      placeholder="بحث في المبيعات..."
-                    />
-                    <i class="fas fa-search"></i>
-                  </div>
+    <!-- New Sale Section -->
+    <div id="new-sale-section" style="display: none;">
+      <div class="card">
+        <div class="quick-sale-header" style="display: flex; justify-content: space-between; align-items: center;">
+          <h3>عملية بيع جديدة</h3>
+          <button class="action-btn btn-green" id="new-sale-action-btn" type="button" style="min-width: 140px;">
+            <i class="fas fa-plus"></i>
+            عملية جديدة
+          </button>
                 </div>
-                <div class="quick-sale">
-                  <div class="quick-sale-header">
-                    <button class="btn-green" onclick="openNewSaleForm()">
-                      بدء عملية بيع جديدة
-                    </button>
-                  </div>
-                  <div
-                    id="new-sale-form"
-                    class="new-sale-form"
-                    style="display: none"
-                  >
-                    <div class="form-header">
-                      <div class="sale-info">
-                        <div class="info-row">
-                          <span>رقم العملية:</span>
-                          <span id="sale-number">#12345</span>
-                        </div>
-                        <div class="info-row">
-                          <span>التاريخ:</span>
-                          <span id="sale-date"></span>
-                        </div>
+        <div id="new-sale-form" class="new-sale-form">
+                  <div class="form-header">
+                    <div class="sale-info">
+                      <div class="info-row">
+                        <span>رقم العملية:</span>
+                        <span id="sale-number">#12345</span>
                       </div>
-                      <button class="btn-icon" onclick="closeNewSaleForm()">
-                        ×
-                      </button>
+                      <div class="info-row">
+                        <span>التاريخ:</span>
+                        <span id="sale-date"></span>
+                      </div>
                     </div>
-                    <div class="form-content">
-                      <div class="sale-grid">
-                        <div class="product-input-section">
-                          <div class="input-group">
-                            <label>الباركود</label>
-                            <input
-                              type="text"
-                              id="barcode-input"
-                              placeholder="مسح الباركود..."
-                              autocomplete="off"
-                            />
-                          </div>
-                          <div class="input-group">
-                            <label>اسم المنتج</label>
-                            <input
-                              type="text"
-                              id="product-name"
-                              list="products-list"
-                              placeholder="ابدأ بكتابة اسم المنتج..."
-                              autocomplete="off"
-                              oninput="validateProductInput()"
-                            />
-                            <datalist id="products-list">
-                              <!-- سيتم ملؤها بواسطة JavaScript -->
-                            </datalist>
-                            <div
-                              id="product-error"
-                              style="
-                                color: red;
-                                font-size: 0.9em;
-                                display: none;
-                              "
-                            >
-                              المنتج غير موجود في القائمة
-                            </div>
-                          </div>
-                          <div class="input-group">
-                            <label>الكمية</label>
-                            <input
-                              type="number"
-                              id="product-quantity"
-                              min="1"
-                              value="1"
-                            />
-                          </div>
-                          <button
-                            class="btn-green"
-                            onclick="addProductToSale()"
-                          >
-                            إضافة
-                          </button>
+                    <button class="btn-icon" onclick="closeNewSaleForm()">×</button>
+                  </div>
+                  <div class="form-content">
+                    <div class="sale-grid">
+                      <div class="product-input-section">
+                        <div class="input-group">
+                          <label>الباركود</label>
+                          <input type="text" id="barcode-input" placeholder="مسح الباركود..." autocomplete="off">
                         </div>
+                        <div class="input-group">
+                          <label>اسم المنتج</label>
+                          <input type="text" id="product-name" list="products-list" placeholder="ابدأ بكتابة اسم المنتج..." autocomplete="off" oninput="validateProductInput()">
+                          <datalist id="products-list">
+                            <!-- سيتم ملؤها بواسطة JavaScript -->
+                          </datalist>
+                          <div id="product-error" style="color:red; font-size:0.9em; display:none;">المنتج غير موجود في القائمة</div>
+                        </div>
+                        <div class="input-group">
+                          <label>الكمية</label>
+                          <input type="number" id="product-quantity" min="1" value="1">
+                        </div>
+                        <button class="btn-green" onclick="addProductToSale()">إضافة</button>
+                      </div>
 
                         <div class="invoice-section">
                           <div class="invoice-table">
@@ -451,37 +430,25 @@
                             </div>
                           </div>
 
-                          <div class="payment-section">
-                            <div class="payment-method">
-                              <label>طريقة الدفع:</label>
-                              <select id="payment-method">
-                                <option value="نقدي">نقدي</option>
-                                <option value="بطاقة">بطاقة</option>
-                                <option value="تحويل">تحويل</option>
-                              </select>
-                            </div>
-                            <div class="sale-type">
-                              <label>نوع العملية:</label>
-                              <select id="sale-type">
-                                <option value="بيع">بيع</option>
-                                <option value="حجز">حجز</option>
-                              </select>
-                            </div>
-                            <div class="form-actions">
-                              <button
-                                class="btn-secondary"
-                                onclick="closeNewSaleForm()"
-                              >
-                                إلغاء
-                              </button>
-                              <button
-                                type="button"
-                                class="btn-green"
-                                onclick="completeSale()"
-                              >
-                                تأكيد البيع
-                              </button>
-                            </div>
+                        <div class="payment-section">
+                          <div class="payment-method">
+                            <label>طريقة الدفع:</label>
+                            <select id="payment-method">
+                              <option value="نقدي">نقدي</option>
+                              <option value="بطاقة">بطاقة</option>
+                              <option value="تحويل">تحويل</option>
+                            </select>
+                          </div>
+                          <div class="sale-type">
+                            <label>نوع العملية:</label>
+                            <select id="sale-type">
+                              <option value="بيع">بيع</option>
+                              <option value="حجز">حجز</option>
+                            </select>
+                          </div>
+                          <div class="form-actions">
+                            <button class="btn-secondary" onclick="closeNewSaleForm()">إلغاء</button>
+                            <button type="button" class="btn-green" onclick="completeSale()">تأكيد البيع</button>
                           </div>
                         </div>
                       </div>
@@ -490,28 +457,117 @@
                 </div>
               </div>
             </div>
-            <div class="table-wrapper">
-              <table>
-                <thead>
-                  <tr>
-                    <th>رقم العملية</th>
-                    <th>التاريخ</th>
-                    <th>الموظف</th>
-                    <th>عدد المنتجات</th>
-                    <th>النوع</th>
-                    <th>المبلغ الإجمالي</th>
-                    <th>الإجراءات</th>
-                  </tr>
-                </thead>
-                <tbody id="sales-table-body">
-                  <!-- سيتم ملؤها بواسطة JavaScript -->
-                </tbody>
-              </table>
-            </div>
+
+    <!-- Sales Table Section -->
+    <div id="sales-table-section" style="display: none;">
+      <div class="card">
+        <h3>سجل المبيعات</h3>
+          <div class="table-wrapper">
+          <div class="table-controls">
+            <!-- تم حذف البحث الخارجي، البحث الآن فقط في رأس الجدول -->
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>رقم العملية</th>
+                  <th>التاريخ</th>
+                  <th>الموظف</th>
+                  <th>عدد المنتجات</th>
+                  <th>النوع</th>
+                  <th>المبلغ الإجمالي</th>
+                  <th>الإجراءات</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="filter-row">
+                  <td>
+                    <input type="text" id="sales-search" placeholder="بحث..." class="table-filter-input" style="width: 100px;">
+                  </td>
+                  <td>
+                    <input type="date" id="sales-date-filter" class="table-filter-input">
+                  </td>
+                  <td>
+                    <select id="sales-employee-filter" class="table-filter-input">
+                      <option value="all">الكل</option>
+                    </select>
+                  </td>
+                  <td></td>
+                  <td>
+                    <select id="sales-type-filter" class="table-filter-input">
+                      <option value="all">الكل</option>
+                      <option value="بيع">بيع</option>
+                      <option value="حجز">حجز</option>
+                    </select>
+                  </td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+              <tbody id="sales-table-body">
+                <!-- سيتم ملؤها بواسطة JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+          </div>
+        </div>
+
+    <!-- Bills Table Section -->
+    <div id="bills-table-section" style="display: none;">
+      <div class="card">
+        <h3>الفواتير الواردة</h3>
+        <div class="table-wrapper">
+          <div class="table-controls">
+              <!-- تم حذف فلاتر الشهر والحالة خارج الجدول -->
+          </div>
+          <div class="table-scroll">
+            <table>
+               <thead>
+                 <tr>
+                   <th>الكهرباء</th>
+                   <th>الماء</th>
+                   <th>الإيجار</th>
+                   <th>الشهر</th>
+                   <th>المتأخرات</th>
+                   <th>الإجمالي</th>
+                   <th>الإجراءات</th>
+                 </tr>
+               </thead>
+               <tbody>
+                 <tr class="filter-row">
+                   <td colspan="3"></td>
+                   <td>
+                     <select id="bills-month-filter" class="table-filter-input">
+                       <option value="all">الكل</option>
+                     </select>
+                   </td>
+                   <td>
+                     <select id="bills-overdue-filter" class="table-filter-input">
+                       <option value="all">الكل</option>
+                       <option value="no">لا يوجد متأخرات</option>
+                       <option value="yes">عليه متأخرات</option>
+                     </select>
+                   </td>
+                   <td>
+                     <select id="bills-total-payment-filter" class="table-filter-input">
+                       <option value="all">الكل</option>
+                       <option value="paid">مدفوع</option>
+                       <option value="unpaid">غير مدفوع</option>
+                     </select>
+                   </td>
+                   <td></td>
+                 </tr>
+               </tbody>
+               <tbody id="incoming-bills-table-body">
+                 <!-- سيتم ملؤها بواسطة JavaScript -->
+               </tbody>
+            </table>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
     <!-- نافذة عرض تفاصيل الفاتورة -->
     <div id="billDetailsModal" class="modal">
@@ -741,25 +797,38 @@
               </div>
             </div>
 
-            <div class="detail-group">
-              <div class="detail-group-header">
-                <h4>المنتجات</h4>
-              </div>
-              <div class="products-table">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>المنتج</th>
-                      <th>الباركود</th>
-                      <th>السعر</th>
-                      <th>الكمية</th>
-                      <th>الإجمالي</th>
-                    </tr>
-                  </thead>
-                  <tbody id="sale-detail-products"></tbody>
-                </table>
-              </div>
+          <div class="detail-group">
+            <div class="detail-group-header">
+              <h4>المنتجات</h4>
+              <button class="btn-icon edit-section" onclick="toggleProductsEditMode()" title="تعديل">
+                <i class="fas fa-edit"></i>
+              </button>
             </div>
+            <div class="products-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>المنتج</th>
+                    <th>الباركود</th>
+                    <th>السعر</th>
+                    <th>الكمية</th>
+                    <th>الإجمالي</th>
+                    <th class="edit-column" style="display: none;">الإجراءات</th>
+                  </tr>
+                </thead>
+                <tbody id="sale-detail-products">
+                </tbody>
+              </table>
+            </div>
+            <div class="edit-actions" id="products-edit-actions" style="display: none;">
+              <button class="btn-green" onclick="saveProductsChanges()">
+                <i class="fas fa-save"></i> حفظ
+              </button>
+              <button class="btn-secondary" onclick="cancelProductsEdit()">
+                <i class="fas fa-times"></i> إلغاء
+              </button>
+            </div>
+          </div>
 
             <div class="detail-group">
               <div class="detail-group-header">
@@ -891,32 +960,1242 @@
               </div>
             </div>
 
-            <div class="detail-group">
-              <div class="detail-group-header">
-                <h4>إجمالي الفاتورة</h4>
-              </div>
-              <div class="summary-grid">
-                <div class="summary-item total">
-                  <span class="summary-label">الإجمالي الكلي:</span>
-                  <span id="total-bill" class="summary-value"></span>
-                </div>
+          <div class="detail-group">
+            <div class="detail-group-header">
+              <h4>إجمالي الفاتورة</h4>
+            </div>
+            <div class="summary-grid">
+              <div class="summary-item total">
+                <span class="summary-label">الإجمالي الكلي:</span>
+                <span id="total-bill" class="summary-value"></span>
               </div>
             </div>
           </div>
         </div>
-        <div class="modal-footer">
-          <button
-            class="btn-secondary"
-            onclick="closeIncomingBillDetailsModal()"
-          >
-            إغلاق
-          </button>
-          <button class="btn-green" onclick="printIncomingBill()">
-            <i class="fas fa-print"></i> طباعة الفاتورة
-          </button>
-        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeIncomingBillDetailsModal()">إغلاق</button>
+        <button class="btn-green" onclick="printIncomingBill()">
+          <i class="fas fa-print"></i> طباعة الفاتورة
+        </button>
       </div>
     </div>
+  </div>
+
+  <!-- CSS لتنسيق قسم الفواتير -->
+  <style>
+    .bills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    .filter-controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .filter-controls select {
+      padding: 8px 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      background: #fff;
+      color: #1e293b;
+    }
+
+    .filter-controls select:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+      outline: none;
+    }
+
+    /* Dark Mode Styles */
+    body.dark .filter-controls select {
+      background: var(--dark-chart);
+      color: var(--dark-text);
+      border-color: #334155;
+    }
+
+    .status-badge {
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .status-badge.pending {
+      background: rgba(245, 158, 11, 0.1);
+      color: #f59e0b;
+    }
+
+    .status-badge.paid {
+      background: rgba(34, 197, 94, 0.1);
+      color: #22c55e;
+    }
+
+    .status-badge.overdue {
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+    }
+
+    body.dark .status-badge.pending {
+      background: rgba(245, 158, 11, 0.2);
+      color: #fbbf24;
+    }
+
+    body.dark .status-badge.paid {
+      background: rgba(34, 197, 94, 0.2);
+      color: #4ade80;
+    }
+
+    body.dark .status-badge.overdue {
+      background: rgba(239, 68, 68, 0.2);
+      color: #f87171;
+    }
+
+    /* تنسيقات نموذج المبيعات */
+    .new-sale-form {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      margin-top: 20px;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .form-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .sale-info {
+      display: flex;
+      gap: 20px;
+    }
+
+    .info-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      padding: 8px 16px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .form-content {
+      padding: 20px;
+    }
+
+    .sale-grid {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 24px;
+      min-height: 500px;
+    }
+
+    .product-input-section {
+      background: #f8fafc;
+      padding: 20px;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      height: fit-content;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .input-group label {
+      font-size: 0.9rem;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    .input-group input {
+      padding: 10px 14px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      height: 42px;
+      width: 100%;
+      transition: all 0.2s;
+    }
+
+    .input-group input:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+      outline: none;
+    }
+
+    .invoice-section {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .invoice-table {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      overflow: hidden;
+      flex: 1;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .invoice-table table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .invoice-table th,
+    .invoice-table td {
+      padding: 12px 16px;
+      text-align: right;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 0.95rem;
+    }
+
+    .invoice-table th {
+      background: #f8fafc;
+      font-weight: 600;
+      color: #1e293b;
+      white-space: nowrap;
+    }
+
+    .invoice-table tbody tr:hover {
+      background: #f8fafc;
+    }
+
+    .invoice-summary {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .summary-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 12px;
+      background: #f8fafc;
+      border-radius: 8px;
+    }
+
+    .summary-item.total {
+      grid-column: 1 / -1;
+      background: #4a74ff;
+      color: #fff;
+      padding: 16px;
+    }
+
+    .summary-item.total .summary-label,
+    .summary-item.total .summary-value {
+      color: #fff;
+    }
+
+    .summary-label {
+      font-size: 0.85rem;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    .summary-value {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .discount-input {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .discount-input input {
+      width: 100px;
+      padding: 8px 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      height: 38px;
+    }
+
+    .currency {
+      color: #64748b;
+      font-size: 0.9rem;
+    }
+
+    .payment-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f8fafc;
+      padding: 16px 20px;
+      border-radius: 12px;
+      margin-top: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .payment-method,
+    .sale-type {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .payment-method label,
+    .sale-type label {
+      font-weight: 500;
+      color: #1e293b;
+      font-size: 0.95rem;
+    }
+
+    .payment-method select,
+    .sale-type select {
+      padding: 8px 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      min-width: 140px;
+      height: 42px;
+      background: #fff;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .form-actions button {
+      padding: 10px 20px;
+      font-size: 0.95rem;
+      height: 42px;
+      border-radius: 8px;
+    }
+
+    /* Dark Mode Styles */
+    body.dark .new-sale-form {
+      background: var(--dark-card);
+    }
+
+    body.dark .form-header {
+      background: var(--dark-chart);
+      border-color: #334155;
+    }
+
+    body.dark .info-row {
+      background: var(--dark-card);
+    }
+
+    body.dark .product-input-section {
+      background: var(--dark-chart);
+    }
+
+    body.dark .input-group input {
+      background: var(--dark-card);
+      color: var(--dark-text);
+      border-color: #334155;
+    }
+
+    body.dark .input-group input:focus {
+      border-color: #3b82f6;
+    }
+
+    body.dark .invoice-table {
+      background: var(--dark-card);
+      border-color: #334155;
+    }
+
+    body.dark .invoice-table th {
+      background: var(--dark-chart);
+      color: var(--dark-text);
+    }
+
+    body.dark .invoice-table td {
+      border-color: #334155;
+      color: var(--dark-text);
+    }
+
+    body.dark .invoice-table tbody tr:hover {
+      background: var(--dark-chart);
+    }
+
+    body.dark .invoice-summary {
+      background: var(--dark-card);
+      border-color: #334155;
+    }
+
+    body.dark .summary-item {
+      background: var(--dark-chart);
+    }
+
+    body.dark .summary-label {
+      color: #94a3b8;
+    }
+
+    body.dark .summary-value {
+      color: var(--dark-text);
+    }
+
+    body.dark .discount-input input {
+      background: var(--dark-card);
+      color: var(--dark-text);
+      border-color: #334155;
+    }
+
+    body.dark .currency {
+      color: #94a3b8;
+    }
+
+    body.dark .payment-section {
+      background: var(--dark-chart);
+    }
+
+    body.dark .payment-method label,
+    body.dark .sale-type label {
+      color: var(--dark-text);
+    }
+
+    body.dark .payment-method select,
+    body.dark .sale-type select {
+      background: var(--dark-card);
+      color: var(--dark-text);
+      border-color: #334155;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .btn-icon {
+      background: none;
+      border: none;
+      padding: 6px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: #64748b;
+    }
+
+    .btn-icon:hover {
+      background-color: #f1f5f9;
+    }
+
+    .view-btn:hover {
+      color: #3b82f6;
+    }
+
+    .delete-btn:hover {
+      color: #ef4444;
+    }
+
+    body.dark .btn-icon {
+      color: #94a3b8;
+    }
+
+    body.dark .btn-icon:hover {
+      background-color: #1e293b;
+    }
+
+    body.dark .view-btn:hover {
+      color: #60a5fa;
+    }
+
+    body.dark .delete-btn:hover {
+      color: #f87171;
+    }
+
+    .bill-details-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      padding: 10px;
+    }
+
+    .detail-group {
+      background: #f8fafc;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .detail-group h4 {
+      margin: 0 0 15px 0;
+      color: #1e3a8a;
+      font-size: 1.1rem;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      padding: 8px 12px;
+    }
+
+    .detail-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 4px 8px;
+      background: #f8fafc;
+      border-radius: 4px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .detail-label {
+      color: #64748b;
+      font-weight: 500;
+      font-size: 0.75rem;
+    }
+
+    .detail-value {
+      color: #1e293b;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    /* الوضع الليلي */
+    body.dark .detail-group {
+      background: #0f172a;
+    }
+
+    body.dark .detail-group h4 {
+      color: #f8fafc;
+      border-bottom-color: #334155;
+    }
+
+    body.dark .detail-item {
+      background: var(--dark-chart);
+      border-color: #334155;
+    }
+
+    body.dark .detail-label {
+      color: #94a3b8;
+    }
+
+    body.dark .detail-value {
+      color: var(--dark-text);
+    }
+
+    /* تنسيقات نافذة تفاصيل عملية البيع */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      overflow-y: auto;
+    }
+
+    .modal-content {
+      background-color: #fff;
+      margin: 2% auto;
+      width: 90%;
+      max-width: 600px;
+      border-radius: 6px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      animation: modalFadeIn 0.3s ease-out;
+    }
+
+    @keyframes modalFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 15px;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      border-radius: 6px 6px 0 0;
+    }
+
+    .modal-header h3 {
+      margin: 0;
+      color: #1e293b;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 1.1rem;
+      color: #64748b;
+      cursor: pointer;
+      padding: 4px;
+      transition: all 0.2s;
+    }
+
+    .close-modal:hover {
+      color: #ef4444;
+      transform: scale(1.1);
+    }
+
+    .modal-body {
+      padding: 10px;
+    }
+
+    .sale-details-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .detail-group {
+      background: #fff;
+      border-radius: 4px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .detail-group-header {
+      padding: 8px 12px;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .detail-group-header h4 {
+      margin: 0;
+      color: #1e293b;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      padding: 8px 12px;
+    }
+
+    .detail-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 0;
+    }
+
+    .detail-label {
+      color: #64748b;
+      font-weight: 500;
+      font-size: 0.85rem;
+    }
+
+    .detail-value {
+      color: #1e293b;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    .products-table {
+      margin-top: 4px;
+      overflow-x: auto;
+    }
+
+    .products-table table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .products-table th,
+    .products-table td {
+      padding: 6px 8px;
+      text-align: right;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 0.85rem;
+    }
+
+    .products-table th {
+      background: #f8fafc;
+      font-weight: 600;
+      color: #1e293b;
+      white-space: nowrap;
+    }
+
+    .products-table tbody tr:hover {
+      background: #f8fafc;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      padding: 8px 12px;
+    }
+
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px;
+      background: #f8fafc;
+      border-radius: 4px;
+    }
+
+    .summary-item.total {
+      grid-column: 1 / -1;
+      background: #1e40af;
+      color: #fff;
+      padding: 8px;
+      margin-top: 4px;
+    }
+
+    .summary-item.total .summary-label,
+    .summary-item.total .summary-value {
+      color: #fff;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      padding: 10px;
+      background: #f8fafc;
+      border-top: 1px solid #e2e8f0;
+      border-radius: 0 0 6px 6px;
+    }
+
+    .modal-footer button {
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+
+    .modal-footer button:hover {
+      transform: translateY(-1px);
+    }
+
+    /* Dark Mode Styles */
+    body.dark .modal-content {
+      background: var(--dark-card);
+    }
+
+    body.dark .modal-header {
+      background: var(--dark-chart);
+      border-color: #334155;
+    }
+
+    body.dark .modal-header h3 {
+      color: var(--dark-text);
+    }
+
+    body.dark .close-modal {
+      color: #94a3b8;
+    }
+
+    body.dark .close-modal:hover {
+      color: #f87171;
+    }
+
+    body.dark .detail-group {
+      background: var(--dark-card);
+    }
+
+    body.dark .detail-group-header {
+      background: var(--dark-chart);
+      border-color: #334155;
+    }
+
+    body.dark .detail-group-header h4 {
+      color: var(--dark-text);
+    }
+
+    body.dark .detail-label {
+      color: #94a3b8;
+    }
+
+    body.dark .detail-value {
+      color: var(--dark-text);
+    }
+
+    body.dark .products-table th {
+      background: var(--dark-chart);
+      color: var(--dark-text);
+    }
+
+    body.dark .products-table td {
+      border-color: #334155;
+      color: var(--dark-text);
+    }
+
+    body.dark .products-table tbody tr:hover {
+      background: var(--dark-chart);
+    }
+
+    body.dark .summary-item {
+      background: var(--dark-chart);
+    }
+
+    body.dark .summary-item.total {
+      background: #1e40af;
+    }
+
+    body.dark .modal-footer {
+      background: var(--dark-chart);
+      border-color: #334155;
+    }
+
+    /* تنسيقات إضافية للفواتير الواردة */
+    .bill-details-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 15px;
+    }
+
+    .detail-group {
+      background: #fff;
+      border-radius: 6px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .detail-group-header {
+      padding: 10px 15px;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .detail-group-header h4 {
+      margin: 0;
+      color: #1e293b;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      padding: 10px 15px;
+    }
+
+    .detail-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 8px;
+      background: #f8fafc;
+      border-radius: 4px;
+    }
+
+    .detail-item.total {
+      grid-column: 1 / -1;
+      background: #1e40af;
+      color: white;
+    }
+
+    .detail-item.total .detail-label,
+    .detail-item.total .detail-value {
+      color: white;
+    }
+
+    .detail-label {
+      font-size: 0.85rem;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    .detail-value {
+      font-size: 0.95rem;
+      color: #1e293b;
+      font-weight: 600;
+    }
+
+    /* Dark Mode Styles */
+    body.dark .detail-group {
+      background: var(--dark-card);
+    }
+
+    body.dark .detail-group-header {
+      background: var(--dark-chart);
+      border-color: #334155;
+    }
+
+    body.dark .detail-group-header h4 {
+      color: var(--dark-text);
+    }
+
+    body.dark .detail-item {
+      background: var(--dark-chart);
+    }
+
+    body.dark .detail-label {
+      color: #94a3b8;
+    }
+
+    body.dark .detail-value {
+      color: var(--dark-text);
+    }
+
+    body.dark .detail-item.total {
+      background: #1e40af;
+    }
+
+    /* تنسيقات الجداول */
+    .table-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .table-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+    }
+
+    .search-box {
+      position: relative;
+      width: 300px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 8px 12px 8px 36px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+
+    .search-input:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+      outline: none;
+    }
+
+    .search-icon {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #64748b;
+    }
+
+    .filter-controls {
+      display: flex;
+      gap: 12px;
+    }
+
+    .filter-select {
+      padding: 8px 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      min-width: 150px;
+      background: #fff;
+    }
+
+    .table-scroll {
+      max-height: 400px;
+      overflow-y: auto;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+    }
+
+    .table-scroll::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .table-scroll::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 4px;
+    }
+
+    .table-scroll::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+
+    .table-scroll::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    .table-scroll table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .table-scroll thead {
+      position: sticky;
+      top: 0;
+      background: #f8fafc;
+      z-index: 1;
+    }
+
+    .table-scroll th {
+      padding: 12px 16px;
+      text-align: right;
+      font-weight: 600;
+      color: #1e293b;
+      border-bottom: 2px solid #e2e8f0;
+      white-space: nowrap;
+    }
+
+    .table-scroll td {
+      padding: 12px 16px;
+      text-align: right;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .table-scroll tbody tr:hover {
+      background: #f8fafc;
+    }
+
+    /* Dark Mode Styles */
+    body.dark .search-input {
+      background: var(--dark-card);
+      color: var(--dark-text);
+      border-color: #334155;
+    }
+
+    body.dark .search-icon {
+      color: #94a3b8;
+    }
+
+    body.dark .filter-select {
+      background: var(--dark-card);
+      color: var(--dark-text);
+      border-color: #334155;
+    }
+
+    body.dark .table-scroll {
+      border-color: #334155;
+    }
+
+    body.dark .table-scroll::-webkit-scrollbar-track {
+      background: #1e293b;
+    }
+
+    body.dark .table-scroll::-webkit-scrollbar-thumb {
+      background: #475569;
+    }
+
+    body.dark .table-scroll::-webkit-scrollbar-thumb:hover {
+      background: #64748b;
+    }
+
+    body.dark .table-scroll thead {
+      background: var(--dark-chart);
+    }
+
+    body.dark .table-scroll th {
+      color: var(--dark-text);
+      border-color: #334155;
+    }
+
+    body.dark .table-scroll td {
+      border-color: #334155;
+      color: var(--dark-text);
+    }
+
+    body.dark .table-scroll tbody tr:hover {
+      background: var(--dark-chart);
+    }
+
+    .table-pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      padding: 8px 0;
+    }
+
+    .pagination-btn {
+      background: none;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 6px 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .pagination-btn:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+    }
+
+    /* Dark Mode Styles */
+    body.dark .pagination-btn {
+      border-color: #334155;
+      color: var(--dark-text);
+    }
+
+    body.dark .pagination-btn:hover {
+      background: var(--dark-chart);
+      border-color: #475569;
+    }
+
+    /* Top Action Bar Styles */
+    .top-action-bar {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+      background: #fff;
+      border-radius: 16px;
+      padding: 18px 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+    .action-group-left {
+      display: flex;
+      gap: 18px;
+    }
+    .action-group-right {
+      display: flex;
+      gap: 18px;
+    }
+    .action-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.1rem;
+      font-weight: 500;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 28px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-blue {
+      background: #2563eb;
+      color: #fff;
+    }
+    .btn-blue:hover {
+      background: #1d4ed8;
+    }
+    .btn-gray {
+      background: #f1f5f9;
+      color: #1e293b;
+    }
+    .btn-gray:hover {
+      background: #e2e8f0;
+    }
+    .btn-green {
+      background: #22c55e;
+      color: #fff;
+    }
+    .btn-green:hover {
+      background: #16a34a;
+    }
+    .action-btn i {
+      font-size: 1.2em;
+    }
+    .action-btn.active, .action-btn.btn-blue.active {
+      background: #2563eb !important;
+      color: #fff !important;
+    }
+    @media (max-width: 700px) {
+      .top-action-bar {
+        flex-direction: column;
+        gap: 10px;
+        padding: 12px;
+      }
+      .action-group-left, .action-group-right {
+        width: 100%;
+        justify-content: center;
+      }
+      .action-btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+    .filter-row {
+      background: #f1f5f9;
+    }
+    .table-filter-input {
+      width: 100%;
+      padding: 6px 8px;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      margin: 0;
+      box-sizing: border-box;
+    }
+    .filter-row select.table-filter-input {
+      min-width: 80px;
+    }
+    .filter-row input[type="date"].table-filter-input {
+      min-width: 120px;
+    }
+    .filter-row th {
+      padding: 6px 8px;
+    }
+
+    .edit-column {
+      width: 100px;
+      text-align: center;
+    }
+
+    .quantity-edit {
+      width: 60px;
+      padding: 4px;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      text-align: center;
+    }
+
+    body.dark .quantity-edit {
+      background: var(--dark-card);
+      color: var(--dark-text);
+      border-color: #334155;
+    }
+
+    .edit-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      margin-top: 12px;
+      padding: 8px;
+      background: #f8fafc;
+      border-radius: 8px;
+    }
+
+    body.dark .edit-actions {
+      background: var(--dark-chart);
+    }
+  </style>
 
     <!-- Add JavaScript functionality for the bills section -->
     <script>
@@ -1048,304 +2327,420 @@
         },
       ];
 
-      // تعريف بيانات المبيعات التجريبية
-      const sampleSalesData = [
-        {
-          id: "#12345",
-          date: "2024-03-15 14:30",
-          employee: "أحمد محمد",
-          products: [
-            {
-              name: "قميص رجالي",
-              barcode: "123456",
-              price: 150,
-              quantity: 2,
-              total: 300,
-            },
-            {
-              name: "بنطلون جينز",
-              barcode: "234567",
-              price: 200,
-              quantity: 1,
-              total: 200,
-            },
-          ],
-          type: "بيع",
-          paymentMethod: "نقدي",
-          subtotal: 500,
-          discount: 0,
-          tax: 75,
-          total: 575,
-        },
-        {
-          id: "#12346",
-          date: "2024-03-15 15:45",
-          employee: "محمد علي",
-          products: [
-            {
-              name: "حذاء رياضي",
-              barcode: "345678",
-              price: 300,
-              quantity: 1,
-              total: 300,
-            },
-            {
-              name: "نظارة شمسية",
-              barcode: "789012",
-              price: 250,
-              quantity: 1,
-              total: 250,
-            },
-          ],
-          type: "حجز",
-          paymentMethod: "بطاقة",
-          subtotal: 550,
-          discount: 50,
-          tax: 75,
-          total: 575,
-        },
-        {
-          id: "#12347",
-          date: "2024-03-15 16:20",
-          employee: "سارة أحمد",
-          products: [
-            {
-              name: "ساعة يد",
-              barcode: "456789",
-              price: 500,
-              quantity: 1,
-              total: 500,
-            },
-            {
-              name: "حقيبة ظهر",
-              barcode: "567890",
-              price: 180,
-              quantity: 1,
-              total: 180,
-            },
-          ],
-          type: "بيع",
-          paymentMethod: "تحويل",
-          subtotal: 680,
-          discount: 0,
-          tax: 102,
-          total: 782,
-        },
-        {
-          id: "#12348",
-          date: "2024-03-16 10:15",
-          employee: "خالد عبدالله",
-          products: [
-            {
-              name: "جاكيت شتوي",
-              barcode: "678901",
-              price: 400,
-              quantity: 1,
-              total: 400,
-            },
-            {
-              name: "قبعة صيفية",
-              barcode: "012345",
-              price: 60,
-              quantity: 2,
-              total: 120,
-            },
-          ],
-          type: "بيع",
-          paymentMethod: "نقدي",
-          subtotal: 520,
-          discount: 20,
-          tax: 75,
-          total: 575,
-        },
-        {
-          id: "#12349",
-          date: "2024-03-16 11:30",
-          employee: "نورة السعيد",
-          products: [
-            {
-              name: "محفظة جلدية",
-              barcode: "890123",
-              price: 120,
-              quantity: 3,
-              total: 360,
-            },
-            {
-              name: "حزام رجالي",
-              barcode: "901234",
-              price: 80,
-              quantity: 2,
-              total: 160,
-            },
-          ],
-          type: "حجز",
-          paymentMethod: "بطاقة",
-          subtotal: 520,
-          discount: 0,
-          tax: 78,
-          total: 598,
-        },
-        {
-          id: "#12350",
-          date: "2024-03-16 13:45",
-          employee: "عمر محمد",
-          products: [
-            {
-              name: "قميص رجالي",
-              barcode: "123456",
-              price: 150,
-              quantity: 3,
-              total: 450,
-            },
-            {
-              name: "بنطلون جينز",
-              barcode: "234567",
-              price: 200,
-              quantity: 2,
-              total: 400,
-            },
-          ],
-          type: "بيع",
-          paymentMethod: "تحويل",
-          subtotal: 850,
-          discount: 50,
-          tax: 120,
-          total: 920,
-        },
-        {
-          id: "#12351",
-          date: "2024-03-17 09:20",
-          employee: "فاطمة علي",
-          products: [
-            {
-              name: "حذاء رياضي",
-              barcode: "345678",
-              price: 300,
-              quantity: 2,
-              total: 600,
-            },
-            {
-              name: "نظارة شمسية",
-              barcode: "789012",
-              price: 250,
-              quantity: 1,
-              total: 250,
-            },
-          ],
-          type: "بيع",
-          paymentMethod: "نقدي",
-          subtotal: 850,
-          discount: 0,
-          tax: 127.5,
-          total: 977.5,
-        },
-        {
-          id: "#12352",
-          date: "2024-03-17 10:35",
-          employee: "عبدالله خالد",
-          products: [
-            {
-              name: "ساعة يد",
-              barcode: "456789",
-              price: 500,
-              quantity: 1,
-              total: 500,
-            },
-            {
-              name: "حقيبة ظهر",
-              barcode: "567890",
-              price: 180,
-              quantity: 2,
-              total: 360,
-            },
-          ],
-          type: "حجز",
-          paymentMethod: "بطاقة",
-          subtotal: 860,
-          discount: 60,
-          tax: 120,
-          total: 920,
-        },
-        {
-          id: "#12353",
-          date: "2024-03-17 14:50",
-          employee: "ريم السعيد",
-          products: [
-            {
-              name: "جاكيت شتوي",
-              barcode: "678901",
-              price: 400,
-              quantity: 1,
-              total: 400,
-            },
-            {
-              name: "قبعة صيفية",
-              barcode: "012345",
-              price: 60,
-              quantity: 3,
-              total: 180,
-            },
-          ],
-          type: "بيع",
-          paymentMethod: "تحويل",
-          subtotal: 580,
-          discount: 0,
-          tax: 87,
-          total: 667,
-        },
-        {
-          id: "#12354",
-          date: "2024-03-18 11:15",
-          employee: "ياسر محمد",
-          products: [
-            {
-              name: "محفظة جلدية",
-              barcode: "890123",
-              price: 120,
-              quantity: 2,
-              total: 240,
-            },
-            {
-              name: "حزام رجالي",
-              barcode: "901234",
-              price: 80,
-              quantity: 3,
-              total: 240,
-            },
-          ],
-          type: "بيع",
-          paymentMethod: "نقدي",
-          subtotal: 480,
-          discount: 30,
-          tax: 67.5,
-          total: 517.5,
-        },
-      ];
+    // تعريف بيانات المبيعات التجريبية
+    const sampleSalesData = [
+      {
+        id: '#12345',
+        date: '2024-03-15 14:30',
+        employee: 'أحمد محمد',
+        products: [
+          { name: 'قميص رجالي', barcode: '123456', price: 150, quantity: 2, total: 300 },
+          { name: 'بنطلون جينز', barcode: '234567', price: 200, quantity: 1, total: 200 }
+        ],
+        type: 'بيع',
+        paymentMethod: 'نقدي',
+        subtotal: 500,
+        discount: 0,
+        tax: 75,
+        total: 575
+      },
+      {
+        id: '#12346',
+        date: '2024-03-15 15:45',
+        employee: 'محمد علي',
+        products: [
+          { name: 'حذاء رياضي', barcode: '345678', price: 300, quantity: 1, total: 300 },
+          { name: 'نظارة شمسية', barcode: '789012', price: 250, quantity: 1, total: 250 }
+        ],
+        type: 'حجز',
+        paymentMethod: 'بطاقة',
+        subtotal: 550,
+        discount: 50,
+        tax: 75,
+        total: 575
+      },
+      {
+        id: '#12347',
+        date: '2024-03-15 16:20',
+        employee: 'سارة أحمد',
+        products: [
+          { name: 'ساعة يد', barcode: '456789', price: 500, quantity: 1, total: 500 },
+          { name: 'حقيبة ظهر', barcode: '567890', price: 180, quantity: 1, total: 180 }
+        ],
+        type: 'بيع',
+        paymentMethod: 'تحويل',
+        subtotal: 680,
+        discount: 0,
+        tax: 102,
+        total: 782
+      },
+      {
+        id: '#12348',
+        date: '2024-03-16 10:15',
+        employee: 'خالد عبدالله',
+        products: [
+          { name: 'جاكيت شتوي', barcode: '678901', price: 400, quantity: 1, total: 400 },
+          { name: 'قبعة صيفية', barcode: '012345', price: 60, quantity: 2, total: 120 }
+        ],
+        type: 'بيع',
+        paymentMethod: 'نقدي',
+        subtotal: 520,
+        discount: 20,
+        tax: 75,
+        total: 575
+      },
+      {
+        id: '#12349',
+        date: '2024-03-16 11:30',
+        employee: 'نورة السعيد',
+        products: [
+          { name: 'محفظة جلدية', barcode: '890123', price: 120, quantity: 1, total: 120 },
+          { name: 'حزام رجالي', barcode: '901234', price: 80, quantity: 1, total: 80 }
+        ],
+        type: 'حجز',
+        paymentMethod: 'بطاقة',
+        subtotal: 200,
+        discount: 0,
+        tax: 30,
+        total: 230
+      },
+      {
+        id: '#12350',
+        date: '2024-03-16 13:45',
+        employee: 'عمر محمد',
+        products: [
+          { name: 'قميص رجالي', barcode: '123456', price: 150, quantity: 3, total: 450 },
+          { name: 'بنطلون جينز', barcode: '234567', price: 200, quantity: 2, total: 400 }
+        ],
+        type: 'بيع',
+        paymentMethod: 'تحويل',
+        subtotal: 850,
+        discount: 50,
+        tax: 120,
+        total: 920
+      },
+      {
+        id: '#12351',
+        date: '2024-03-17 09:20',
+        employee: 'فاطمة أحمد',
+        products: [
+          { name: 'حذاء رياضي', barcode: '345678', price: 300, quantity: 2, total: 600 },
+          { name: 'نظارة شمسية', barcode: '789012', price: 250, quantity: 1, total: 250 }
+        ],
+        type: 'بيع',
+        paymentMethod: 'نقدي',
+        subtotal: 850,
+        discount: 0,
+        tax: 127.5,
+        total: 977.5
+      },
+      {
+        id: '#12352',
+        date: '2024-03-17 10:35',
+        employee: 'عبدالله خالد',
+        products: [
+          { name: 'ساعة يد', barcode: '456789', price: 500, quantity: 1, total: 500 },
+          { name: 'حقيبة ظهر', barcode: '567890', price: 180, quantity: 2, total: 360 }
+        ],
+        type: 'حجز',
+        paymentMethod: 'بطاقة',
+        subtotal: 860,
+        discount: 60,
+        tax: 120,
+        total: 920
+      },
+      {
+        id: '#12353',
+        date: '2024-03-17 12:50',
+        employee: 'سارة محمد',
+        products: [
+          { name: 'جاكيت شتوي', barcode: '678901', price: 400, quantity: 1, total: 400 },
+          { name: 'قبعة صيفية', barcode: '012345', price: 60, quantity: 3, total: 180 }
+        ],
+        type: 'بيع',
+        paymentMethod: 'تحويل',
+        subtotal: 580,
+        discount: 30,
+        tax: 82.5,
+        total: 632.5
+      },
+      {
+        id: '#12354',
+        date: '2024-03-17 14:15',
+        employee: 'محمد علي',
+        products: [
+          { name: 'محفظة جلدية', barcode: '890123', price: 120, quantity: 2, total: 240 },
+          { name: 'حزام رجالي', barcode: '901234', price: 80, quantity: 2, total: 160 }
+        ],
+        type: 'بيع',
+        paymentMethod: 'نقدي',
+        subtotal: 400,
+        discount: 0,
+        tax: 60,
+        total: 460
+      }
+    ];
 
-      // تعريف مصفوفة لتخزين عمليات البيع
-      let salesHistory = [...sampleSalesData];
+    // تعريف بيانات الفواتير الواردة التجريبية
+    const sampleBillsData = [
+      {
+        id: 'INV-001',
+        storeName: 'محل الأزياء الراقية',
+        storeOwner: 'أحمد محمد',
+        electricity: {
+          current: 500,
+          overdue: 0,
+          total: 500
+        },
+        water: {
+          current: 200,
+          overdue: 0,
+          total: 200
+        },
+        rent: {
+          current: 5000,
+          overdue: 0,
+          total: 5000
+        },
+        month: 'مارس 2024',
+        total: 5700,
+        status: 'معلقة'
+      },
+      {
+        id: 'INV-002',
+        storeName: 'محل الإلكترونيات',
+        storeOwner: 'محمد علي',
+        electricity: {
+          current: 450,
+          overdue: 500,
+          total: 950
+        },
+        water: {
+          current: 180,
+          overdue: 200,
+          total: 380
+        },
+        rent: {
+          current: 5000,
+          overdue: 5000,
+          total: 10000
+        },
+        month: 'فبراير 2024',
+        total: 11330,
+        status: 'متأخرة'
+      },
+      {
+        id: 'INV-003',
+        storeName: 'محل الأثاث',
+        storeOwner: 'سارة أحمد',
+        electricity: {
+          current: 600,
+          overdue: 0,
+          total: 600
+        },
+        water: {
+          current: 250,
+          overdue: 0,
+          total: 250
+        },
+        rent: {
+          current: 6000,
+          overdue: 0,
+          total: 6000
+        },
+        month: 'مارس 2024',
+        total: 6850,
+        status: 'مدفوعة'
+      },
+      {
+        id: 'INV-004',
+        storeName: 'محل الألعاب',
+        storeOwner: 'خالد عبدالله',
+        electricity: {
+          current: 400,
+          overdue: 400,
+          total: 800
+        },
+        water: {
+          current: 150,
+          overdue: 150,
+          total: 300
+        },
+        rent: {
+          current: 4500,
+          overdue: 4500,
+          total: 9000
+        },
+        month: 'يناير 2024',
+        total: 10100,
+        status: 'متأخرة'
+      },
+      {
+        id: 'INV-005',
+        storeName: 'محل الحلويات',
+        storeOwner: 'نورة السعيد',
+        electricity: {
+          current: 550,
+          overdue: 0,
+          total: 550
+        },
+        water: {
+          current: 220,
+          overdue: 0,
+          total: 220
+        },
+        rent: {
+          current: 5500,
+          overdue: 0,
+          total: 5500
+        },
+        month: 'مارس 2024',
+        total: 6270,
+        status: 'معلقة'
+      },
+      {
+        id: 'INV-006',
+        storeName: 'محل العطور',
+        storeOwner: 'عمر محمد',
+        electricity: {
+          current: 350,
+          overdue: 350,
+          total: 700
+        },
+        water: {
+          current: 120,
+          overdue: 120,
+          total: 240
+        },
+        rent: {
+          current: 4800,
+          overdue: 4800,
+          total: 9600
+        },
+        month: 'فبراير 2024',
+        total: 10540,
+        status: 'متأخرة'
+      },
+      {
+        id: 'INV-007',
+        storeName: 'محل الساعات',
+        storeOwner: 'فاطمة أحمد',
+        electricity: {
+          current: 480,
+          overdue: 0,
+          total: 480
+        },
+        water: {
+          current: 180,
+          overdue: 0,
+          total: 180
+        },
+        rent: {
+          current: 5200,
+          overdue: 0,
+          total: 5200
+        },
+        month: 'مارس 2024',
+        total: 5860,
+        status: 'مدفوعة'
+      },
+      {
+        id: 'INV-008',
+        storeName: 'محل النظارات',
+        storeOwner: 'عبدالله خالد',
+        electricity: {
+          current: 420,
+          overdue: 420,
+          total: 840
+        },
+        water: {
+          current: 160,
+          overdue: 160,
+          total: 320
+        },
+        rent: {
+          current: 4700,
+          overdue: 4700,
+          total: 9400
+        },
+        month: 'يناير 2024',
+        total: 10560,
+        status: 'متأخرة'
+      },
+      {
+        id: 'INV-009',
+        storeName: 'محل الأحذية',
+        storeOwner: 'سارة محمد',
+        electricity: {
+          current: 520,
+          overdue: 0,
+          total: 520
+        },
+        water: {
+          current: 200,
+          overdue: 0,
+          total: 200
+        },
+        rent: {
+          current: 5300,
+          overdue: 0,
+          total: 5300
+        },
+        month: 'مارس 2024',
+        total: 6020,
+        status: 'معلقة'
+      },
+      {
+        id: 'INV-010',
+        storeName: 'محل الحقائب',
+        storeOwner: 'محمد علي',
+        electricity: {
+          current: 380,
+          overdue: 380,
+          total: 760
+        },
+        water: {
+          current: 140,
+          overdue: 140,
+          total: 280
+        },
+        rent: {
+          current: 4600,
+          overdue: 4600,
+          total: 9200
+        },
+        month: 'فبراير 2024',
+        total: 10240,
+        status: 'متأخرة'
+      }
+    ];
 
-      // تحميل البيانات عند تحميل الصفحة
-      window.onload = function () {
-        console.log("Loading data...");
-        loadIncomingBills();
-        loadSalesData();
-        fillProductsList();
-      };
-
-      // تحميل بيانات المبيعات في الجدول
-      function loadSalesData() {
-        console.log("Loading sales data...");
-        const tbody = document.getElementById("sales-table-body");
-        if (!tbody) {
-          console.error("Sales table body not found");
-          return;
-        }
-
-        tbody.innerHTML = ""; // مسح البيانات الحالية
-        salesHistory.forEach((sale) => {
-          const row = document.createElement("tr");
-          row.innerHTML = `
+    // تحميل بيانات المبيعات في الجدول
+    function loadSalesData() {
+      const tbody = document.getElementById('sales-table-body');
+      const searchTerm = document.getElementById('sales-search').value.toLowerCase();
+      const typeFilter = document.getElementById('sales-type-filter').value;
+      const employeeFilter = document.getElementById('sales-employee-filter').value;
+      const dateFilter = document.getElementById('sales-date-filter').value;
+      
+      let filteredData = sampleSalesData.filter(sale => {
+        let match = true;
+        if (searchTerm && !(
+          sale.id.toLowerCase().includes(searchTerm) ||
+          sale.employee.toLowerCase().includes(searchTerm) ||
+          sale.type.toLowerCase().includes(searchTerm)
+        )) match = false;
+        if (typeFilter !== 'all' && sale.type !== typeFilter) match = false;
+        if (employeeFilter !== 'all' && sale.employee !== employeeFilter) match = false;
+        if (dateFilter && !sale.date.startsWith(dateFilter)) match = false;
+        return match;
+      });
+      
+      // عرض البيانات
+      tbody.innerHTML = '';
+      filteredData.forEach(sale => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
           <td>${sale.id}</td>
           <td>${sale.date}</td>
           <td>${sale.employee}</td>
@@ -1662,10 +3057,10 @@
         }
       }
 
-      // الحصول على بيانات العملية
-      function getSaleData(saleId) {
-        return salesHistory.find((sale) => sale.id === saleId);
-      }
+    // الحصول على بيانات العملية
+    function getSaleData(saleId) {
+      return sampleSalesData.find(sale => sale.id === saleId);
+    }
 
       // عرض تفاصيل عملية البيع
       function viewSaleDetails(saleId) {
@@ -1978,18 +3373,18 @@
                   @page {
                     size: A4;
                     margin: 0;
-                  }
-                </style>
+                }
+              </style>
             </head>
             <body>
               ${invoiceContent}
             </body>
           </html>
         `);
-          printWindow.document.close();
-          printWindow.print();
-        }
+        printWindow.document.close();
+        printWindow.print();
       }
+    }
 
       // إغلاق نموذج البيع
       function closeNewSaleForm() {
@@ -2339,10 +3734,456 @@
             </body>
           </html>
         `);
-        printWindow.document.close();
-        printWindow.print();
+      printWindow.document.close();
+      printWindow.print();
+    }
+
+    // متغيرات الصفحات
+    let currentSalesPage = 1;
+    let currentBillsPage = 1;
+    const itemsPerPage = 5;
+
+    // وظائف التنقل بين الصفحات
+    function nextSalesPage() {
+      const totalPages = Math.ceil(sampleSalesData.length / itemsPerPage);
+      if (currentSalesPage < totalPages) {
+        currentSalesPage++;
+        loadSalesData();
       }
-    </script>
-    <script src="../views/js/stores/index.js"></script>
-  </body>
+    }
+
+    function previousSalesPage() {
+      if (currentSalesPage > 1) {
+        currentSalesPage--;
+        loadSalesData();
+      }
+    }
+
+    function nextBillsPage() {
+      const totalPages = Math.ceil(sampleBillsData.length / itemsPerPage);
+      if (currentBillsPage < totalPages) {
+        currentBillsPage++;
+        loadBillsData();
+      }
+    }
+
+    function previousBillsPage() {
+      if (currentBillsPage > 1) {
+        currentBillsPage--;
+        loadBillsData();
+      }
+    }
+
+    // إضافة مستمعي الأحداث
+    document.addEventListener('DOMContentLoaded', function() {
+      // تحميل البيانات الأولية
+      loadSalesData();
+      loadBillsData();
+      
+      // إضافة مستمع للبحث
+      document.getElementById('sales-search').addEventListener('input', function() {
+        loadSalesData();
+      });
+      
+      // إضافة مستمعين للفلترة
+      document.getElementById('month-filter').addEventListener('change', function() {
+        loadBillsData();
+      });
+      
+      document.getElementById('bill-status-filter').addEventListener('change', function() {
+        loadBillsData();
+      });
+      
+      // إضافة مستمع للفلتر الجديد
+      document.getElementById('bills-total-payment-filter').addEventListener('change', function() {
+        loadBillsData();
+      });
+    });
+
+    // تحميل بيانات الفواتير الواردة
+    function loadBillsData() {
+      const tbody = document.getElementById('incoming-bills-table-body');
+      const monthFilter = document.getElementById('bills-month-filter').value;
+      const overdueFilter = document.getElementById('bills-overdue-filter').value;
+      const totalPaymentFilter = document.getElementById('bills-total-payment-filter').value;
+      
+      let filteredData = sampleBillsData;
+      if (monthFilter !== 'all') {
+        filteredData = filteredData.filter(bill => bill.month.toLowerCase().includes(monthFilter));
+      }
+      if (overdueFilter === 'no') {
+        filteredData = filteredData.filter(bill => (bill.electricity.overdue + bill.water.overdue + bill.rent.overdue) === 0);
+      } else if (overdueFilter === 'yes') {
+        filteredData = filteredData.filter(bill => (bill.electricity.overdue + bill.water.overdue + bill.rent.overdue) > 0);
+      }
+      
+      // تطبيق فلتر الإجمالي المدفوع/غير المدفوع
+      if (totalPaymentFilter === 'paid') {
+        filteredData = filteredData.filter(bill => bill.total === 0);
+      } else if (totalPaymentFilter === 'unpaid') {
+        filteredData = filteredData.filter(bill => bill.total > 0);
+      }
+      
+      tbody.innerHTML = '';
+      filteredData.forEach(bill => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${bill.electricity.current} ريال</td>
+          <td>${bill.water.current} ريال</td>
+          <td>${bill.rent.current} ريال</td>
+          <td>${bill.month}</td>
+          <td>${bill.electricity.overdue + bill.water.overdue + bill.rent.overdue} ريال</td>
+          <td>${bill.total} ريال</td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn-icon view-btn" onclick="viewIncomingBillDetails('${bill.id}')" title="عرض التفاصيل">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="btn-icon print-btn" onclick="printIncomingBill('${bill.id}')" title="طباعة الفاتورة">
+                <i class="fas fa-print"></i>
+              </button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+    
+
+    // Toggle between sections
+    function showSection(section) {
+      document.getElementById('new-sale-section').style.display = 'none';
+      document.getElementById('sales-table-section').style.display = 'none';
+      document.getElementById('bills-table-section').style.display = 'none';
+      document.getElementById(section).style.display = 'block';
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      let newSaleOpen = false;
+      const salesBtn = document.getElementById('show-sales-btn');
+      const billsBtn = document.getElementById('show-bills-btn');
+      const newSaleBtn = document.getElementById('new-sale-btn');
+      const newSaleActionBtn = document.getElementById('new-sale-action-btn');
+
+      newSaleBtn.onclick = function() {
+        newSaleOpen = !newSaleOpen;
+        if (newSaleOpen) {
+          document.getElementById('new-sale-section').style.display = 'block';
+          document.getElementById('sales-table-section').style.display = 'none';
+          document.getElementById('bills-table-section').style.display = 'none';
+          salesBtn.classList.remove('btn-blue', 'active');
+          salesBtn.classList.add('btn-gray');
+          billsBtn.classList.remove('btn-blue', 'active');
+          billsBtn.classList.add('btn-gray');
+        } else {
+          document.getElementById('new-sale-section').style.display = 'none';
+        }
+      };
+      salesBtn.onclick = function() {
+        newSaleOpen = false;
+        showSection('sales-table-section');
+        salesBtn.classList.add('btn-blue', 'active');
+        salesBtn.classList.remove('btn-gray');
+        billsBtn.classList.remove('btn-blue', 'active');
+        billsBtn.classList.add('btn-gray');
+      };
+      billsBtn.onclick = function() {
+        newSaleOpen = false;
+        showSection('bills-table-section');
+        billsBtn.classList.add('btn-blue', 'active');
+        billsBtn.classList.remove('btn-gray');
+        salesBtn.classList.remove('btn-blue', 'active');
+        salesBtn.classList.add('btn-gray');
+      };
+      // Show bills table by default
+      billsBtn.classList.add('btn-blue', 'active');
+      billsBtn.classList.remove('btn-gray');
+      salesBtn.classList.remove('btn-blue', 'active');
+      salesBtn.classList.add('btn-gray');
+      showSection('bills-table-section');
+
+      if (newSaleActionBtn) {
+        newSaleActionBtn.onclick = function() {
+          // إعادة تعيين النموذج وتوليد رقم وتاريخ جديد
+          if (document.getElementById('new-sale-section').style.display === 'block') {
+            openNewSaleForm();
+          }
+        };
+      }
+    });
+
+    // تحديث قائمة الموظفين في الفلتر
+    function fillSalesEmployeeFilter(filteredData) {
+      const select = document.getElementById('sales-employee-filter');
+      if (!select) return;
+      // استخراج الموظفين من البيانات بدون تكرار
+      const employees = [...new Set(filteredData.map(sale => sale.employee))];
+      const current = select.value;
+      select.innerHTML = '<option value="all">الكل</option>';
+      employees.forEach(emp => {
+        const option = document.createElement('option');
+        option.value = emp;
+        option.textContent = emp;
+        select.appendChild(option);
+      });
+      // إعادة التحديد إذا كان موجوداً
+      if (employees.includes(current)) select.value = current;
+    }
+
+    // تحميل بيانات المبيعات في الجدول مع الفلاتر
+    function loadSalesData() {
+      const tbody = document.getElementById('sales-table-body');
+      const searchTerm = document.getElementById('sales-search').value.toLowerCase();
+      const typeFilter = document.getElementById('sales-type-filter').value;
+      const employeeFilter = document.getElementById('sales-employee-filter').value;
+      const dateFilter = document.getElementById('sales-date-filter').value;
+      
+      let filteredData = sampleSalesData.filter(sale => {
+        let match = true;
+        if (searchTerm && !(
+          sale.id.toLowerCase().includes(searchTerm) ||
+          sale.employee.toLowerCase().includes(searchTerm) ||
+          sale.type.toLowerCase().includes(searchTerm)
+        )) match = false;
+        if (typeFilter !== 'all' && sale.type !== typeFilter) match = false;
+        if (employeeFilter !== 'all' && sale.employee !== employeeFilter) match = false;
+        if (dateFilter && !sale.date.startsWith(dateFilter)) match = false;
+        return match;
+      });
+      
+      // عرض البيانات
+      tbody.innerHTML = '';
+      filteredData.forEach(sale => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${sale.id}</td>
+          <td>${sale.date}</td>
+          <td>${sale.employee}</td>
+          <td>${sale.products.length}</td>
+          <td>${sale.type}</td>
+          <td>${sale.total} ريال</td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn-icon view-btn" onclick="viewSaleDetails('${sale.id}')" title="عرض التفاصيل">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="btn-icon print-btn" onclick="printSale('${sale.id}')" title="طباعة الفاتورة">
+                <i class="fas fa-print"></i>
+              </button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+      fillSalesEmployeeFilter(filteredData);
+    }
+
+    // تحميل بيانات الفواتير مع الفلاتر
+    function loadBillsData() {
+      const tbody = document.getElementById('incoming-bills-table-body');
+      const monthFilter = document.getElementById('bills-month-filter').value;
+      const overdueFilter = document.getElementById('bills-overdue-filter').value;
+      const totalPaymentFilter = document.getElementById('bills-total-payment-filter').value;
+      
+      let filteredData = sampleBillsData;
+      if (monthFilter !== 'all') {
+        filteredData = filteredData.filter(bill => bill.month.toLowerCase().includes(monthFilter));
+      }
+      if (overdueFilter === 'no') {
+        filteredData = filteredData.filter(bill => (bill.electricity.overdue + bill.water.overdue + bill.rent.overdue) === 0);
+      } else if (overdueFilter === 'yes') {
+        filteredData = filteredData.filter(bill => (bill.electricity.overdue + bill.water.overdue + bill.rent.overdue) > 0);
+      }
+      
+      // تطبيق فلتر الإجمالي المدفوع/غير المدفوع
+      if (totalPaymentFilter === 'paid') {
+        filteredData = filteredData.filter(bill => bill.status === 'مدفوعة');
+      } else if (totalPaymentFilter === 'unpaid') {
+        filteredData = filteredData.filter(bill => bill.status !== 'مدفوعة');
+      }
+      
+      tbody.innerHTML = '';
+      filteredData.forEach(bill => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${bill.electricity.current} ريال</td>
+          <td>${bill.water.current} ريال</td>
+          <td>${bill.rent.current} ريال</td>
+          <td>${bill.month}</td>
+          <td>${bill.electricity.overdue + bill.water.overdue + bill.rent.overdue} ريال</td>
+          <td>${bill.total} ريال</td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn-icon view-btn" onclick="viewIncomingBillDetails('${bill.id}')" title="عرض التفاصيل">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="btn-icon print-btn" onclick="printIncomingBill('${bill.id}')" title="طباعة الفاتورة">
+                <i class="fas fa-print"></i>
+              </button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    // إضافة مستمعي الأحداث
+    document.addEventListener('DOMContentLoaded', function() {
+      loadSalesData();
+      loadBillsData();
+      // سجل المبيعات
+      document.getElementById('sales-search').addEventListener('input', loadSalesData);
+      document.getElementById('sales-type-filter').addEventListener('change', loadSalesData);
+      document.getElementById('sales-employee-filter').addEventListener('change', loadSalesData);
+      document.getElementById('sales-date-filter').addEventListener('change', loadSalesData);
+      // الفواتير
+      document.getElementById('bills-month-filter').addEventListener('change', loadBillsData);
+      document.getElementById('bills-overdue-filter').addEventListener('change', loadBillsData);
+    });
+
+    // تعبئة قائمة الأشهر ديناميكياً من بيانات الفواتير
+    function fillBillsMonthFilter() {
+      const select = document.getElementById('bills-month-filter');
+      if (!select) return;
+      const months = [...new Set(sampleBillsData.map(bill => bill.month))];
+      select.innerHTML = '<option value="all">الكل</option>';
+      months.forEach(month => {
+        const option = document.createElement('option');
+        option.value = month;
+        option.textContent = month;
+        select.appendChild(option);
+      });
+    }
+
+    // إضافة مستمعي الأحداث
+    document.addEventListener('DOMContentLoaded', function() {
+      loadSalesData();
+      fillBillsMonthFilter();
+      loadBillsData();
+      // سجل المبيعات
+      document.getElementById('sales-search').addEventListener('input', loadSalesData);
+      document.getElementById('sales-type-filter').addEventListener('change', loadSalesData);
+      document.getElementById('sales-employee-filter').addEventListener('change', loadSalesData);
+      document.getElementById('sales-date-filter').addEventListener('change', loadSalesData);
+      // الفواتير
+      document.getElementById('bills-month-filter').addEventListener('change', loadBillsData);
+      document.getElementById('bills-overdue-filter').addEventListener('change', loadBillsData);
+      document.getElementById('bills-total-payment-filter').addEventListener('change', loadBillsData);
+    });
+
+    let originalProductsData = null;
+
+    function toggleProductsEditMode() {
+      const editColumn = document.querySelector('.edit-column');
+      const editActions = document.getElementById('products-edit-actions');
+      const isEditing = editColumn.style.display !== 'none';
+      
+      if (!isEditing) {
+        // حفظ البيانات الأصلية
+        originalProductsData = [...document.querySelectorAll('#sale-detail-products tr')].map(row => ({
+          name: row.cells[0].textContent,
+          barcode: row.cells[1].textContent,
+          price: parseFloat(row.cells[2].textContent),
+          quantity: parseInt(row.cells[3].textContent),
+          total: parseFloat(row.cells[4].textContent)
+        }));
+        
+        // تحويل الخلايا إلى حقول تعديل
+        const rows = document.querySelectorAll('#sale-detail-products tr');
+        rows.forEach(row => {
+          const quantityCell = row.cells[3];
+          const currentQuantity = quantityCell.textContent;
+          quantityCell.innerHTML = `
+            <input type="number" class="quantity-edit" value="${currentQuantity}" min="1" 
+                   onchange="updateProductTotal(this)" data-price="${row.cells[2].textContent}">
+          `;
+          
+          // إضافة زر حذف
+          const actionsCell = document.createElement('td');
+          actionsCell.className = 'edit-column';
+          actionsCell.innerHTML = `
+            <button class="btn-icon delete-btn" onclick="removeProductFromEdit(this)" title="حذف المنتج">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          `;
+          row.appendChild(actionsCell);
+        });
+        
+        editColumn.style.display = 'table-cell';
+        editActions.style.display = 'flex';
+      } else {
+        cancelProductsEdit();
+      }
+    }
+
+    function updateProductTotal(input) {
+      const price = parseFloat(input.dataset.price);
+      const quantity = parseInt(input.value);
+      const total = price * quantity;
+      const totalCell = input.closest('tr').cells[4];
+      totalCell.textContent = `${total.toFixed(2)} ريال`;
+    }
+
+    function removeProductFromEdit(button) {
+      button.closest('tr').remove();
+    }
+
+    function saveProductsChanges() {
+      const rows = document.querySelectorAll('#sale-detail-products tr');
+      const updatedProducts = Array.from(rows).map(row => ({
+        name: row.cells[0].textContent,
+        barcode: row.cells[1].textContent,
+        price: parseFloat(row.cells[2].textContent),
+        quantity: parseInt(row.querySelector('.quantity-edit').value),
+        total: parseFloat(row.cells[4].textContent)
+      }));
+      
+      // تحديث البيانات في مصفوفة المبيعات
+      const saleId = document.getElementById('sale-detail-id').textContent;
+      const saleIndex = sampleSalesData.findIndex(sale => sale.id === saleId);
+      if (saleIndex !== -1) {
+        sampleSalesData[saleIndex].products = updatedProducts;
+        sampleSalesData[saleIndex].subtotal = updatedProducts.reduce((sum, product) => sum + product.total, 0);
+        sampleSalesData[saleIndex].total = sampleSalesData[saleIndex].subtotal - 
+                                         sampleSalesData[saleIndex].discount + 
+                                         sampleSalesData[saleIndex].tax;
+        
+        // تحديث عرض التفاصيل
+        viewSaleDetails(saleId);
+        
+        // تحديث جدول المبيعات
+        loadSalesData();
+      }
+      
+      // إغلاق وضع التعديل
+      cancelProductsEdit();
+    }
+
+    function cancelProductsEdit() {
+      const editColumn = document.querySelector('.edit-column');
+      const editActions = document.getElementById('products-edit-actions');
+      
+      if (originalProductsData) {
+        // إعادة عرض البيانات الأصلية
+        const tbody = document.getElementById('sale-detail-products');
+        tbody.innerHTML = '';
+        originalProductsData.forEach(product => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${product.name}</td>
+            <td>${product.barcode}</td>
+            <td>${product.price} ريال</td>
+            <td>${product.quantity}</td>
+            <td>${product.total} ريال</td>
+          `;
+          tbody.appendChild(row);
+        });
+      }
+      
+      editColumn.style.display = 'none';
+      editActions.style.display = 'none';
+      originalProductsData = null;
+    }
+  </script>
+  <script src="../views/js/stores/index.js"> </script>  
+</body>
 </html>

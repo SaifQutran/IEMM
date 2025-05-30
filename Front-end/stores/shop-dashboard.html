@@ -1,157 +1,285 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>IEMM - بوابة صاحب المحل</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="../views/css/styles.css" />
-    <link rel="stylesheet" href="../views/css/chat.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <script src="../views/js/script.js" defer></script>
-    <script src="../views/js/theme-manager.js" defer></script>
-    <script src="../views/js/stores/chat.js" defer></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  </head>
-  <body>
-    <!-- Authorization Check -->
-    <script>
-      // Check authorization before loading the page
-      function checkAuthorization() {
-        const token = localStorage.getItem("token");
-        const userType = localStorage.getItem("user_type");
-
-        // Check if token exists
-        if (!token) {
-          window.location.href = "../login.html";
-          return;
-        }
-
-        // Check user type (shop manager = 2)
-        if (userType !== "2") {
-          // Create and show unauthorized message
-          document.body.innerHTML = `
-          <div style="
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            background-color: #f8fafc;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-          ">
-            <i class="fas fa-exclamation-triangle" style="
-              font-size: 64px;
-              color: #ef4444;
-              margin-bottom: 20px;
-            "></i>
-            <h1 style="
-              color: #1e293b;
-              font-size: 24px;
-              margin-bottom: 16px;
-            ">غير مصرح لك بالوصول</h1>
-            <p style="
-              color: #64748b;
-              font-size: 16px;
-              margin-bottom: 24px;
-            ">عذراً، ليس لديك الصلاحية للوصول إلى هذه الصفحة</p>
-            <button onclick="window.location.href='../login.html'" style="
-              background-color: #2563eb;
-              color: white;
-              border: none;
-              padding: 12px 24px;
-              border-radius: 8px;
-              font-size: 16px;
-              cursor: pointer;
-              transition: background-color 0.01s;
-            ">العودة إلى صفحة تسجيل الدخول</button>
-          </div>
-        `;
-          return;
-        }
-
-        // Verify token with backend
-      }
-
-      // Run authorization check when page loads
-      $(document).ready(function () {
-        checkAuthorization();
-
-        // Check is_owner status and toggle Employees page button
-        const isOwner = localStorage.getItem("is_owner") == "true";
-        const staffLink = document.getElementById("staff-link");
-        if (staffLink) {
-          staffLink.style.display = isOwner ? "block" : "none";
-        }
-      });
-    </script>
-
-    <!-- Header Section -->
-    <header>
-      <div class="container navbar">
-        <h1>IEMM</h1>
-        <nav>
-          <a href="shop-dashboard.html" id="dashboard-link" class="active"
-            ><i class="fas fa-chart-line"></i> لوحة التحكم</a
-          >
-          <a href="products-management.html" id="products-link"
-            ><i class="fas fa-shopping-bag"></i> إدارة المنتجات</a
-          >
-          <a href="inventory.html" id="inventory-link"
-            ><i class="fas fa-box"></i> المخزون</a
-          >
-          <a href="employees.html" id="staff-link"
-            ><i class="fas fa-users"></i> إدارة العاملين</a
-          >
-          <a href="bills-stores.html" id="bills-link"
-            ><i class="fas fa-file-invoice-dollar"></i> الفواتير</a
-          >
-        </nav>
-        <div style="display: flex; align-items: center; gap: 12px">
-          <button class="btn-dark convert"></button>
-          <!-- <button class="btn-dark " onclick="document.body.classList.toggle('dark')">الوضع الليلي</button> -->
-          <button
-            id="chat-toggle"
-            class="chat-toggle-btn"
-            title="الدردشة مع مدير المول"
-          >
-            <i class="fas fa-comments"></i>
-          </button>
-        </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IEMM - بوابة صاحب المحل</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="../views/css/styles.css">
+  <link rel="stylesheet" href="../views/css/chat.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="../views/js/script.js" defer></script>
+  <script src="../views/js/stores/chat.js" defer></script>
+</head>
+<body>
+  
+  <!-- Header Section -->
+  <header>
+    <div class="container navbar">
+      <h1>IEMM</h1>
+      <nav>
+        <a href="shop-dashboard.html" id="dashboard-link" class="active"><i class="fas fa-chart-line"></i> لوحة التحكم</a>
+        <a href="products-management.html" id="products-link"><i class="fas fa-shopping-bag"></i> إدارة المنتجات</a>
+        <a href="inventory.html" id="inventory-link"><i class="fas fa-box"></i> المخزون</a>
+        <a href="employees.html" id="staff-link"><i class="fas fa-users"></i> إدارة العاملين</a>
+        <a href="bills-stores.html" id="bills-link"><i class="fas fa-file-invoice-dollar"></i> الفواتير</a>
+      </nav>
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <button class="btn-dark" onclick="document.body.classList.toggle('dark')">الوضع الليلي</button>
+        <button id="chat-toggle" class="chat-toggle-btn" title="الدردشة مع مدير المول">
+          <i class="fas fa-comments"></i>
+        </button>
+        <button id="profile-toggle" class="profile-toggle-btn" title="الملف الشخصي">
+          <i class="fas fa-user"></i>
+          <span class="notification-dot" id="profile-notification"></span>
+        </button>
       </div>
-    </header>
+    </div>
+  </header>
 
-    <!-- نافذة الدردشة الجانبية -->
-    <div id="chat-panel" class="chat-panel">
-      <div class="chat-header">
-        <div class="mall-logo-container">
-          <img id="mall-logo" alt="شعار المول" class="mall-logo" />
-          <h3>الدردشة مع مدير المول</h3>
-        </div>
-        <button id="chat-close" class="chat-close-btn">
+  <!-- نافذة الدردشة الجانبية -->
+  <div id="chat-panel" class="chat-panel">
+    <div class="chat-header">
+      <div class="mall-logo-container">
+        <img id="mall-logo" alt="شعار المول" class="mall-logo">
+        <h3>الدردشة مع مدير المول</h3>
+      </div>
+      <button id="chat-close" class="chat-close-btn">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div id="messages-container" class="messages-container">
+      <!-- سيتم إنشاء الرسائل عبر JavaScript -->
+    </div>
+    <form id="message-form" class="message-form">
+      <textarea id="message-input" class="message-input" placeholder="اكتب رسالتك هنا..." rows="1"></textarea>
+      <button type="submit" class="send-message-btn">
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </form>
+  </div>
+
+  <!-- نافذة الملف الشخصي المنبثقة -->
+  <div id="profile-modal" class="profile-modal">
+    <div class="profile-content">
+      <div class="profile-header">
+        <h3>الملف الشخصي</h3>
+        <button id="profile-close" class="profile-close-btn">
           <i class="fas fa-times"></i>
         </button>
       </div>
-      <div id="messages-container" class="messages-container">
-        <!-- سيتم إنشاء الرسائل عبر JavaScript -->
+      <div class="profile-body">
+        <div class="profile-image-container">
+          <img id="profile-image" src="../assets/default-profile.png" alt="صورة الملف الشخصي">
+          <button class="edit-btn" data-field="image">
+            <i class="fas fa-edit"></i>
+          </button>
+        </div>
+        <div class="profile-info">
+          <div class="info-item">
+            <label>اسم المحل:</label>
+            <span id="profile-shopname">متجرك العصري</span>
+          </div>
+          <div class="info-item">
+            <label>اسم العامل:</label>
+            <span id="profile-name">أحمد محمد</span>
+          </div>
+          <div class="info-item">
+            <label>البريد الإلكتروني:</label>
+            <span id="profile-email">ahmed@example.com</span>
+          </div>
+          <div class="info-item">
+            <label>اسم المستخدم:</label>
+            <span id="profile-username">ahmed123</span>
+          </div>
+          <div class="info-item">
+            <label>رقم الهاتف:</label>
+            <span id="profile-phone">+966 50 123 4567</span>
+            <button class="edit-btn" data-field="phone">
+              <i class="fas fa-edit"></i>
+            </button>
+          </div>
+          <div class="info-item">
+            <label>كلمة السر:</label>
+            <input type="password" id="profile-password" value="********" readonly style="background:transparent; border:none; font-size:1rem; width:120px; direction:ltr; letter-spacing:3px;" tabindex="-1">
+            <button class="edit-btn" data-field="password">
+              <i class="fas fa-edit"></i>
+            </button>
+          </div>
+        </div>
       </div>
-      <form id="message-form" class="message-form">
-        <textarea
-          id="message-input"
-          class="message-input"
-          placeholder="اكتب رسالتك هنا..."
-          rows="1"
-        ></textarea>
-        <button type="submit" class="send-message-btn">
-          <i class="fas fa-paper-plane"></i>
+    </div>
+  </div>
+
+  <!-- نافذة تغيير كلمة السر -->
+  <div id="password-modal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>تغيير كلمة السر</h3>
+        <button class="btn-close" onclick="closeModal('password-modal')">
+          <i class="fas fa-times"></i>
         </button>
+      </div>
+      <form id="password-form" class="form">
+        <div class="form-group">
+          <label>كلمة السر الحالية</label>
+          <div class="password-input-container">
+            <input type="password" id="current-password" required>
+            <button type="button" class="toggle-password" onclick="togglePasswordVisibility('current-password')">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>كلمة السر الجديدة</label>
+          <div class="password-input-container">
+            <input type="password" id="new-password" required 
+                   pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+                   title="يجب أن تحتوي كلمة السر على 8 أحرف على الأقل، وتتضمن حروف وأرقام">
+            <button type="button" class="toggle-password" onclick="togglePasswordVisibility('new-password')">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <small class="password-requirements">
+            يجب أن تحتوي كلمة السر على 8 أحرف على الأقل، وتتضمن حروف وأرقام
+          </small>
+        </div>
+        <div class="form-group">
+          <label>تأكيد كلمة السر الجديدة</label>
+          <div class="password-input-container">
+            <input type="password" id="confirm-password" required>
+            <button type="button" class="toggle-password" onclick="togglePasswordVisibility('confirm-password')">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-green">تغيير كلمة السر</button>
+          <button type="button" class="btn-secondary" onclick="closeModal('password-modal')">إلغاء</button>
+        </div>
       </form>
     </div>
+  </div>
+
+  <style>
+    .password-input-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .password-input-container input {
+      width: 100%;
+      padding-right: 40px;
+    }
+    .toggle-password {
+      position: absolute;
+      right: 10px;
+      background: none;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      padding: 5px;
+    }
+    .toggle-password:hover {
+      color: #2563eb;
+    }
+    .password-requirements {
+      display: block;
+      color: #64748b;
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+    }
+    .modal, .profile-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+    }
+    .modal-content, .profile-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      padding: 2rem;
+      width: 90%;
+      max-width: 500px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      max-height: 80vh;
+      overflow-y: auto;
+      margin: 0;
+    }
+  </style>
+
+  <script>
+    // إخفاء نافذة تغيير كلمة السر عند تحميل الصفحة دائماً
+    window.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('password-modal').style.display = 'none';
+    });
+    document.querySelectorAll('.edit-btn').forEach(button => {
+      button.addEventListener('click', function() {
+        const field = this.getAttribute('data-field');
+        if (field === 'password') {
+          openPasswordModal();
+          return false;
+        }
+        // ... باقي الكود للتعامل مع الحقول الأخرى
+      });
+    });
+    function openPasswordModal() {
+      const modal = document.getElementById('password-modal');
+      modal.style.display = 'flex'; // flex لضمان التوسيط
+      document.getElementById('password-form').reset();
+      window.onclick = function(event) {
+        if (event.target === modal) {
+          closeModal('password-modal');
+        }
+      }
+    }
+    function closeModal(modalId) {
+      document.getElementById(modalId).style.display = 'none';
+    }
+    function togglePasswordVisibility(inputId) {
+      const input = document.getElementById(inputId);
+      const icon = input.nextElementSibling.querySelector('i');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    }
+    document.getElementById('password-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const currentPassword = document.getElementById('current-password').value;
+      const newPassword = document.getElementById('new-password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
+      if (newPassword !== confirmPassword) {
+        alert('كلمة السر الجديدة غير متطابقة');
+        return;
+      }
+      const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+      if (!passwordRegex.test(newPassword)) {
+        alert('كلمة السر الجديدة لا تلبي المتطلبات');
+        return;
+      }
+      // هنا يمكنك إضافة كود للتحقق من كلمة السر الحالية وإرسال التغييرات إلى الخادم
+      console.log('تغيير كلمة السر:', {
+        currentPassword,
+        newPassword
+      });
+      closeModal('password-modal');
+      alert('تم تغيير كلمة السر بنجاح');
+    });
+  </script>
 
     <!-- Main Content -->
     <div class="main">
@@ -237,13 +365,15 @@
             <canvas id="staffPerformanceChart" height="200"></canvas>
           </div>
 
-          <div class="card">
-            <h3>توزيع المبيعات حسب ساعات اليوم</h3>
-            <canvas id="hourlyDistributionChart" height="200"></canvas>
-          </div>
+        <div class="card">
+          <h3>توزيع المبيعات حسب ساعات اليوم</h3>
+          <canvas id="hourlyDistributionChart" height="200"></canvas>
         </div>
       </div>
     </div>
-    <script src="../views/js/stores/index.js"></script>
-  </body>
+  </div>
+  <script src="../views/js/stores/index.js"> </script>
+  <script src="../views/js/profile.js"></script>
+  <link rel="stylesheet" href="../views/css/profile.css">
+</body>
 </html>
