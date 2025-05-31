@@ -250,3 +250,4 @@
     function completeSale() {
       // تنفيذ إتمام عملية البيع
     }
+    

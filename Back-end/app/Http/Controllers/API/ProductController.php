@@ -15,16 +15,16 @@ class ProductController extends Controller
         $data = Product::with(['stocks.warehouse', 'stocks'])->get();
         $data = $data->map(function ($product) {
             $product->total_stock = $product->stocks->sum('quantity');
-            $product->image_urls = [];
-            $productPath = storage_path('app/public/products/' . $product->id);
-            if (file_exists($productPath)) {
-                $files = scandir($productPath);
-                foreach ($files as $file) {
-                    if ($file != '.' && $file != '..') {
-                        $product->image_urls[] = storage_path('app/public/products/' . $product->id . '/' . $file);
-                    }
-                }
-            }
+            // $product->image_urls = [];
+            // $productPath = storage_path('app/public/products/' . $product->id);
+            // if (file_exists($productPath)) {
+            //     $files = scandir($productPath);
+            //     foreach ($files as $file) {
+            //         if ($file != '.' && $file != '..') {
+            //             $product->image_urls[] = storage_path('app/public/products/' . $product->id . '/' . $file);
+            //         }
+            //     }
+            // }
 
 
             $product->in_primary_stock = $product->stocks->filter(function ($stock) {
@@ -57,16 +57,16 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = Product::find($id);
-        $product->image_urls = [];
-        $productPath = storage_path('app/public/products/' . $product->id);
-        if (file_exists($productPath)) {
-            $files = scandir($productPath);
-            foreach ($files as $file) {
-                if ($file != '.' && $file != '..') {
-                    $product->image_urls[] = storage_path('app/public/products/' . $product->id . '/' . $file);
-                }
-            }
-        }
+        // $product->image_urls = [];
+        // $productPath = storage_path('app/public/products/' . $product->id);
+        // if (file_exists($productPath)) {
+        //     $files = scandir($productPath);
+        //     foreach ($files as $file) {
+        //         if ($file != '.' && $file != '..') {
+        //             $product->image_urls[] = storage_path('app/public/products/' . $product->id . '/' . $file);
+        //         }
+        //     }
+        // }
 
 
         if (!$product) {
@@ -108,12 +108,12 @@ class ProductController extends Controller
                     mkdir($path, 0777, true);
                 }
 
-                $imagePaths = [];
-                foreach ($request->file('images') as $index => $image) {
-                    $imageName = 'image_' . ($index + 1) . '.png';
-                    $image->move($path, $imageName);
-                    $imagePaths[] = 'products/' . $product->id . '/' . $imageName;
-                }
+                // $imagePaths = [];
+                // foreach ($request->file('images') as $index => $image) {
+                //     $imageName = 'image_' . ($index + 1) . '.png';
+                //     $image->move($path, $imageName);
+                //     $imagePaths[] = 'products/' . $product->id . '/' . $imageName;
+                // }
 
                 // Update product with image paths
 

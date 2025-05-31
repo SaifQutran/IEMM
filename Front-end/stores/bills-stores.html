@@ -1,35 +1,242 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>IEMM - الفواتير</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="../views/css/styles.css">
-  <link rel="stylesheet" href="../views/css/chat.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script src="../views/js/script.js" defer></script>
-  <script src="../views/js/stores/chat.js" defer></script>
-</head>
-<body>
-  
-  <!-- Header Section -->
-  <header>
-    <div class="container navbar">
-      <h1>IEMM</h1>
-      <nav>
-        <a href="shop-dashboard.html" id="dashboard-link"><i class="fas fa-chart-line"></i> لوحة التحكم</a>
-        <a href="products-management.html" id="products-link"><i class="fas fa-shopping-bag"></i> إدارة المنتجات</a>
-        <a href="inventory.html" id="inventory-link"><i class="fas fa-box"></i> المخزون</a>
-        <a href="employees.html" id="staff-link"><i class="fas fa-users"></i> إدارة العاملين</a>
-        <a href="bills-stores.html" id="bills-link" class="active"><i class="fas fa-file-invoice-dollar"></i> الفواتير</a>
-        <a href="reservations.html" id="reservations-link"><i class="fas fa-calendar-check"></i> إدارة الحجوزات</a>
-      </nav>
-      <div style="display: flex; align-items: center; gap: 12px;">
-        <button class="btn-dark" onclick="document.body.classList.toggle('dark')">الوضع الليلي</button>
-        <button id="chat-toggle" class="chat-toggle-btn" title="الدردشة مع مدير المول">
-          <i class="fas fa-comments"></i>
-        </button>
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IEMM - الفواتير</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="../views/css/styles.css" />
+    <link rel="stylesheet" href="../views/css/chat.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script src="../views/js/script.js" defer></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../views/js/theme-manager.js" defer></script>
+    <script src="../views/js/stores/chat.js" defer></script>
+    <style>
+      /* تنسيقات الجداول مع التمرير */
+      .table-wrapper {
+        /* max-height: 400px; */
+        overflow-y: visible;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+      }
+
+      .table-wrapper table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .table-wrapper thead {
+        position: sticky;
+        top: 0;
+        background: #f8fafc;
+        z-index: 1;
+      }
+
+      .table-wrapper th {
+        padding: 12px;
+        text-align: right;
+        font-weight: 600;
+        color: #1e293b;
+        border-bottom: 2px solid #e2e8f0;
+      }
+
+      .table-wrapper td {
+        padding: 12px;
+        text-align: right;
+        border-bottom: 1px solid #e2e8f0;
+      }
+
+      /* تنسيقات البحث والفلترة */
+      .table-controls {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 12px;
+        align-items: center;
+      }
+
+      .search-box {
+        position: relative;
+        flex: 1;
+      }
+
+      .search-box input {
+        width: 100%;
+        padding: 8px 12px;
+        padding-right: 35px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 0.9rem;
+      }
+
+      .search-box i {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #64748b;
+      }
+
+      .filter-controls {
+        display: flex;
+        gap: 8px;
+      }
+
+      .filter-controls select {
+        padding: 8px 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        min-width: 120px;
+      }
+
+      /* Dark Mode Styles */
+      body.dark .table-wrapper {
+        border-color: #334155;
+      }
+
+      body.dark .table-wrapper thead {
+        background: var(--dark-chart);
+      }
+
+      body.dark .table-wrapper th {
+        color: var(--dark-text);
+        border-bottom-color: #334155;
+      }
+
+      body.dark .table-wrapper td {
+        border-bottom-color: #334155;
+        color: var(--dark-text);
+      }
+
+      body.dark .search-box input {
+        background: var(--dark-card);
+        color: var(--dark-text);
+        border-color: #334155;
+      }
+
+      body.dark .search-box i {
+        color: #94a3b8;
+      }
+
+      body.dark .filter-controls select {
+        background: var(--dark-card);
+        color: var(--dark-text);
+        border-color: #334155;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Authorization Check -->
+     <script>
+      // Check authorization before loading the page
+      function checkAuthorization() {
+        const token = localStorage.getItem('token');
+        const userType = localStorage.getItem('user_type');
+        
+        // Check if token exists
+        if (!token) {
+          window.location.href = '../login.html';
+          return;
+        }
+
+        // Check user type (admin = 4)
+        if (userType !== '2') {
+          // Create and show unauthorized message
+          document.body.innerHTML = `
+            <div style="
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              height: 100vh;
+              background-color: #f8fafc;
+              font-family: Arial, sans-serif;
+              text-align: center;
+              padding: 20px;
+            ">
+              <i class="fas fa-exclamation-triangle" style="
+                font-size: 64px;
+                color: #ef4444;
+                margin-bottom: 20px;
+              "></i>
+              <h1 style="
+                color: #1e293b;
+                font-size: 24px;
+                margin-bottom: 16px;
+              ">غير مصرح لك بالوصول</h1>
+              <p style="
+                color: #64748b;
+                font-size: 16px;
+                margin-bottom: 24px;
+              ">عذراً، ليس لديك الصلاحية للوصول إلى هذه الصفحة</p>
+              <button onclick="window.location.href='../login.html'" style="
+                background-color: #2563eb;
+                color: white;
+                border: none;
+                padding: 12px 24px;
+                border-radius: 8px;
+                font-size: 16px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+              ">العودة إلى صفحة تسجيل الدخول</button>
+            </div>
+          `;
+          return;
+        }
+
+        // Verify token with backend
+        
+      }
+
+      // Run authorization check when page loads
+      $(document).ready(function() {
+        // checkAuthorization();
+        //     const isOwner = localStorage.getItem("is_owner") == "true";
+        // const staffLink = document.getElementById("staff-link");
+        // if (staffLink) {
+        //   staffLink.style.display = isOwner ? "block" : "none";
+        // }
+      });
+    </script>
+    
+
+    <!-- Header Section -->
+    <header>
+      <div class="container navbar">
+        <h1>IEMM</h1>
+        <nav>
+          <a href="shop-dashboard.html" id="dashboard-link"
+            ><i class="fas fa-chart-line"></i> لوحة التحكم</a
+          >
+          <a href="products-management.html" id="products-link"
+            ><i class="fas fa-shopping-bag"></i> إدارة المنتجات</a
+          >
+          <a href="inventory.html" id="inventory-link"
+            ><i class="fas fa-box"></i> المخزون</a
+          >
+          <a href="employees.html" id="staff-link"
+            ><i class="fas fa-users"></i> إدارة العاملين</a
+          >
+          <a href="bills-stores.html" id="bills-link" class="active"
+            ><i class="fas fa-file-invoice-dollar"></i> الفواتير</a
+          >
+        </nav>
+        <div style="display: flex; align-items: center; gap: 12px">
+          <button class="btn-dark convert"></button>
+          <!-- <button class="btn-dark " onclick="document.body.classList.toggle('dark')">الوضع الليلي</button> -->
+          <button
+            id="chat-toggle"
+            class="chat-toggle-btn"
+            title="الدردشة مع مدير المول"
+          >
+            <i class="fas fa-comments"></i>
+          </button>
+        </div>
       </div>
     </div>
   </header>

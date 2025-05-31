@@ -121,7 +121,7 @@ Route::get('/malls/{id}/shops', [MallController::class, 'shops']);
 Route::get('/malls/{id}/shops/owners', [MallController::class, 'shopsOwners']);
 Route::get('/malls/{id}/facilities', [MallController::class, 'facilities']);
 Route::get('/malls/{id}/floors', [MallController::class, 'floors']);
-Route::get('/malls/{id}/chats', [MallController::class, 'facilities']);
+Route::get('/malls/{id}/chats', [MallController::class, 'chats']);
 Route::get('/malls/{id}/products', [MallController::class, 'products']);
 Route::get('/malls/{id}/all_products', [MallController::class, 'products']);
 Route::put('/malls/{id}/owner', [MallController::class, 'changeTheOwner']);
@@ -141,6 +141,7 @@ Route::apiResource('facilities', FacilityController::class);
 // get : /shops/{id}/users
 // get : /shops/{id}/products
 // get : /shops/{id}/bills
+// get : /shops/{id}/dashboard
 // post : /shops
 // delete : /shops/{id}
 // put : /shops/{id}
@@ -148,13 +149,14 @@ Route::apiResource('shops', ShopController::class);
 Route::get('/shops/{id}/users', [ShopController::class, 'shopUsers']);
 Route::get('/shops/{id}/products', [ShopController::class, 'shopProducts']);
 Route::get('/shops/{id}/bills', [ShopController::class, 'shopBills']);
-
+Route::get('/shops/{id}/dashboard', [ShopController::class, 'dashboardData']);
 // Money Logs
 // get : /money-logs
 // post : /money-logs
 // delete : /money-logs/{id}
 // put : /money-logs/{id}
 Route::apiResource('money-logs', MoneyLogController::class);
+Route::get('/malls/{id}/money-logs', [MallController::class, 'money_logs']);
 
 // Floors
 // get : /floors
