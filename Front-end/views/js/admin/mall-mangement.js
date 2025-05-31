@@ -13,8 +13,12 @@ function fetchMalls() {
     $.ajax({
         url: 'http://localhost/IEMM/Back-end/public/api/malls',
         method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
         dataType: 'json',
         success: function(data) {
+            
             displayMalls(data);
             $('#loading').hide();
             $('table tbody').show();
@@ -27,14 +31,17 @@ function fetchMalls() {
     });
 }
 
+
+
 // Display mall data in the table
 async function displayMalls(malls) {
     const tbody = $('table tbody');
     tbody.empty(); // Clear existing data
-
+    
     try {
-        for (const m of malls.data) {
-            const row = document.createElement("tr");
+      for (const m of malls.data) {
+        const row = document.createElement("tr");
+        
 
             // Create data cells
             const nameCell = document.createElement("td");
@@ -91,8 +98,6 @@ async function displayMalls(malls) {
             actionsCell.appendChild(viewBtn);
             actionsCell.appendChild(deleteBtn);
             row.appendChild(actionsCell);
-
-            // Add row to table
             tbody.append(row);
         }
     } catch (error) {
@@ -113,6 +118,9 @@ function deleteMall(id) {
         $.ajax({
             url: `http://localhost/IEMM/Back-end/public/api/malls/${id}`,
             method: 'DELETE',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
             success: function() {
                 // Refresh the mall list
                 fetchMalls();
@@ -125,11 +133,18 @@ function deleteMall(id) {
     }
 }
 
-// Load cities function
+// Initialize the page
+$(document).ready(function() {
+    fetchMalls();
+    loadCities();
+});
 function loadCities() {
     $.ajax({
         url: 'http://localhost/IEMM/Back-end/public/api/cities',
         method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
         success: function(response) {
             const citySelect = $('select[name="city_id"]');
             citySelect.find('option:not(:first)').remove();
@@ -144,177 +159,6 @@ function loadCities() {
     });
 }
 
-// Add new mall function
-function addMall(event) {
-    if (event) {
-        event.preventDefault(); // منع إرسال النموذج
-    }
-
-    // جمع بيانات النموذج
-    const formData = {
-        mall_name: $('input[name="mall_name"]').val(),
-        owner_name: $('input[name="owner_name"]').val(),
-        location: $('input[name="location"]').val(),
-        location_link: $('input[name="location_link"]').val(),
-        floors_count: parseInt($('input[name="floors_count"]').val()),
-        username: $('input[name="username"]').val(),
-        email: $('input[name="email"]').val(),
-        sex: $('input[name="sex"]:checked').val(),
-        password: $('input[name="password"]').val(),
-        phone: $('input[name="phone"]').val(),
-        birth_date: $('input[name="birth_date"]').val(),
-        city_id: $('select[name="city_id"]').val()
-    };
-
-    // التحقق من الحقول المطلوبة
-    if (!formData.mall_name || !formData.owner_name || !formData.location || 
-        !formData.username || !formData.email || !formData.password || 
-        !formData.phone || !formData.birth_date || !formData.city_id) {
-        alert('الرجاء ملء جميع الحقول المطلوبة');
-        return;
-    }
-
-    // حفظ البيانات في ملف JSON للمعاينة (تنزيل الملف)
-    const jsonData = JSON.stringify(formData, null, 2);
-    const blob = new Blob([jsonData], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "mall_data.json";
-    a.click();
-    URL.revokeObjectURL(url);
-
-    // عرض حالة التحميل
-    $('#loading').show();
-
-    // إرسال الطلب إلى الـ API
-    $.ajax({
-        url: 'http://localhost/IEMM/Back-end/public/api/malls',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(formData),
-        
-        success: function(response) {
-            // إخفاء النموذج وتحديث القائمة
-            $('#mall-form').hide();
-            fetchMalls();
-            
-            // تفريغ الحقول
-            $('input').val('');
-            $('select').val('');
-            
-            // عرض رسالة نجاح
-            alert('تم إضافة المجمع بنجاح');
-        },
-        error: function(xhr, status, error) {
-            console.error('Error adding mall:', error);
-            if (xhr.responseJSON && xhr.responseJSON.errors) {
-                // عرض الأخطاء
-                const errors = xhr.responseJSON.errors;
-                let errorMessage = 'الرجاء تصحيح الأخطاء التالية:\n';
-                for (const field in errors) {
-                    errorMessage += `- ${errors[field][0]}\n`;
-                }
-                alert(errorMessage);
-            } else {
-                alert('حدث خطأ أثناء إضافة المجمع');
-            }
-        },
-        complete: function() {
-            $('#loading').hide();
-        }
-    });
-}
-
-// Submit owner change function
-function submitOwnerChange() {
-    const mallId = document
-        .getElementById("changeOwnerBtn")
-        .getAttribute("data-mall-id");
-    const formData = {
-        owner_name: $('input[name="newOwnerName"]').val(), 
-        username: $('input[name="newUsername"]').val(),
-        email: $('input[name="newOwnerEmail"]').val(),
-        sex: $('input[name="newSex"]:checked').val(),
-        password: $('input[name="newPassword"]').val(),
-        phone: $('input[name="newPhone"]').val(),
-        birth_date: $('input[name="newBirthDate"]').val(),
-        
-    };
-    // const formData = {
-        
-    //     username: document.getElementById("newUsername").value,
-    //     owner_name: document.getElementById("newOwnerName").value,
-    //     email: document.getElementById("newOwnerEmail").value,
-    //     password: document.getElementById("newPassword").value,
-    //     sex: $('input[name="newSex"]:checked').val(),
-    //     phone: document.getElementById("newPhone").value,
-    //     birth_date: document.getElementById("newBirthDate").value
-    // };
-
-    // Validate required fields
-    if (!formData.username || !formData.owner_name || !formData.email || 
-        !formData.password || !formData.phone || !formData.birth_date) {
-        alert("الرجاء إدخال جميع البيانات المطلوبة");
-        return;
-    }
-
-    // Show loading state
-    $('#loading').show();
-
-    // Send PUT request to API
-    $.ajax({
-        url: `http://localhost/IEMM/Back-end/public/api/malls/${mallId}/owner`,
-        method: 'PUT',
-        contentType: 'application/json',
-        data: JSON.stringify(formData),
-        success: function(response) {
-            // Hide form and refresh mall list
-            document.getElementById("changeOwnerForm").style.display = "none";
-            document.getElementById("changeOwnerBtn").style.display = "block";
-            document.getElementById("mallDetailsModal").style.display = "none";
-            
-            // Clear form fields
-            document.getElementById("newUsername").value = "";
-            document.getElementById("newOwnerName").value = "";
-            document.getElementById("newOwnerEmail").value = "";
-            document.getElementById("newPassword").value = "";
-            document.getElementById("newMale").checked = false;
-            document.getElementById("newFemale").checked = false;
-            document.getElementById("newPhone").value = "";
-            document.getElementById("newBirthDate").value = "";
-            
-            // Refresh the mall list
-            fetchMalls();
-            loadCities();
-            // Show success message
-            
-        },
-        error: function(xhr, status, error) {
-            console.error('Error changing mall owner:', error);
-            if (xhr.responseJSON && xhr.responseJSON.errors) {
-                // Show validation errors
-                const errors = xhr.responseJSON.errors;
-                let errorMessage = 'الرجاء تصحيح الأخطاء التالية:\n';
-                for (const field in errors) {
-                    errorMessage += `- ${errors[field][0]}\n`;
-                }
-                alert(errorMessage);
-            } else {
-                alert('حدث خطأ أثناء تغيير مالك المجمع');
-            }
-        },
-        complete: function() {
-            $('#loading').hide();
-        }
-    });
-}
-
-// Initialize the page
-$(document).ready(function() {
-    fetchMalls();
-    loadCities();
-});
 function showMallDetails(mallData) {
         const detailsContent = document.getElementById("mallDetailsContent");
 

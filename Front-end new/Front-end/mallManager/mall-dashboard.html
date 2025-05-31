@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IEMM - لوحة تحكم المول</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="../views/css/styles.css">
+    <link rel="stylesheet" href="../views/css/malls-dashbboard/mall.css">
+    <link rel="stylesheet" href="../views/css/chat.css">
+    <script src="../views/js/script.js" defer></script>
+    <script src="../views/js/chat.js" defer></script>
+    <link rel="stylesheet" href="../views/css/profile.css">
+    <script src="../views/js/profile.js" defer></script>
+    <!-- إضافة مكتبة Font Awesome للأيقونات -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  </head>
+<body>
+  <!-- Header Section -->
+  <header>
+    <div class="container navbar">
+      <h1>IEMM</h1>
+      <nav>
+        <a href="mall-dashboard.html" id="dashboard-link" class="active"><i class="fas fa-chart-line"></i> لوحة التحكم</a>
+        <a href="stores-management.html" id="stores-link"><i class="fas fa-store"></i> إدارة المحلات</a>
+        <a href="bills.html" id="bills-link"><i class="fas fa-file-invoice-dollar"></i> الفواتير</a>   
+      </nav>
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <button class="btn-dark" onclick="document.body.classList.toggle('dark')">الوضع الليلي</button>
+        <button id="chat-toggle" class="chat-toggle-btn" title="الدردشة مع أصحاب المحلات">
+          <i class="fas fa-comments"></i>
+        </button>
+        <button id="profile-toggle" class="profile-toggle-btn" title="الملف الشخصي">
+          <i class="fas fa-user"></i>
+          <span class="notification-dot" id="profile-notification"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- نافذة الدردشة الجانبية -->
+  <div id="chat-panel" class="chat-panel">
+    <!-- قائمة جهات الاتصال -->
+    <div id="contacts-view">
+      <div class="chat-header">
+        <h3>الدردشة مع أصحاب المحلات</h3>
+        <button id="chat-close" class="chat-close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div id="contact-list" class="contact-list">
+        <!-- سيتم إنشاء قائمة جهات الاتصال عبر JavaScript -->
+      </div>
+    </div>
+
+    <!-- نافذة المحادثة -->
+    <div id="chat-conversation" class="chat-conversation">
+      <div class="conversation-header">
+        <button id="back-to-contacts" class="back-to-contacts">
+          <i class="fas fa-arrow-right"></i>
+        </button>
+        <div class="conversation-contact">
+          <div id="conversation-avatar" class="conversation-avatar">أ</div>
+          <div class="conversation-info">
+            <h4 id="conversation-title">أحمد محمد</h4>
+            <p id="conversation-store">مطعم الأصالة</p>
+          </div>
+        </div>
+      </div>
+      <div id="messages-container" class="messages-container">
+        <!-- سيتم إنشاء الرسائل عبر JavaScript -->
+      </div>
+      <form id="message-form" class="message-form">
+        <textarea id="message-input" class="message-input" placeholder="اكتب رسالتك هنا..." rows="1"></textarea>
+        <button type="submit" class="send-message-btn">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main">
+    <!-- Dashboard Section -->
+    <!-- تحديث قسم لوحة التحكم -->
+    <div class="section active" id="dashboard-section">
+      <h2 class="section-title"><i class="fas fa-chart-line"></i> نظرة عامة على المول</h2>
+      
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h3 class="stat-title">إجمالي المحلات</h3>
+          <p class="stat-value">120</p>
+          <span class="stat-change">نسبة الإشغال 85%</span>
+        </div>
+    
+        <div class="stat-card">
+          <h3 class="stat-title">المحلات المؤجرة</h3>
+          <p class="stat-value">102</p>
+          <span class="stat-change">متبقي 18 محل</span>
+        </div>
+    
+        <div class="stat-card">
+          <h3 class="stat-title">إجمالي الإيجارات الشهرية</h3>
+          <p class="stat-value">420,000 ريال</p>
+          <span class="stat-change">معدل التحصيل 95%</span>
+        </div>
+    
+        <div class="stat-card">
+          <h3 class="stat-title">طلبات الصيانة</h3>
+          <p class="stat-value">5</p>
+          <span class="stat-change negative">تحتاج للمعالجة</span>
+        </div>
+      </div>
+    
+      <div class="charts-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 24px; margin-top: 24px;">
+        <div class="card">
+          <h3>توزيع المحلات حسب النشاط</h3>
+          <canvas id="storeTypesChart" height="200"></canvas>
+        </div>
+    
+        <div class="card">
+          <h3>معدل تحصيل الإيجارات</h3>
+          <canvas id="rentCollectionChart" height="200"></canvas>
+        </div>
+    
+        <div class="card">
+          <h3>مقارنة نسب الإشغال</h3>
+          <canvas id="occupancyChart" height="200"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="../views/js/mall-management/index.js"> </script>
+</body>
+</html>
+
+<!-- نافذة الملف الشخصي المنبثقة -->
+<div id="profile-modal" class="profile-modal">
+  <div class="profile-content">
+    <div class="profile-header">
+      <h3>الملف الشخصي</h3>
+      <button id="profile-close" class="profile-close-btn">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="profile-body">
+      <div class="profile-image-container">
+        <img id="profile-image" src="../assets/default-profile.png" alt="صورة الملف الشخصي">
+        <button class="edit-btn" data-field="image">
+          <i class="fas fa-edit"></i>
+        </button>
+      </div>
+      <div class="profile-info">
+        <div class="info-item">
+          <label>الاسم:</label>
+          <span id="profile-name">أحمد محمد</span>
+        </div>
+        <div class="info-item">
+          <label>البريد الإلكتروني:</label>
+          <span id="profile-email">ahmed@example.com</span>
+        </div>
+        <div class="info-item">
+          <label>رقم الهاتف:</label>
+          <span id="profile-phone">+966 50 123 4567</span>
+          <button class="edit-btn" data-field="phone">
+            <i class="fas fa-edit"></i>
+          </button>
+        </div>
+        <div class="info-item">
+          <label>كلمة السر:</label>
+          <input type="password" id="profile-password" value="********" readonly style="background:transparent; border:none; font-size:1rem; width:120px; direction:ltr; letter-spacing:3px;" tabindex="-1">
+          <button class="edit-btn" data-field="password">
+            <i class="fas fa-edit"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- نافذة تغيير كلمة السر -->
+<div id="password-modal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>تغيير كلمة السر</h3>
+      <button class="btn-close" onclick="closeModal('password-modal')">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <form id="password-form" class="form">
+      <div class="form-group">
+        <label>كلمة السر الحالية</label>
+        <div class="password-input-container">
+          <input type="password" id="current-password" required>
+          <button type="button" class="toggle-password" onclick="togglePasswordVisibility('current-password')">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>كلمة السر الجديدة</label>
+        <div class="password-input-container">
+          <input type="password" id="new-password" required 
+                 pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+                 title="يجب أن تحتوي كلمة السر على 8 أحرف على الأقل، وتتضمن حروف وأرقام">
+          <button type="button" class="toggle-password" onclick="togglePasswordVisibility('new-password')">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+        <small class="password-requirements">
+          يجب أن تحتوي كلمة السر على 8 أحرف على الأقل، وتتضمن حروف وأرقام
+        </small>
+      </div>
+      <div class="form-group">
+        <label>تأكيد كلمة السر الجديدة</label>
+        <div class="password-input-container">
+          <input type="password" id="confirm-password" required>
+          <button type="button" class="toggle-password" onclick="togglePasswordVisibility('confirm-password')">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn-green">تغيير كلمة السر</button>
+        <button type="button" class="btn-secondary" onclick="closeModal('password-modal')">إلغاء</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+  /* تنسيقات نافذة كلمة السر */
+  .password-input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .password-input-container input {
+    width: 100%;
+    padding-right: 40px;
+  }
+
+  .toggle-password {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    padding: 5px;
+  }
+
+  .toggle-password:hover {
+    color: #2563eb;
+  }
+
+  .password-requirements {
+    display: block;
+    color: #64748b;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+  }
+
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+  }
+
+  .modal-content {
+    position: relative;
+    background-color: white;
+    margin: 5% auto;
+    padding: 2rem;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+</style>
+
+<script>
+  // تعديل دالة التعديل في البروفايل
+  document.querySelectorAll('.edit-btn').forEach(button => {
+    button.addEventListener('click', function() {
+      const field = this.getAttribute('data-field');
+      if (field === 'password') {
+        openPasswordModal();
+        return false; // منع ظهور النافذة الافتراضية
+      }
+      // ... باقي الكود للتعامل مع الحقول الأخرى
+    });
+  });
+
+  // تعديل دالة فتح نافذة تغيير كلمة السر
+  function openPasswordModal() {
+    const modal = document.getElementById('password-modal');
+    modal.style.display = 'block';
+    document.getElementById('password-form').reset();
+    
+    // إضافة مستمع لإغلاق النافذة عند النقر خارجها
+    window.onclick = function(event) {
+      if (event.target === modal) {
+        closeModal('password-modal');
+      }
+    }
+  }
+
+  // دالة إغلاق النافذة المنبثقة
+  function closeModal(modalId) {
+    document.getElementById(modalId).style.display = 'none';
+  }
+
+  // دالة تبديل إظهار/إخفاء كلمة السر
+  function togglePasswordVisibility(inputId) {
+    const input = document.getElementById(inputId);
+    const icon = input.nextElementSibling.querySelector('i');
+    
+    if (input.type === 'password') {
+      input.type = 'text';
+      icon.classList.remove('fa-eye');
+      icon.classList.add('fa-eye-slash');
+    } else {
+      input.type = 'password';
+      icon.classList.remove('fa-eye-slash');
+      icon.classList.add('fa-eye');
+    }
+  }
+
+  // معالجة تغيير كلمة السر
+  document.getElementById('password-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const currentPassword = document.getElementById('current-password').value;
+    const newPassword = document.getElementById('new-password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
+
+    // التحقق من تطابق كلمة السر الجديدة
+    if (newPassword !== confirmPassword) {
+      alert('كلمة السر الجديدة غير متطابقة');
+      return;
+    }
+
+    // التحقق من قوة كلمة السر
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    if (!passwordRegex.test(newPassword)) {
+      alert('كلمة السر الجديدة لا تلبي المتطلبات');
+      return;
+    }
+
+    // هنا يمكنك إضافة كود للتحقق من كلمة السر الحالية وإرسال التغييرات إلى الخادم
+    console.log('تغيير كلمة السر:', {
+      currentPassword,
+      newPassword
+    });
+
+    // إغلاق النافذة المنبثقة
+    closeModal('password-modal');
+    
+    // إظهار رسالة نجاح
+    alert('تم تغيير كلمة السر بنجاح');
+  });
+</script>
+
+

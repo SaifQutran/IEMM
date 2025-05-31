@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
   <head>
     <script>
       function getCookie(name) {
@@ -138,6 +139,90 @@
     </style>
   </head>
   <body>
+    <script>
+      // Check authorization before loading the page
+      function checkAuthorization() {
+        const token = localStorage.getItem('token');
+        const userType = localStorage.getItem('user_type');
+        
+        // Check if token exists
+        if (!token) {
+          window.location.href = '../login.html';
+          return;
+        }
+
+        // Check user type (admin = 4)
+        if (userType !== '4') {
+          // Create and show unauthorized message
+          document.body.innerHTML = `
+            <div style="
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              height: 100vh;
+              background-color: #f8fafc;
+              font-family: Arial, sans-serif;
+              text-align: center;
+              padding: 20px;
+            ">
+              <i class="fas fa-exclamation-triangle" style="
+                font-size: 64px;
+                color: #ef4444;
+                margin-bottom: 20px;
+              "></i>
+              <h1 style="
+                color: #1e293b;
+                font-size: 24px;
+                margin-bottom: 16px;
+              ">غير مصرح لك بالوصول</h1>
+              <p style="
+                color: #64748b;
+                font-size: 16px;
+                margin-bottom: 24px;
+              ">عذراً، ليس لديك الصلاحية للوصول إلى هذه الصفحة</p>
+              <button onclick="window.location.href='../login.html'" style="
+                background-color: #2563eb;
+                color: white;
+                border: none;
+                padding: 12px 24px;
+                border-radius: 8px;
+                font-size: 16px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+              ">العودة إلى صفحة تسجيل الدخول</button>
+            </div>
+          `;
+          return;
+        }
+
+        // Verify token with backend
+        $.ajax({
+          url: 'http://localhost/IEMM/Back-end/public/api/verify-token',
+          method: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function(response) {
+            if (!response.success) {
+              localStorage.removeItem('token');
+              localStorage.removeItem('user_type');
+              window.location.href = '../login.html';
+            }
+          },
+          error: function() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user_type');
+            window.location.href = '../login.html';
+          }
+        });
+      }
+
+      // Run authorization check when page loads
+      $(document).ready(function() {
+        checkAuthorization();
+      });
+    </script>
     <header>
       <div class="container navbar">
         <h1>IEMM</h1>
@@ -162,6 +247,7 @@
         <form action="" id="mall-form" style="display: none" method="post">
           <div class="form card">
             <h3>إضافة مجمع جديد</h3>
+            
             <div class="form-grid">
               <input type="text" placeholder="اسم المجمع" name="mall_name" />
               <input type="text" placeholder="الموقع" name="location" />
@@ -364,47 +450,83 @@
       </div>
     </div>
 
-    <script>
-      // كود للتعامل مع النافذة المنبثقة
-      const modal = document.getElementById("mallDetailsModal");
-      const closeBtn = document.getElementsByClassName("close")[0];
+    
+</body>
 
-      // إغلاق النافذة عند النقر على زر الإغلاق
-      closeBtn.onclick = function () {
-        modal.style.display = "none";
-      };
+<script>
+// كود للتعامل مع النافذة المنبثقة
+const modal = document.getElementById("mallDetailsModal");
+const closeBtn = document.getElementsByClassName("close")[0];
 
-      // إغلاق النافذة عند النقر خارجها
-      window.onclick = function (event) {
-        if (event.target == modal) {
-          modal.style.display = "none";
-        }
-      };
+// إغلاق النافذة عند النقر على زر الإغلاق
+closeBtn.onclick = function() {
+  modal.style.display = "none";
+}
 
-      // دالة لعرض بيانات المجمع في النافذة المنبثقة
-    </script>
+// إغلاق النافذة عند النقر خارجها
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
 
-    <script>
-      function toggleNightMode() {
-        document.body.classList.toggle("dark");
-        document.documentElement.classList.toggle("dark");
-        var expires = "";
-        var days = 365;
-        var date = new Date();
-        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-        expires = "; expires=" + date.toUTCString();
-        document.cookie =
-          "nightMode=" +
-          (document.body.classList.contains("dark") ? "on" : "off") +
-          expires +
-          "; path=/";
-        console.log("Cookie after set:", document.cookie);
-      }
-    </script>
+// دالة لعرض بيانات المجمع في النافذة المنبثقة
+function showMallDetails(mallData) {
+  const detailsContent = document.getElementById("mallDetailsContent");
+  
+  // تفريغ المحتوى السابق
+  detailsContent.innerHTML = "";
+  
+  // إضافة بيانات المجمع
+  detailsContent.innerHTML += `<p><strong>اسم المجمع:</strong> ${mallData.name}</p>`;
+  detailsContent.innerHTML += `<p><strong>المالك:</strong> ${mallData.owner}</p>`;
+  detailsContent.innerHTML += `<p><strong>الموقع:</strong> ${mallData.location}</p>`;
+  detailsContent.innerHTML += `<p><strong>عدد الطوابق:</strong> ${mallData.floors}</p>`;
+  detailsContent.innerHTML += `<p><strong>المدينة:</strong> ${mallData.city}</p>`;
+  
+  // تخزين معرف المجمع للاستخدام في زر تغيير المالك
+  document.getElementById("changeOwnerBtn").setAttribute("data-mall-id", mallData.id);
+  
+  // عرض النافذة
+  modal.style.display = "block";
+}
 
-    <!-- All JS scripts at the end for best performance -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="../views/js/script.js"></script>
-    <script src="../views/js/admin/mall-mangement.js"></script>
-  </body>
+// دالة لتغيير مالك المجمع
+document.getElementById("changeOwnerBtn").addEventListener("click", function() {
+  const changeOwnerForm = document.getElementById("changeOwnerForm");
+  changeOwnerForm.style.display = changeOwnerForm.style.display === "none" ? "block" : "none";
+  this.style.display = "none";
+});
+
+// دالة لإلغاء تغيير المالك
+function cancelOwnerChange() {
+  document.getElementById("changeOwnerForm").style.display = "none";
+  document.getElementById("changeOwnerBtn").style.display = "block";
+  document.getElementById("newOwnerName").value = "";
+  document.getElementById("newOwnerEmail").value = "";
+}
+
+// دالة لحفظ تغييرات المالك الجديد
+function submitOwnerChange() {
+  const mallId = document.getElementById("changeOwnerBtn").getAttribute("data-mall-id");
+  const newOwnerName = document.getElementById("newOwnerName").value;
+  const newOwnerEmail = document.getElementById("newOwnerEmail").value;
+  
+  if (!newOwnerName || !newOwnerEmail) {
+    alert("الرجاء إدخال جميع البيانات المطلوبة");
+    return;
+  }
+  
+  // هنا يمكن إضافة كود للتحقق من صحة البريد الإلكتروني وإرسال البيانات إلى الخادم
+  alert(`تم تغيير مالك المجمع بنجاح\nالمالك الجديد: ${newOwnerName}\nالبريد الإلكتروني: ${newOwnerEmail}`);
+  
+  // إعادة تعيين النموذج
+  cancelOwnerChange();
+  
+  // إغلاق النافذة المنبثقة
+  document.getElementById("mallDetailsModal").style.display = "none";
+}
+</script>
+<script src="../views/js/script.js" defer></script>
+    <script src="../views/js/admin/mall-mangement.js" defer></script>
 </html>

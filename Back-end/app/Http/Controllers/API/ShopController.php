@@ -16,11 +16,21 @@ class ShopController extends Controller
 {
     public function index()
     {
+        $shops = Shop::all()->map(function ($shop) {
+            // Add image URL
+            $shop->image_url = null;
+            $imagePath = storage_path('app/public/shops/' . $shop->id . ' image.png');
+            if (file_exists($imagePath)) {
+                $shop->image_url = 'shops/' . $shop->id . ' image.png';
+            }
+            return $shop;
+        });
+
         return response()->json([
             'status' => 'success',
             'code' => 200,
             'message' => 'تم استرجاع المتاجر بنجاح',
-            'data' => Shop::all()
+            'data' => $shops
         ]);
     }
 
@@ -35,6 +45,13 @@ class ShopController extends Controller
                 'message' => 'المتجر غير موجود',
                 'data' => null
             ], 404);
+        }
+
+        // Add image URL
+        $shop->image_url = null;
+        $imagePath = storage_path('app/public/shops/' . $shop->id . ' image.png');
+        if (file_exists($imagePath)) {
+            $shop->image_url = 'shops/' . $shop->id . ' image.png';
         }
 
         return response()->json([
@@ -53,6 +70,7 @@ class ShopController extends Controller
                 'shop_name' => 'required|string|max:255',
                 'mall_id' => 'required|exists:malls,id',
                 'owner_name' => 'required|string|max:255',
+                'image' => 'required|image|mimes:jpeg,png,jpg',
                 'facility_id' => 'required|exists:facilities,id',
                 'work_times' => 'required|string|max:255',
                 'username' => 'required|string|unique:users',
@@ -65,23 +83,18 @@ class ShopController extends Controller
 
             // Create the user (owner)
             $user = \App\Models\User::create([
-                'f_name' => strtok($validatedData['owner_name'], ' '), // Extract first name
-                'l_name' => substr($validatedData['owner_name'], strpos($validatedData['owner_name'], ' ') + 1), // Extract last name
+                'f_name' => strtok($validatedData['owner_name'], ' '),
+                'l_name' => substr($validatedData['owner_name'], strpos($validatedData['owner_name'], ' ') + 1),
                 'username' => $validatedData['username'],
                 'email' => $validatedData['email'],
-                'sex' => $validatedData['sex'] === 'true', // Convert string to boolean
-                'user_type' => 1, // Convert string to boolean
+                'sex' => $validatedData['sex'] === 'true',
+                'user_type' => 1,
                 'password' => bcrypt($validatedData['password']),
                 'phone' => $validatedData['phone'],
                 'birth_date' => $validatedData['birth_date'],
-
             ]);
 
-            // TODO: Convert location_link to coordinates (latitude and longitude)
-            // For now, let's use placeholder values
-
-
-            // Create the mall
+            // Create the shop
             $shop = Shop::create([
                 'name' => $validatedData['shop_name'],
                 'work_times' => $validatedData['work_times'],
@@ -90,9 +103,21 @@ class ShopController extends Controller
                 'mall_id' => $validatedData['mall_id'],
                 'owner_id' => $user->id,
             ]);
+
+            // Handle image upload
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $path = storage_path('app/public/shops/');
+                if (!file_exists($path)) {
+                    mkdir($path, 0777, true);
+                }
+                $image->move($path, $shop->id . ' image.png');
+            }
+
             $user->shop_id = $shop->id;
             $user->save();
-            // Create the floor
+
+            // Create the warehouse
             $mall = Mall::find($validatedData['mall_id']);
             $warehouse = Warehouse::create([
                 'shop_id' => $shop->id,
@@ -100,7 +125,6 @@ class ShopController extends Controller
                 'city_id' => $mall->city_id,
                 'location' => "مخزن المحل",
                 'is_primary' => true,
-
             ]);
 
             return response()->json([
@@ -125,14 +149,15 @@ class ShopController extends Controller
             ], 500);
         }
     }
+
     public function shopUsers($id)
     {
         $shop = Shop::find($id);
         $users = User::where('shop_id', $shop->id)->get();
         foreach ($users as $user) {
             $user->name = $user->f_name . ' ' . $user->l_name;
-            if($user->id == $shop->owner_id){
-                $user->name = $user->name . ' -  '. 'مالك المتجر';
+            if ($user->id == $shop->owner_id) {
+                $user->name = $user->name . ' -  ' . 'مالك المتجر';
             }
         }
         if (!$users) {
@@ -140,7 +165,7 @@ class ShopController extends Controller
                 'status' => 'error',
                 'code' => 404,
                 'message' => 'لا يوجد مستخدمين لهذا المتجر',
-                    'data' => null
+                'data' => null
             ], 404);
         }
         return response()->json([
@@ -150,6 +175,7 @@ class ShopController extends Controller
             'data' => $users
         ]);
     }
+
     public function shopProducts($id)
     {
         $shop = Shop::find($id);
@@ -170,6 +196,7 @@ class ShopController extends Controller
             'data' => $products
         ]);
     }
+
     public function shopBills($id)
     {
         $shop = Shop::find($id);
@@ -202,6 +229,7 @@ class ShopController extends Controller
             'data' => $data
         ]);
     }
+
     public function update(Request $request, $id)
     {
         $shop = Shop::find($id);
@@ -215,7 +243,29 @@ class ShopController extends Controller
             ], 404);
         }
 
-        $shop->update($request->all());
+        // Handle image update if provided
+        if ($request->hasFile('image')) {
+            $request->validate([
+                'image' => 'image|mimes:jpeg,png,jpg'
+            ]);
+
+            $image = $request->file('image');
+            $path = storage_path('app/public/shops/');
+            if (!file_exists($path)) {
+                mkdir($path, 0777, true);
+            }
+
+            // Delete old image if exists
+            $oldImagePath = $path . $shop->id . ' image.png';
+            if (file_exists($oldImagePath)) {
+                unlink($oldImagePath);
+            }
+
+            // Store new image
+            $image->move($path, $shop->id . ' image.png');
+        }
+
+        $shop->update($request->except('image'));
 
         return response()->json([
             'status' => 'success',
@@ -236,6 +286,12 @@ class ShopController extends Controller
                 'message' => 'المتجر غير موجود',
                 'data' => null
             ], 404);
+        }
+
+        // Delete shop image if exists
+        $imagePath = storage_path('app/public/shops/' . $shop->id . ' image.png');
+        if (file_exists($imagePath)) {
+            unlink($imagePath);
         }
 
         $shop->delete();

@@ -20,7 +20,7 @@ function renderDashboardCards(data) {
 
   dashboardCards.forEach(card => {
     if (typeof data[card.key] === 'undefined') return; // Skip if not in API
-    console.log(data);
+    // console.log(data);
     // Card HTML
     let cardHtml = `<div class="stat-card">
       <h3>${card.title}</h3>
@@ -46,55 +46,70 @@ function renderDashboardCards(data) {
 }
 
 function setCookie(name, value, days) {
-        var expires = "";
-        if (days) {
-          var date = new Date();
-          date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-          expires = "; expires=" + date.toUTCString();
-        }
-        document.cookie = name + "=" + (value || "") + expires + "; path=/";
+  var expires = "";
+  if (days) {
+    var date = new Date();
+    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+    expires = "; expires=" + date.toUTCString();
+  }
+  document.cookie = name + "=" + (value || "") + expires + "; path=/";
+}
+
+function getCookie(name) {
+  var nameEQ = name + "=";
+  var ca = document.cookie.split(';');
+  for (var i = 0; i < ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+  }
+  return null;
+}
+
+function applyNightModeFromCookie() {
+  const nightMode = getCookie('nightMode');
+  if (nightMode === 'on') {
+    document.body.classList.add('dark');
+  } else {
+    document.body.classList.remove('dark');
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  // Check if jQuery is loaded
+  if (typeof jQuery === 'undefined') {
+    // console.error('jQuery is not loaded. Please include jQuery in your HTML file.');
+    return;
+  }
+
+  // Fetch dashboard data using jQuery AJAX
+  jQuery.ajax({
+    url: DASHBOARD_API,
+    type: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    },
+    success: function(response) {
+      if (response && response.data) {
+        renderDashboardCards(response.data);
       }
-
-      function getCookie(name) {
-        var nameEQ = name + "=";
-        var ca = document.cookie.split(';');
-        for (var i = 0; i < ca.length; i++) {
-          var c = ca[i];
-          while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-          if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-        }
-        return null;
+    },
+    error: function(xhr, status, error) {
+      console.error('Error fetching dashboard data:', error);
+      if (xhr.status === 401) {
+        // Handle unauthorized access
+        window.location.href = '../login.html';
       }
+    }
+  });
 
-      function applyNightModeFromCookie() {
-        const nightMode = getCookie('nightMode');
-        if (nightMode === 'on') {
-          document.body.classList.add('dark');
-        } else {
-          document.body.classList.remove('dark');
-        }
-      }
-
-      document.addEventListener('DOMContentLoaded', function () {
-        // Fetch dashboard data from API
-        fetch(DASHBOARD_API)
-          .then(res => res.json())
-          .then(json => {
-            if (json && json.data) {
-              renderDashboardCards(json.data);
-            }
-          })
-          .catch(err => {
-            console.error('Error fetching dashboard data:', err);
-          });
-
-        // Night mode logic (unchanged)
-        applyNightModeFromCookie();
-        const nightModeBtn = document.querySelector('.btn-dark');
-        if (nightModeBtn) {
-          nightModeBtn.onclick = function () {
-            document.body.classList.toggle('dark');
-            setCookie('nightMode', document.body.classList.contains('dark') ? 'on' : 'off', 365);
-          };
-        }
-      });
+  // Night mode logic (unchanged)
+  applyNightModeFromCookie();
+  const nightModeBtn = document.querySelector('.btn-dark');
+  if (nightModeBtn) {
+    nightModeBtn.onclick = function () {
+      document.body.classList.toggle('dark');
+      setCookie('nightMode', document.body.classList.contains('dark') ? 'on' : 'off', 365);
+    };
+  }
+});

@@ -202,3 +202,52 @@
     box-shadow: 0 0 0 0 rgba(255, 68, 68, 0);
   }
 }
+
+body.dark .profile-modal {
+  background-color: rgba(15, 23, 42, 0.92) !important;
+}
+
+body.dark .profile-content {
+  background-color: var(--dark-card) !important;
+  color: var(--dark-text) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.7) !important;
+}
+
+body.dark .profile-header h3,
+body.dark .profile-info label,
+body.dark .profile-info span {
+  color: var(--dark-text) !important;
+}
+
+body.dark .profile-close-btn,
+body.dark .edit-btn {
+  color: var(--dark-text) !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+body.dark .edit-btn:hover {
+  background: var(--dark-chart) !important;
+  color: var(--primary-green) !important;
+}
+
+body.dark .profile-info input[type="tel"],
+body.dark .profile-info input[type="text"],
+body.dark .profile-info input[type="password"] {
+  background: var(--dark-bg) !important;
+  color: var(--dark-text) !important;
+  border: 1px solid var(--dark-chart) !important;
+}
+
+body.dark .profile-image-container {
+  background: var(--dark-card) !important;
+  border-color: var(--dark-chart) !important;
+}
+
+body.dark .info-item {
+  background-color: var(--dark-card) !important;
+}
+
+body.dark .profile-info {
+  background-color: var(--dark-card) !important;
+}

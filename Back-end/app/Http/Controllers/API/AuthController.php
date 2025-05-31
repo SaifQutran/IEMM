@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Shop;
+use App\Models\Mall;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -13,6 +15,8 @@ use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
+    
+
     public function register(Request $request)
     {
         $request->validate([
@@ -75,22 +79,74 @@ class AuthController extends Controller
         $user->update(['signed_in' => true]);
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return response()->json([
-            'status' => 'success',
-            'code' => 200,
-            'message' => 'تم تسجيل الدخول بنجاح',
-            'data' => [
-                'user' => $user,
-                'token' => $token
-            ]
-        ]);
+        if ($user->user_type == 2) {
+            $shop = Shop::find($user->shop_id);
+            $shop->update(['state' => true]);
+            return response()->json([
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'تم تسجيل الدخول بنجاح',
+                'data' => [
+                    'user_name' => $user->f_name . ' ' . $user->l_name,
+                    'user_id' => $user->id,
+                    'token' => $token,
+                    'shop_id' => $shop->id,
+                    'user_type' => $user->user_type,
+                    'is_owner' => $shop->owner_id == $user->id ? true:false
+                ]
+            ]);
+        } else if ($user->user_type == 1) {
+            $mall = Mall::where('owner_id', $user->id)->first();
+
+            return response()->json([
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'تم تسجيل الدخول بنجاح',
+                'data' => [
+                    'user_name' => $user->f_name . ' ' . $user->l_name,
+                    'user_id' => $user->id,
+                    'token' => $token,
+                    'mall_id' => $mall->id,
+                    'user_type' => $user->user_type
+                ]
+            ]);
+        } else if ($user->user_type == 3 || $user->user_type == 4) {
+            return response()->json([
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'تم تسجيل الدخول بنجاح',
+                'data' => [
+                    'user_name' => $user->f_name . ' ' . $user->l_name,
+                    'user_id' => $user->id,
+                    'token' => $token,
+                    'user_type' => $user->user_type
+                ]
+            ]);
+        }
     }
 
     public function logout(Request $request)
     {
-        $user = User::find(Auth::id());
-        // $user->update(['signed_in' => false]);
-        $user->update(['remember_token' => null]);
+        // Verify token and get user
+        $user = $request->user();
+        if (!$user) {
+            return response()->json([
+                'status' => 'error',
+                'code' => 401,
+                'message' => 'غير مصرح',
+                'data' => null
+            ], 401);
+        }
+
+        // Revoke the token that was used to authenticate the current request
+        $request->user()->currentAccessToken()->delete();
+        $user->remebrer_token = null;
+        $user->save();
+        
+        if ($user->user_type == 2) {
+            $shop = Shop::find($user->shop_id);
+            $shop->update(['state' => false]);
+        }
 
         return response()->json([
             'status' => 'success',
@@ -158,5 +214,28 @@ class AuthController extends Controller
             'message' => 'فشل في تغيير كلمة المرور',
             'data' => null
         ], 400);
+    }
+
+    // Add a method to verify token
+    public function verifyToken(Request $request)
+    {
+        $user = $request->user();
+        if (!$user) {
+            return response()->json([
+                'status' => 'error',
+                'code' => 401,
+                'message' => 'Token غير صالح',
+                'data' => null
+            ], 401);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'code' => 200,
+            'message' => 'Token صالح',
+            'data' => [
+                'user' => $user
+            ]
+        ]);
     }
 }

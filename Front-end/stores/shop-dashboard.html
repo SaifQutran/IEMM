@@ -282,87 +282,89 @@
     });
   </script>
 
-  <!-- Main Content -->
-  <div class="main">
-    <!-- Dashboard Section -->
-    <div class="section active" id="dashboard-section">
-      <h2 class="section-title"><i class="fas fa-chart-line"></i> نظرة عامة على المحل</h2>
-      
-      <div class="stats-grid">
-        <div class="stat-card">
-          <h3 class="stat-title">مبيعات اليوم</h3>
-          <p class="stat-value">5,230 ريال</p>
-          <span class="stat-change positive">+12% عن أمس</span>
-        </div>
-    
-        <div class="stat-card">
-          <h3 class="stat-title">متوسط قيمة الطلب</h3>
-          <p class="stat-value">185 ريال</p>
-          <span class="stat-change positive">+5% عن المتوسط</span>
-        </div>
-    
-        <div class="stat-card">
-          <h3 class="stat-title">عدد المعاملات</h3>
-          <p class="stat-value">28</p>
-          <span class="stat-change">معاملة اليوم</span>
-        </div>
-    
-        <div class="stat-card">
-          <h3 class="stat-title">نسبة نمو المبيعات</h3>
-          <p class="stat-value">15%</p>
-          <span class="stat-change positive">هذا الشهر</span>
+    <!-- Main Content -->
+    <div class="main">
+      <!-- Dashboard Section -->
+      <div class="section active" id="dashboard-section">
+        <h2 class="section-title">
+          <i class="fas fa-chart-line"></i> نظرة عامة على المحل
+        </h2>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <h3 class="stat-title">مبيعات اليوم</h3>
+            <p class="stat-value">5,230 ريال</p>
+            <span class="stat-change positive">+12% عن أمس</span>
+          </div>
+
+          <div class="stat-card">
+            <h3 class="stat-title">متوسط قيمة الطلب</h3>
+            <p class="stat-value">185 ريال</p>
+            <span class="stat-change positive">+5% عن المتوسط</span>
+          </div>
+
+          <div class="stat-card">
+            <h3 class="stat-title">عدد المعاملات</h3>
+            <p class="stat-value">28</p>
+            <span class="stat-change">معاملة اليوم</span>
+          </div>
+
+          <div class="stat-card">
+            <h3 class="stat-title">نسبة نمو المبيعات</h3>
+            <p class="stat-value">15%</p>
+            <span class="stat-change positive">هذا الشهر</span>
+          </div>
+
+          <div class="stat-card">
+            <h3 class="stat-title">المنتجات الفعالة</h3>
+            <p class="stat-value">48</p>
+            <span class="stat-change">من أصل 52</span>
+          </div>
+
+          <div class="stat-card">
+            <h3 class="stat-title">منتجات قليلة المخزون</h3>
+            <p class="stat-value">3</p>
+            <span class="stat-change negative">تحتاج للتجديد</span>
+          </div>
+
+          <div class="stat-card">
+            <h3 class="stat-title">رضا العملاء</h3>
+            <p class="stat-value">4.8/5</p>
+            <span class="stat-change positive">95% راضون</span>
+          </div>
+
+          <div class="stat-card">
+            <h3 class="stat-title">عدد الزيارات</h3>
+            <p class="stat-value">156</p>
+            <span class="stat-change positive">+8% عن أمس</span>
+          </div>
         </div>
 
-        <div class="stat-card">
-          <h3 class="stat-title">المنتجات الفعالة</h3>
-          <p class="stat-value">48</p>
-          <span class="stat-change">من أصل 52</span>
-        </div>
-    
-        <div class="stat-card">
-          <h3 class="stat-title">منتجات قليلة المخزون</h3>
-          <p class="stat-value">3</p>
-          <span class="stat-change negative">تحتاج للتجديد</span>
-        </div>
+        <div class="charts-grid">
+          <div class="card">
+            <h3>المبيعات الأسبوعية</h3>
+            <canvas id="weeklySalesChart" height="200"></canvas>
+          </div>
 
-        <div class="stat-card">
-          <h3 class="stat-title">رضا العملاء</h3>
-          <p class="stat-value">4.8/5</p>
-          <span class="stat-change positive">95% راضون</span>
-        </div>
+          <div class="card">
+            <h3>أفضل المنتجات مبيعاً</h3>
+            <canvas id="topProductsChart" height="200"></canvas>
+          </div>
 
-        <div class="stat-card">
-          <h3 class="stat-title">عدد الزيارات</h3>
-          <p class="stat-value">156</p>
-          <span class="stat-change positive">+8% عن أمس</span>
-        </div>
-      </div>
+          <div class="card">
+            <h3>توزيع المبيعات حسب الفئات</h3>
+            <canvas id="categorySalesChart" height="200"></canvas>
+          </div>
 
-      <div class="charts-grid">
-        <div class="card">
-          <h3>المبيعات الأسبوعية</h3>
-          <canvas id="weeklySalesChart" height="200"></canvas>
-        </div>
-    
-        <div class="card">
-          <h3>أفضل المنتجات مبيعاً</h3>
-          <canvas id="topProductsChart" height="200"></canvas>
-        </div>
+          <div class="card">
+            <h3>مقارنة المبيعات مع الأسبوع السابق</h3>
+            <canvas id="salesComparisonChart" height="200"></canvas>
+          </div>
 
-        <div class="card">
-          <h3>توزيع المبيعات حسب الفئات</h3>
-          <canvas id="categorySalesChart" height="200"></canvas>
-        </div>
-
-        <div class="card">
-          <h3>مقارنة المبيعات مع الأسبوع السابق</h3>
-          <canvas id="salesComparisonChart" height="200"></canvas>
-        </div>
-
-        <div class="card">
-          <h3>أداء الموظفين في المبيعات</h3>
-          <canvas id="staffPerformanceChart" height="200"></canvas>
-        </div>
+          <div class="card">
+            <h3>أداء الموظفين في المبيعات</h3>
+            <canvas id="staffPerformanceChart" height="200"></canvas>
+          </div>
 
         <div class="card">
           <h3>توزيع المبيعات حسب ساعات اليوم</h3>
@@ -376,5 +378,3 @@
   <link rel="stylesheet" href="../views/css/profile.css">
 </body>
 </html>
-
-
