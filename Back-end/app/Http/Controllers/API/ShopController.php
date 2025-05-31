@@ -297,10 +297,11 @@ class ShopController extends Controller
         if (file_exists($imagePath)) {
             unlink($imagePath);
         }
-
+        $user = User::Find($shop->owner_id);
+        $user->delete();
         $shop->delete();
 
-        return response()->json([
+            return response()->json([
             'status' => 'success',
             'code' => 200,
             'message' => 'تم حذف المتجر بنجاح',

@@ -233,7 +233,7 @@ class MallController extends Controller
 
     public function show($id)
     {
-        $mall = Mall::find($id);
+     -   $mall = Mall::find($id);
         $mall->floors_count = Floor::where(['mall_id' => $id])->count();
         if (!$mall) {
             return response()->json([
