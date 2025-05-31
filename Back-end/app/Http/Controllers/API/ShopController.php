@@ -169,7 +169,7 @@ class ShopController extends Controller
         // var_dump(now()->subDays(10));
         foreach ($products as $product) {
             $stocks = $product->stocks; // get all stocks for all warehouses
-            
+
             foreach ($stocks as $stock) {
 
                 if ($stock->expiration_date < now()->addDays(10) && $stock->expiration_date != null) {
