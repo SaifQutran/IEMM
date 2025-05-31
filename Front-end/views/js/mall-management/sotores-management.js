@@ -1,9 +1,15 @@
 // Store Management CRUD Operations
 // const API_URL = 'http://localhost/IEMM/Back-end/public/api/shop';
 
-const API_URL = 'http://localhost/IEMM/Back-end/public/api/malls/'+localStorage.getItem("mall_id")+'/shops';
-const facility_API_URL='http://localhost/IEMM/Back-end/public/api/malls/'+localStorage.getItem("mall_id")+'/facilities';
-const OWNER_API_URL = 'http://localhost/IEMM/Back-end/public/api/malls/'+localStorage.getItem("mall_id")+'/shops/owners';
+// const API_URL = 'http://localhost/IEMM/Back-end/public/api/malls/'+localStorage.getItem("mall_id")+'/shops';
+// const facility_API_URL='http://localhost/IEMM/Back-end/public/api/malls/'+localStorage.getItem("mall_id")+'/facilities';
+// const OWNER_API_URL = 'http://localhost/IEMM/Back-end/public/api/malls/'+localStorage.getItem("mall_id")+'/shops/owners';
+const API_URL = 'http://localhost/IEMM/Back-end/public/api/malls/2/shops';
+const facility_API_URL='http://localhost/IEMM/Back-end/public/api/malls/2/facilities';
+const OWNER_API_URL = 'http://localhost/IEMM/Back-end/public/api/malls/2/shops/owners';
+// +localStorage.getItem("mall_id")+
+// +localStorage.getItem("mall_id")+
+// +localStorage.getItem("mall_id")+
 
 class StoreManagement {
     constructor() {
@@ -27,7 +33,7 @@ class StoreManagement {
 
     // Load all stores
     loadStores() {
-        $.ajax({
+        $.ajax({    
             url: API_URL,
             method: 'GET',
             headers: {
@@ -47,7 +53,7 @@ class StoreManagement {
                             <td>${store.rent_began_At.substring(0, 10)}</td>
                             <td>${store.work_times}</td>
                             <td>
-                            <button class="btn-icon view-btn" title="عرض" onclick="StoreManagement.openViewModal(${JSON.stringify(store).replace(/"/g, '&quot;')})"><i class="fas fa-eye"></i></button>
+                            <button class="btn-icon view-btn" title="عرض" onclick='showStoreModal(${JSON.stringify(store)})'><i class="fas fa-eye"></i></button>
                             <button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button>
                             </td>
                         </tr>
@@ -82,139 +88,6 @@ class StoreManagement {
             }
         });
     }
-
-    // Change the openViewModal to be a static method
-    static openViewModal(data) {
-        const modal = document.getElementById('viewEditModal');
-        if (!modal) {
-            console.error('Modal element not found! Make sure you have an element with id="viewEditModal"');
-            return;
-        }
-
-        const title = document.getElementById('viewEditModalTitle');
-        if (!title) {
-            console.error('Modal title element not found! Make sure you have an element with id="viewEditModalTitle"');
-            return;
-        }
-
-        const fieldsContainer = document.getElementById('viewEditFields');
-        if (!fieldsContainer) {
-            console.error('Fields container not found! Make sure you have an element with id="viewEditFields"');
-            return;
-        }
-
-        fieldsContainer.innerHTML = '';
-
-        // تعريف الحقول حسب النوع
-        let fields = [];
-        title.textContent = 'بيانات المحل';
-        fields = [
-            {label: 'اسم المالك', key: 'owner_name', type: 'text'},
-            {label: 'اسم المحل', key: 'name', type: 'text'},
-            {label: 'الدور', key: 'floor', type: 'number'},
-            {label: 'النشاط', key: 'shop_state', type: 'text'},
-            {label: 'تاريخ بدء العقد', key: 'rent_began_At', type: 'date'},
-            {label: 'أوقات الدوام', key: 'work_times', type: 'text'}
-        ];
-
-        // توليد الحقول
-        fields.forEach(field => {
-            const value = data[field.key] || '';
-            const fieldId = `view-field-${field.key}`;
-            const fieldDiv = document.createElement('div');
-            fieldDiv.className = 'form-group';
-            fieldDiv.style.position = 'relative';
-            fieldDiv.innerHTML = `
-                <label>${field.label}</label>
-                <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
-                <button type="button" class="btn-icon edit-field-btn" title="تعديل" onclick="StoreManagement.enableFieldEdit('${fieldId}', '${field.key}', '${field.type}')" style="position:absolute; left:0; top:50%; transform:translateY(-50%);")'><i class='fas fa-edit'></i></button>
-            `;
-            fieldsContainer.appendChild(fieldDiv);
-        });
-
-        // Show the modal
-        modal.style.display = 'block';
-        
-        // Add close button functionality if not already present
-        const closeBtn = modal.querySelector('.close-modal');
-        if (closeBtn) {
-            closeBtn.onclick = function() {
-                modal.style.display = 'none';
-            };
-        }
-
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            if (event.target === modal) {
-                modal.style.display = 'none';
-            }
-        };
-    }
-
-    static enableFieldEdit(fieldId, fieldKey, fieldType) {
-        // Add your field editing logic here
-        console.log('Editing field:', fieldId, fieldKey, fieldType);
-    }
-
-    // Edit store
-    // editStore(storeId) {
-    //     $.ajax({
-    //         url: `${API_URL}/${storeId}`,
-    //         method: 'GET',
-    //         success: (store) => {
-    //             // Fill the edit form with store data
-    //             $('#edit-store-number').val(store.store_number);
-    //             $('#edit-store-area').val(store.area);
-    //             $('#edit-store-activity').val(store.activity);
-    //             $('#edit-store-floor').val(store.floor);
-    //             $('#edit-store-x').val(store.location_x);
-    //             $('#edit-store-y').val(store.location_y);
-    //             $('#edit-store-width').val(store.width);
-    //             $('#edit-store-height').val(store.height);
-                
-    //             // If store has tenant, fill tenant data
-    //             if (store.tenant) {
-    //                 $('#edit-tenant-name').val(store.tenant.name);
-    //                 $('#edit-tenant-phone').val(store.tenant.phone);
-    //                 $('#edit-tenant-email').val(store.tenant.email);
-    //                 $('#edit-tenant-id').val(store.tenant.id_number);
-    //                 $('#edit-tenant-contract-start').val(store.tenant.contract_start);
-    //                 $('#edit-tenant-contract-end').val(store.tenant.contract_end);
-    //             }
-                
-    //             // Show the edit modal
-    //             $('#editStoreModal').show();
-                
-    //             // Handle form submission
-    //             $('#editStoreModal form').off('submit').on('submit', (e) => {
-    //                 e.preventDefault();
-    //                 this.updateStore(storeId, $(e.target).serialize());
-    //             });
-    //         },
-    //         error: (xhr, status, error) => {
-    //             alert('حدث خطأ أثناء تحميل بيانات المحل');
-    //             console.error(error);
-    //         }
-    //     });
-    // }
-
-    // // Update store
-    // updateStore(storeId, storeData) {
-    //     $.ajax({
-    //         url: `${API_URL}/${storeId}`,
-    //         method: 'PUT',
-    //         data: storeData,
-    //         success: (response) => {
-    //             alert('تم تحديث بيانات المحل بنجاح');
-    //             this.loadStores();
-    //             this.closeModal('editStoreModal');
-    //         },
-    //         error: (xhr, status, error) => {
-    //             alert('حدث خطأ أثناء تحديث بيانات المحل');
-    //             console.error(error);
-    //         }
-    //     });
-    // }
 
     // Delete store
     deleteStore(storeId) {
@@ -301,7 +174,7 @@ class StoreOwnerManagement {
                             <td>${owner.owner_email}</td>
                             <td>${owner.facilities}</td>
                             <td>
-                            <button class="btn-icon view-btn" title="عرض" onclick="StoreOwnerManagement.openOwnerViewModal(${JSON.stringify(owner).replace(/"/g, '&quot;')})"><i class="fas fa-eye"></i></button>
+                            <button class="btn-icon view-btn" title="عرض" onclick='showStoreOwnerModal(${JSON.stringify(owner)})'><i class="fas fa-eye"></i></button>
                             <button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button>
                             </td>
                         </tr>
@@ -336,122 +209,6 @@ class StoreOwnerManagement {
             }
         });
     }
-    static openOwnerViewModal(data) {
-        const modal = document.getElementById('viewEditModal');
-        if (!modal) {
-            console.error('Modal element not found! Make sure you have an element with id="viewEditModal"');
-            return;
-        }
-
-        const title = document.getElementById('viewEditModalTitle');
-        if (!title) {
-            console.error('Modal title element not found! Make sure you have an element with id="viewEditModalTitle"');
-            return;
-        }
-
-        const fieldsContainer = document.getElementById('viewEditFields');
-        if (!fieldsContainer) {
-            console.error('Fields container not found! Make sure you have an element with id="viewEditFields"');
-            return;
-        }
-
-        fieldsContainer.innerHTML = '';
-
-        // تعريف الحقول حسب النوع
-        let fields = [];
-        title.textContent = 'بيانات صاحب المحل';
-        fields = [
-            {label: 'الاسم', key: 'owner_name', type: 'text'},
-            {label: 'رقم الجوال', key: 'phone', type: 'tel'},
-            {label: 'البريد الإلكتروني', key: 'owner_email', type: 'email'},
-            {label: 'المحلات المستأجرة', key: 'facilities', type: 'text'},
-            {label: 'النوع', key: 'gender', type: 'select', options: [{value:'male',label:'ذكر'},{value:'female',label:'أنثى'}]},
-            {label: 'تاريخ الميلاد', key: 'birthdate', type: 'date'}
-          ];
-        // توليد الحقول
-        fields.forEach(field => {
-            const value = data[field.key] || '';
-            const fieldId = `view-field-${field.key}`;
-            const fieldDiv = document.createElement('div');
-            fieldDiv.className = 'form-group';
-            fieldDiv.style.position = 'relative';
-            fieldDiv.innerHTML = `
-                <label>${field.label}</label>
-                <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
-                <button type="button" class="btn-icon edit-field-btn" title="تعديل" onclick="StoreOwnerManagement.enableFieldEdit('${fieldId}', '${field.key}', '${field.type}')" style="position:absolute; left:0; top:50%; transform:translateY(-50%);")'><i class='fas fa-edit'></i></button>
-            `;
-            fieldsContainer.appendChild(fieldDiv);
-        });
-
-        // Show the modal
-        modal.style.display = 'block';
-        
-        // Add close button functionality if not already present
-        const closeBtn = modal.querySelector('.close-modal');
-        if (closeBtn) {
-            closeBtn.onclick = function() {
-                modal.style.display = 'none';
-            };
-        }
-
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            if (event.target === modal) {
-                modal.style.display = 'none';
-            }
-        };
-    }
-    static enableFieldEdit(fieldId, fieldKey, fieldType) {
-        // Add your field editing logic here
-        console.log('Editing field:', fieldId, fieldKey, fieldType);
-    }
-    // Edit store owner
-    // editStoreOwner(ownerId) {
-    //     $.ajax({
-    //         url: `${OWNER_API_URL}/${ownerId}`,
-    //         method: 'GET',
-    //         success: (owner) => {
-    //             // Fill the edit form with owner data
-    //             $('#edit-owner-name').val(owner.name);
-    //             $('#edit-owner-phone').val(owner.phone);
-    //             $('#edit-owner-email').val(owner.email);
-    //             $('#edit-owner-id').val(owner.id_number);
-    //             $('#edit-owner-contract-start').val(owner.contract_start);
-    //             $('#edit-owner-contract-end').val(owner.contract_end);
-                
-    //             // Show the edit modal
-    //             $('#editOwnerModal').show();
-                
-    //             // Handle form submission
-    //             $('#editOwnerModal form').off('submit').on('submit', (e) => {
-    //                 e.preventDefault();
-    //                 this.updateStoreOwner(ownerId, $(e.target).serialize());
-    //             });
-    //         },
-    //         error: (xhr, status, error) => {
-    //             alert('حدث خطأ أثناء تحميل بيانات صاحب المحل');
-    //             console.error(error);
-    //         }
-    //     });
-    // }
-
-    // // Update store owner
-    // updateStoreOwner(ownerId, ownerData) {
-    //     $.ajax({
-    //         url: `${OWNER_API_URL}/${ownerId}`,
-    //         method: 'PUT',
-    //         data: ownerData,
-    //         success: (response) => {
-    //             alert('تم تحديث بيانات صاحب المحل بنجاح');
-    //             this.loadStoreOwners();
-    //             this.closeModal('editOwnerModal');
-    //         },
-    //         error: (xhr, status, error) => {
-    //             alert('حدث خطأ أثناء تحديث بيانات صاحب المحل');
-    //             console.error(error);
-    //         }
-    //     });
-    // }
 
     // Delete store owner
     deleteStoreOwner(ownerId) {
@@ -707,3 +464,83 @@ $(document).ready(() => {
     window.storeOwnerManagement = new StoreOwnerManagement();
     window.facilitiesManagement = new FacilitiesManagement();
 });
+
+// Modal for store and owner view (single modal for both)
+if (!document.getElementById('customViewModal')) {
+    const modalHtml = `
+    <div id="customViewModal" class="modal" style="display:none;z-index:9999;">
+      <div class="modal-content" style="max-width:600px;direction:rtl;">
+        <span class="close-modal" style="float:left;font-size:28px;cursor:pointer;">&times;</span>
+        <h2 id="customViewModalTitle" style="color:#2176ff;text-align:center;margin-bottom:16px;"></h2>
+        <div id="customViewModalGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:18px 18px;margin-bottom:24px;"></div>
+        <button class="btn btn-secondary" id="customViewModalCloseBtn" style="margin-top:8px;">إغلاق</button>
+      </div>
+    </div>`;
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    document.getElementById('customViewModalCloseBtn').onclick = document.querySelector('#customViewModal .close-modal').onclick = function() {
+        document.getElementById('customViewModal').style.display = 'none';
+    };
+    window.onclick = function(event) {
+        if (event.target === document.getElementById('customViewModal')) {
+            document.getElementById('customViewModal').style.display = 'none';
+        }
+    };
+}
+
+window.showStoreOwnerModal = function(data) {
+    const modal = document.getElementById('customViewModal');
+    const title = document.getElementById('customViewModalTitle');
+    const grid = document.getElementById('customViewModalGrid');
+    title.textContent = 'بيانات صاحب المحل';
+    grid.innerHTML = '';
+    const fields = [
+        {label: 'الاسم', key: 'owner_name'},
+        {label: 'رقم الجوال', key: 'phone'},
+        {label: 'المحلات المستأجرة', key: 'facilities'},
+        {label: 'البريد الإلكتروني', key: 'owner_email'},
+        {label: 'تاريخ الميلاد', key: 'birthdate'},
+        {label: 'النوع', key: 'gender'}
+    ];
+    fields.forEach(field => {
+        const value = data[field.key] || '';
+        const card = document.createElement('div');
+        card.style.background = '#f7fafd';
+        card.style.borderRadius = '12px';
+        card.style.padding = '18px 12px';
+        card.style.display = 'flex';
+        card.style.flexDirection = 'column';
+        card.style.alignItems = 'flex-start';
+        card.innerHTML = `<div style='color:#2176ff;font-weight:500;margin-bottom:6px;'>${field.label}</div><div>${value}</div>`;
+        grid.appendChild(card);
+    });
+    modal.style.display = 'block';
+};
+
+window.showStoreModal = function(data) {
+    const modal = document.getElementById('customViewModal');
+    const title = document.getElementById('customViewModalTitle');
+    const grid = document.getElementById('customViewModalGrid');
+    title.textContent = 'بيانات المحل';
+    grid.innerHTML = '';
+    const fields = [
+        {label: 'اسم المالك', key: 'owner_name'},
+        {label: 'اسم المحل', key: 'name'},
+        {label: 'الدور', key: 'floor'},
+        {label: 'النشاط', key: 'shop_state'},
+        {label: 'تاريخ بدء العقد', key: 'rent_began_At'},
+        {label: 'أوقات الدوام', key: 'work_times'}
+    ];
+    fields.forEach(field => {
+        const value = data[field.key] || '';
+        const card = document.createElement('div');
+        card.style.background = '#f7fafd';
+        card.style.borderRadius = '12px';
+        card.style.padding = '18px 12px';
+        card.style.display = 'flex';
+        card.style.flexDirection = 'column';
+        card.style.alignItems = 'flex-start';
+        card.innerHTML = `<div style='color:#2176ff;font-weight:500;margin-bottom:6px;'>${field.label}</div><div>${value}</div>`;
+        grid.appendChild(card);
+    });
+    modal.style.display = 'block';
+};

@@ -223,27 +223,6 @@
                     oninput="applyFilters()"
                   />
                 </div>
-                <select
-                  id="invoice-type-filter"
-                  class="filter-select"
-                  onchange="applyFilters()"
-                >
-                  <option value="all">كل أنواع الفواتير</option>
-                  <option value="rent">إيجار</option>
-                  <option value="electricity">كهرباء</option>
-                  <option value="water">ماء</option>
-                </select>
-
-                <select
-                  id="status-filter"
-                  class="filter-select"
-                  onchange="applyFilters()"
-                >
-                  <option value="all">كل الحالات</option>
-                  <option value="paid">مدفوعة</option>
-                  <option value="unpaid">غير مدفوعة</option>
-                  <option value="overdue">متأخرة</option>
-                </select>
               </div>
 
               <button class="btn-dark" onclick="openBulkMessageModal()">
@@ -264,6 +243,33 @@
                   <th>المتأخرات</th>
                   <th>الإجمالي</th>
                   <th>الإجراءات</th>
+                </tr>
+                <tr class="filter-row">
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <select id="filter-month" class="table-filter-input">
+                      <option value="all">الكل</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="filter-overdue" class="table-filter-input">
+                      <option value="all">الكل</option>
+                      <option value="yes">عليه متأخرات</option>
+                      <option value="no">ليس عليه متأخرات</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="filter-total" class="table-filter-input">
+                      <option value="all">الكل</option>
+                      <option value="paid">مدفوع</option>
+                      <option value="unpaid">غير مدفوع</option>
+                    </select>
+                  </td>
+                  <td></td>
                 </tr>
               </thead>
               <tbody>
@@ -1591,9 +1597,54 @@
     </script>
 
     <style>
+      /* تنسيقات قسم الفلترة */
+      .filter-controls {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background: #f8fafc;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+      }
+
+      .filter-group {
+        flex: 1;
+        display: flex;
+        gap: 1rem;
+      }
+
+      .search-box {
+        flex: 1;
+      }
+
+      .search-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.3s;
+      }
+
+      .search-input:focus {
+        outline: none;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      }
+
+      .btn-dark {
+        white-space: nowrap;
+        padding: 0.75rem 1.5rem;
+      }
+
       /* تنسيقات الجدول */
       .table-wrapper {
-        max-height: 400px; /* ارتفاع يكفي لعرض 5 صفوف */
+        max-height: 400px;
         overflow-y: auto;
         border-radius: 8px;
         border: 1px solid #e2e8f0;
@@ -1653,6 +1704,107 @@
       .table-wrapper::-webkit-scrollbar-thumb:hover {
         background: #94a3b8;
       }
+
+      /* تحسين تصميم صف الفلاتر في الجدول */
+      .table-wrapper table .filter-row {
+        background: #f1f5f9;
+      }
+      .table-wrapper table .filter-row td {
+        padding: 0.5rem 0.7rem;
+        border-bottom: 1px solid #e2e8f0;
+      }
+      .table-wrapper table .filter-row select.table-filter-input {
+        width: 100%;
+        min-width: 90px;
+        max-width: 140px;
+        height: 38px;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        background: #fff;
+        color: #1e293b;
+        font-size: 1rem;
+        text-align: center;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        margin: 0 auto;
+        display: block;
+        box-shadow: none;
+      }
+      .table-wrapper table .filter-row select.table-filter-input:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 2px rgba(37,99,235,0.08);
+        outline: none;
+      }
+      .table-wrapper table .filter-row select.table-filter-input:hover {
+        border-color: #94a3b8;
+        background: #f8fafc;
+      }
+      .table-wrapper table .filter-row select.table-filter-input option {
+        text-align: right;
+      }
     </style>
+
+    <script>
+      // دالة تطبيق الفلاتر على الجدول
+      function applyFilters() {
+        const searchInput = document.getElementById('search-input').value.toLowerCase();
+        const rows = document.querySelectorAll('tbody tr');
+        
+        rows.forEach(row => {
+          const storeName = row.cells[0].textContent.toLowerCase();
+          const ownerName = row.cells[1].textContent.toLowerCase();
+          
+          // فلترة حسب البحث النصي
+          const matchesSearch = storeName.includes(searchInput) || ownerName.includes(searchInput);
+          
+          // إظهار أو إخفاء الصف بناءً على البحث
+          row.style.display = matchesSearch ? '' : 'none';
+        });
+      }
+
+      function fillMonthFilter() {
+        const monthSet = new Set();
+        document.querySelectorAll('tbody tr').forEach(row => {
+          if (row.classList.contains('filter-row')) return;
+          const month = row.cells[5]?.textContent.trim();
+          if (month) monthSet.add(month);
+        });
+        const select = document.getElementById('filter-month');
+        if (!select) return;
+        select.innerHTML = '<option value="all">الكل</option>';
+        Array.from(monthSet).forEach(month => {
+          const option = document.createElement('option');
+          option.value = month;
+          option.textContent = month;
+          select.appendChild(option);
+        });
+      }
+
+      function applyTableFilters() {
+        const monthValue = document.getElementById('filter-month').value;
+        const overdueValue = document.getElementById('filter-overdue').value;
+        const totalValue = document.getElementById('filter-total').value;
+
+        document.querySelectorAll('tbody tr').forEach(row => {
+          if (row.classList.contains('filter-row')) return;
+          const month = row.cells[5]?.textContent.trim();
+          const overdue = parseInt(row.cells[6]?.textContent.replace(/[^\d]/g, '')) || 0;
+          const total = parseInt(row.cells[7]?.textContent.replace(/[^\d]/g, '')) || 0;
+          let show = true;
+          if (monthValue !== 'all' && month !== monthValue) show = false;
+          if (overdueValue === 'yes' && overdue === 0) show = false;
+          if (overdueValue === 'no' && overdue > 0) show = false;
+          if (totalValue === 'paid' && total > 0) show = false;
+          if (totalValue === 'unpaid' && total === 0) show = false;
+          row.style.display = show ? '' : 'none';
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', function() {
+        fillMonthFilter();
+        document.getElementById('filter-month').addEventListener('change', applyTableFilters);
+        document.getElementById('filter-overdue').addEventListener('change', applyTableFilters);
+        document.getElementById('filter-total').addEventListener('change', applyTableFilters);
+      });
+    </script>
   </body>
 </html>
