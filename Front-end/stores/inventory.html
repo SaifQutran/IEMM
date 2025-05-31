@@ -17,6 +17,7 @@
     <script src="../views/js/stores/chat.js" defer></script>
   </head>
 
+
   <body>
     <script>
       // Check authorization before loading the page
@@ -131,24 +132,32 @@
           <h3>الدردشة مع مدير المول</h3>
         </div>
         <button id="chat-close" class="chat-close-btn">
-          <i class="fas fa-times"></i>
         </button>
       </div>
-      <div id="messages-container" class="messages-container">
-        <!-- سيتم إنشاء الرسائل عبر JavaScript -->
-      </div>
-      <form id="message-form" class="message-form">
-        <textarea
-          id="message-input"
-          class="message-input"
-          placeholder="اكتب رسالتك هنا..."
-          rows="1"
-        ></textarea>
-        <button type="submit" class="send-message-btn">
-          <i class="fas fa-paper-plane"></i>
-        </button>
-      </form>
     </div>
+  </header>
+
+  <!-- نافذة الدردشة الجانبية -->
+  <div id="chat-panel" class="chat-panel">
+    <div class="chat-header">
+      <div class="mall-logo-container">
+        <img id="mall-logo" alt="شعار المول" class="mall-logo">
+        <h3>الدردشة مع مدير المول</h3>
+      </div>
+      <button id="chat-close" class="chat-close-btn">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div id="messages-container" class="messages-container">
+      <!-- سيتم إنشاء الرسائل عبر JavaScript -->
+    </div>
+    <form id="message-form" class="message-form">
+      <textarea id="message-input" class="message-input" placeholder="اكتب رسالتك هنا..." rows="1"></textarea>
+      <button type="submit" class="send-message-btn">
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </form>
+  </div>
 
     <!-- Main Content -->
     <div class="main">
