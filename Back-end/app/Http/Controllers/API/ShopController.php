@@ -13,6 +13,7 @@ use App\Models\Sale;
 use App\Models\Product;
 use App\Models\User;
 use App\Models\Review;
+use Doctrine\DBAL\Schema\Index;
 use Illuminate\Http\Request;
 
 class ShopController extends Controller
@@ -63,6 +64,9 @@ class ShopController extends Controller
             'message' => 'تم استرجاع المتجر بنجاح',
             'data' => $shop
         ]);
+    }
+    public function categories(Request $request, $id) {
+        $shop = Shop::find($id);
     }
     public function dashboardData(Request $request, $id)
     {
@@ -293,9 +297,9 @@ class ShopController extends Controller
                 'mall_id' => $validatedData['mall_id'],
                 'owner_id' => $user->id,
             ]);
-        $facility = Facility::find($validatedData['facility_id']);
-        $facility->update(['status'=>true]);
-        $facility->save();
+            $facility = Facility::find($validatedData['facility_id']);
+            $facility->update(['status' => true]);
+            $facility->save();
 
             // Handle image upload
             if ($request->hasFile('image')) {
@@ -372,7 +376,113 @@ class ShopController extends Controller
     public function shopProducts($id)
     {
         $shop = Shop::find($id);
-        $products = Product::where('shop_id', $shop->id)->get();
+        $products = Product::with(['stocks.warehouse', 'company', 'sales.bill.customer'])->where('shop_id', $shop->id)->get();
+
+        foreach ($products as $product) {
+            $imageUrls = [];
+            $basePath = storage_path('app/public/products/' . $product->id . '/');
+            $extensions = ['png', 'jpg', 'jpeg', 'gif'];
+            $index = 1;
+
+            while (true) {
+                $found = false;
+                foreach ($extensions as $ext) {
+                    $imagePath = $basePath . 'image_' . $index . '.' . $ext;
+                    if (file_exists($imagePath)) {
+                        $imageUrls[] = 'products/' . $product->id . '/image_' . $index . '.' . $ext;
+                        $found = true;
+                        break;
+                    }
+                }
+                if (!$found) {
+                    break; // No more images found
+                }
+                $index++;
+            }
+            $product->image_urls = $imageUrls;
+
+            // Calculate total quantity and primary warehouse quantity
+            $totalQuantity = 0;
+            $primaryQuantity = 0;
+
+            foreach ($product->stocks as $stock) {
+                $totalQuantity += $stock->quantity;
+                if ($stock->warehouse && $stock->warehouse->is_primary) {
+                    $primaryQuantity += $stock->quantity;
+                }
+            }
+
+            // Format quantity string
+            $product->formatted_quantity = $totalQuantity . ' (' . $primaryQuantity . ')';
+            $product->sales_count = $product->sales ? $product->sales->sum('quantity') : null;
+            $product->incomes = $product->sales ? $product->sales->sum(function ($sale) {
+                return $sale->quantity * $sale->unit_price;
+            }) : null;
+
+            // Calculate sales by age groups
+            $salesByAge = [
+                'under_18' => 0,
+                '18_24' => 0,
+                '25_34' => 0,
+                '35_44' => 0,
+                '45_plus' => 0
+            ];
+
+            // Calculate sales by gender
+            $salesByGender = [
+                'male' => 0,
+                'female' => 0
+            ];
+
+            if ($product->sales) {
+                foreach ($product->sales as $sale) {
+
+                    if ($sale->bill->customer) {
+                        // Calculate age from birth_date
+                        $birthDate = new \DateTime($sale->bill->customer->birth_date);
+                        $today = new \DateTime();
+                        $age = $birthDate->diff($today)->y;
+
+                        // Calculate age group
+                        if ($age < 18) {
+                            $salesByAge['under_18'] += $sale->quantity;
+                        } elseif ($age <= 24) {
+                            $salesByAge['18_24'] += $sale->quantity;
+                        } elseif ($age <= 34) {
+                            $salesByAge['25_34'] += $sale->quantity;
+                        } elseif ($age <= 44) {
+                            $salesByAge['35_44'] += $sale->quantity;
+                        } else {
+                            $salesByAge['45_plus'] += $sale->quantity;
+                        }
+
+                        // Calculate gender
+                        if ($sale->bill->customer->sex == 1) {
+                            $salesByGender['male'] += $sale->quantity;
+                        } else {
+                            $salesByGender['female'] += $sale->quantity;
+                        }
+                    }
+                }
+            }
+
+            // Add chart data to product
+            $product->salesByAge = array_values($salesByAge);
+            $product->salesByGender = array_values($salesByGender);
+
+            unset($product->sales);
+            $product->reviews = $product->reviews ? $product->reviews : null;
+            $product->stocks = $product->stocks->map(function ($stock) {
+                $stock->warehouse_name = $stock->warehouse ? $stock->warehouse->name : null;
+                $stock->is_primary_warehouse = $stock->warehouse ? $stock->warehouse->is_primary : null;
+                unset($stock->warehouse);
+                return $stock;
+            });
+            // Add company information
+            $product->manufacturer = $product->company ? $product->company->name : null;
+            $product->country = $product->manufacturerCountry ? $product->manufacturerCountry->name : null;
+        }
+
         if (!$products) {
             return response()->json([
                 'status' => 'error',

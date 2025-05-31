@@ -3,7 +3,7 @@ $(document).ready(function () {
   const shopId = localStorage.getItem('shop_id');
   if (!shopId) return;
 
-  fetch(`/api/shops/${shopId}/dashboard`)
+  fetch(`http://localhost/IEMM/Back-end/public/api/shops/${shopId}/dashboard`)
     .then(res => res.json())
     .then(res => {
       if (res.status !== 'success' || !Array.isArray(res.data)) return;

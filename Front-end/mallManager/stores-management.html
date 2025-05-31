@@ -6,15 +6,18 @@
     <title>IEMM - إدارة المحلات</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="../views/css/styles.css">
-    <link rel="stylesheet" href="../views/css/malls-dashbboard/mall.css">
-    <link rel="stylesheet" href="../views/css/chat.css">
+    <link rel="stylesheet" href="../views/css/styles.css" />
+    <link rel="stylesheet" href="../views/css/malls-dashbboard/mall.css" />
+    <link rel="stylesheet" href="../views/css/chat.css" />
     <script src="../views/js/script.js" defer></script>
     <script src="../views/js/chat.js" defer></script>
     <script src="../views/js/theme-manager.js" defer></script>
     <!-- <script src="../views/js/mall-management/sotores-management.js" defer></script> -->
     <!-- إضافة مكتبة Font Awesome للأيقونات -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <style>
       /* حذف الأنماط المكررة وتنظيمها */
       .header-bar {
@@ -29,12 +32,14 @@
         border: 1px solid #e2e8f0;
       }
 
-      .view-toggle-buttons, .action-buttons {
+      .view-toggle-buttons,
+      .action-buttons {
         display: flex;
         gap: 1rem;
       }
 
-      .btn-dark, .btn-green {
+      .btn-dark,
+      .btn-green {
         padding: 0.75rem 1.5rem;
         border-radius: 8px;
         border: none;
@@ -255,24 +260,32 @@
 
       /* إضافة ظل عند التمرير */
       .table-wrapper::after {
-        content: '';
+        content: "";
         position: absolute;
         bottom: 0;
         left: 0;
         right: 0;
         height: 20px;
-        background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1));
+        background: linear-gradient(
+          to bottom,
+          rgba(255, 255, 255, 0),
+          rgba(255, 255, 255, 1)
+        );
         pointer-events: none;
       }
 
       .table-wrapper::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
         height: 20px;
-        background: linear-gradient(to top, rgba(255,255,255,0), rgba(255,255,255,1));
+        background: linear-gradient(
+          to top,
+          rgba(255, 255, 255, 0),
+          rgba(255, 255, 255, 1)
+        );
         pointer-events: none;
       }
 
@@ -483,7 +496,7 @@
         padding: 0.8rem;
         border-radius: 8px;
         z-index: 2;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         width: 42px;
         height: 42px;
         display: flex;
@@ -495,7 +508,7 @@
         color: #2563eb;
         background: white;
         transform: translateY(-1px);
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         border-color: #2563eb;
       }
 
@@ -511,7 +524,7 @@
         padding: 1rem 1.2rem;
         background: white;
         border-radius: 8px;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
         border: 1px solid #e2e8f0;
         min-width: 0;
         margin-bottom: 0.5rem;
@@ -577,7 +590,9 @@
         box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
       }
 
-      #viewEditModal .edit-buttons { display: none; }
+      #viewEditModal .edit-buttons {
+        display: none;
+      }
 
       #viewEditModal .btn-save,
       #viewEditModal .btn-cancel {
@@ -723,7 +738,7 @@
         padding: 0.8rem;
         border-radius: 8px;
         z-index: 2;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         width: 42px;
         height: 42px;
         display: flex;
@@ -735,7 +750,7 @@
         color: #2563eb;
         background: white;
         transform: translateY(-2px);
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         border-color: #2563eb;
       }
 
@@ -765,7 +780,7 @@
         padding: 1rem 1.2rem;
         background: white;
         border-radius: 8px;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
         border: 1px solid #e2e8f0;
         min-width: 0;
         transition: all 0.2s ease;
@@ -773,7 +788,7 @@
 
       #viewEditModal .field-row:hover {
         border-color: #cbd5e1;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
       }
 
       #viewEditModal .field-row label {
@@ -805,7 +820,7 @@
       .header-bar .bar-btn.active-bar-btn {
         background: #e0f0ff;
         color: #2563eb;
-        box-shadow: 0 2px 8px rgba(37,99,235,0.07);
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.07);
         border: 1.5px solid #b6d5fa;
       }
       .header-bar .bar-btn.btn-green.active-bar-btn {
@@ -817,54 +832,56 @@
     <script>
       function toggleForm(formId) {
         const form = document.getElementById(formId);
-        const allForms = document.querySelectorAll('.form-container');
-        const tablesContainer = document.getElementById('tables-view');
-        
-        if (form.style.display === 'block') {
-          form.style.display = 'none';
-          tablesContainer.style.display = 'block';
+        const allForms = document.querySelectorAll(".form-container");
+        const tablesContainer = document.getElementById("tables-view");
+
+        if (form.style.display === "block") {
+          form.style.display = "none";
+          tablesContainer.style.display = "block";
           return;
         }
-        
-        allForms.forEach(f => f.style.display = 'none');
-        form.style.display = 'block';
-        tablesContainer.style.display = 'none';
+
+        allForms.forEach((f) => (f.style.display = "none"));
+        form.style.display = "block";
+        tablesContainer.style.display = "none";
       }
 
       function toggleList(listId) {
         // تحديث حالة الأزرار
-        const buttons = document.querySelectorAll('.list-toggle-bar .btn-dark');
-        buttons.forEach(btn => btn.classList.remove('active'));
-        event.target.classList.add('active');
+        const buttons = document.querySelectorAll(".list-toggle-bar .btn-dark");
+        buttons.forEach((btn) => btn.classList.remove("active"));
+        event.target.classList.add("active");
 
         // إخفاء جميع القوائم
-        const lists = document.querySelectorAll('.list-section');
-        lists.forEach(list => list.style.display = 'none');
+        const lists = document.querySelectorAll(".list-section");
+        lists.forEach((list) => (list.style.display = "none"));
 
         // إظهار القائمة المطلوبة
-        document.getElementById(listId).style.display = 'block';
+        document.getElementById(listId).style.display = "block";
       }
 
       // تهيئة القوائم عند تحميل الصفحة
-      document.addEventListener('DOMContentLoaded', function() {
+      document.addEventListener("DOMContentLoaded", function () {
         // إظهار قائمة المرافق افتراضياً
-        document.querySelector('.list-toggle-bar .btn-dark').classList.add('active');
-        document.getElementById('facilities-list').style.display = 'block';
+        document
+          .querySelector(".list-toggle-bar .btn-dark")
+          .classList.add("active");
+        document.getElementById("facilities-list").style.display = "block";
       });
 
       function searchTable(listId, searchText) {
         const table = document.querySelector(`#${listId} table`);
-        const rows = table.getElementsByTagName('tr');
-        
+        const rows = table.getElementsByTagName("tr");
+
         // تحويل نص البحث إلى حروف صغيرة
         searchText = searchText.toLowerCase();
-        
+
         // بدء من الصف الثاني (تخطي رأس الجدول)
         for (let i = 1; i < rows.length; i++) {
           const row = rows[i];
-          const cells = row.getElementsByTagName('td');
+          const cells = row.getElementsByTagName("td");
           let found = false;
-          
+
           // البحث في كل خلية في الصف
           for (let j = 0; j < cells.length; j++) {
             const cell = cells[j];
@@ -873,78 +890,98 @@
               break;
             }
           }
-          
+
           // إظهار أو إخفاء الصف بناءً على نتيجة البحث
-          row.style.display = found ? '' : 'none';
+          row.style.display = found ? "" : "none";
         }
       }
 
       // دالة فتح نافذة العرض/تعديل الحقل
       function openViewModal(data, type) {
-        const modal = document.getElementById('viewEditModal');
-        const title = document.getElementById('viewEditModalTitle');
-        const fieldsContainer = document.getElementById('viewEditFields');
-        fieldsContainer.innerHTML = '';
+        const modal = document.getElementById("viewEditModal");
+        const title = document.getElementById("viewEditModalTitle");
+        const fieldsContainer = document.getElementById("viewEditFields");
+        fieldsContainer.innerHTML = "";
 
         // تعريف الحقول حسب النوع
         let fields = [];
-        if (type === 'facilities') {
-          title.textContent = 'بيانات المرفق';
+        if (type === "facilities") {
+          title.textContent = "بيانات المرفق";
           fields = [
-            {label: 'مبلغ الإيجار', key: 'rent', type: 'number'},
-            {label: 'رقم عداد الماء', key: 'waterMeter', type: 'text'},
-            {label: 'رقم عداد الكهرباء', key: 'electricityMeter', type: 'text'},
-            {label: 'الدور', key: 'floor', type: 'text'},
-            {label: 'الموقع X', key: 'x', type: 'number'},
-            {label: 'الموقع Y', key: 'y', type: 'number'},
-            {label: 'العرض', key: 'width', type: 'number'},
-            {label: 'الطول', key: 'height', type: 'number'}
+            { label: "مبلغ الإيجار", key: "rent", type: "number" },
+            { label: "رقم عداد الماء", key: "waterMeter", type: "text" },
+            {
+              label: "رقم عداد الكهرباء",
+              key: "electricityMeter",
+              type: "text",
+            },
+            { label: "الدور", key: "floor", type: "text" },
+            { label: "الموقع X", key: "x", type: "number" },
+            { label: "الموقع Y", key: "y", type: "number" },
+            { label: "العرض", key: "width", type: "number" },
+            { label: "الطول", key: "height", type: "number" },
           ];
-        } else if (type === 'tenants') {
-          title.textContent = 'بيانات صاحب المحل';
+        } else if (type === "tenants") {
+          title.textContent = "بيانات صاحب المحل";
           fields = [
-            {label: 'الاسم', key: 'name', type: 'text'},
-            {label: 'رقم الجوال', key: 'phone', type: 'tel'},
-            {label: 'البريد الإلكتروني', key: 'email', type: 'email'},
-            {label: 'المحلات المستأجرة', key: 'stores', type: 'text'},
-            {label: 'النوع', key: 'gender', type: 'select', options: [{value:'male',label:'ذكر'},{value:'female',label:'أنثى'}]},
-            {label: 'تاريخ الميلاد', key: 'birthdate', type: 'date'}
+            { label: "الاسم", key: "name", type: "text" },
+            { label: "رقم الجوال", key: "phone", type: "tel" },
+            { label: "البريد الإلكتروني", key: "email", type: "email" },
+            { label: "المحلات المستأجرة", key: "stores", type: "text" },
+            {
+              label: "النوع",
+              key: "gender",
+              type: "select",
+              options: [
+                { value: "male", label: "ذكر" },
+                { value: "female", label: "أنثى" },
+              ],
+            },
+            { label: "تاريخ الميلاد", key: "birthdate", type: "date" },
           ];
-        } else if (type === 'stores') {
-          title.textContent = 'بيانات المحل';
+        } else if (type === "stores") {
+          title.textContent = "بيانات المحل";
           fields = [
-            {label: 'اسم المالك', key: 'owner', type: 'text'},
-            {label: 'اسم المحل', key: 'storeName', type: 'text'},
-            {label: 'النشاط', key: 'activity', type: 'text'},
-            {label: 'تاريخ بدء العقد', key: 'contractStart', type: 'date'},
-            {label: 'أوقات الدوام', key: 'workingHours', type: 'text'}
+            { label: "اسم المالك", key: "owner", type: "text" },
+            { label: "اسم المحل", key: "storeName", type: "text" },
+            { label: "النشاط", key: "activity", type: "text" },
+            { label: "تاريخ بدء العقد", key: "contractStart", type: "date" },
+            { label: "أوقات الدوام", key: "workingHours", type: "text" },
           ];
         }
 
         // توليد الحقول
-        fields.forEach(field => {
-          const value = data[field.key] || '';
+        fields.forEach((field) => {
+          const value = data[field.key] || "";
           const fieldId = `view-field-${field.key}`;
-          const fieldDiv = document.createElement('div');
-          fieldDiv.className = 'form-group';
-          fieldDiv.style.position = 'relative';
+          const fieldDiv = document.createElement("div");
+          fieldDiv.className = "form-group";
+          fieldDiv.style.position = "relative";
           // إذا كان النوع facilities أضف زر التعديل، غير ذلك لا تضف الزر
-          if (type === 'facilities') {
+          if (type === "facilities") {
             fieldDiv.innerHTML = `
               <label>${field.label}</label>
-              <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
-              <button type="button" class="btn-icon edit-field-btn" title="تعديل" onclick="enableFieldEdit('${fieldId}', '${field.key}', '${field.type}', '${type}')" style="position:absolute; left:0; top:50%; transform:translateY(-50%);"><i class='fas fa-edit'></i></button>
+              <span id="${fieldId}" class="field-value">${
+              field.type === "date" && value ? value.split("T")[0] : value
+            }</span>
+              <button type="button" class="btn-icon edit-field-btn" title="تعديل" onclick="enableFieldEdit('${fieldId}', '${
+              field.key
+            }', '${
+              field.type
+            }', '${type}')" style="position:absolute; left:0; top:50%; transform:translateY(-50%);"><i class='fas fa-edit'></i></button>
             `;
           } else {
             fieldDiv.innerHTML = `
               <label>${field.label}</label>
-              <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
+              <span id="${fieldId}" class="field-value">${
+              field.type === "date" && value ? value.split("T")[0] : value
+            }</span>
             `;
           }
           fieldsContainer.appendChild(fieldDiv);
         });
 
-        modal.style.display = 'block';
+        modal.style.display = "block";
       }
 
       // دالة إلغاء التعديل
@@ -954,25 +991,29 @@
       }
 
       // تحديث أزرار الإجراءات في الجداول
-      document.addEventListener('DOMContentLoaded', function() {
+      document.addEventListener("DOMContentLoaded", function () {
         // تحديث أزرار الإجراءات في جدول المرافق
-        const facilitiesTable = document.querySelector('#facilities-list table');
-        facilitiesTable.querySelectorAll('tr').forEach(row => {
-          const actionsCell = row.querySelector('td:last-child');
+        const facilitiesTable = document.querySelector(
+          "#facilities-list table"
+        );
+        facilitiesTable.querySelectorAll("tr").forEach((row) => {
+          const actionsCell = row.querySelector("td:last-child");
           if (actionsCell) {
             const storeData = {
-              rent: '',
-              waterMeter: '',
-              electricityMeter: '',
+              rent: "",
+              waterMeter: "",
+              electricityMeter: "",
               floor: row.cells[1].textContent,
               x: 0,
               y: 0,
               width: 0,
-              height: 0
+              height: 0,
             };
 
             actionsCell.innerHTML = `
-              <button class="btn-icon" title="عرض" onclick='openViewModal(${JSON.stringify(storeData).replace(/'/g, "\\'")}, "facilities")'>
+              <button class="btn-icon" title="عرض" onclick='openViewModal(${JSON.stringify(
+                storeData
+              ).replace(/'/g, "\\'")}, "facilities")'>
                 <i class="fas fa-eye"></i>
               </button>
               <button class="btn-icon" title="حذف" onclick="deleteStore(this)"><i class="fas fa-trash"></i></button>
@@ -981,21 +1022,23 @@
         });
 
         // تحديث أزرار الإجراءات في جدول أصحاب المحلات
-        const tenantsTable = document.querySelector('#tenants-list table');
-        tenantsTable.querySelectorAll('tr').forEach(row => {
-          const actionsCell = row.querySelector('td:last-child');
+        const tenantsTable = document.querySelector("#tenants-list table");
+        tenantsTable.querySelectorAll("tr").forEach((row) => {
+          const actionsCell = row.querySelector("td:last-child");
           if (actionsCell) {
             const tenantData = {
               name: row.cells[0].textContent,
               phone: row.cells[1].textContent,
               email: row.cells[2].textContent,
               stores: row.cells[3].textContent,
-              gender: '',
-              birthdate: ''
+              gender: "",
+              birthdate: "",
             };
 
             actionsCell.innerHTML = `
-              <button class="btn-icon" title="عرض" onclick='openViewModal(${JSON.stringify(tenantData).replace(/'/g, "\\'")}, "tenants")'>
+              <button class="btn-icon" title="عرض" onclick='openViewModal(${JSON.stringify(
+                tenantData
+              ).replace(/'/g, "\\'")}, "tenants")'>
                 <i class="fas fa-eye"></i>
               </button>
               <button class="btn-icon" title="حذف" onclick="deleteStore(this)"><i class="fas fa-trash"></i></button>
@@ -1004,20 +1047,22 @@
         });
 
         // تحديث أزرار الإجراءات في جدول المحلات
-        const storesTable = document.querySelector('#stores-list table');
-        storesTable.querySelectorAll('tr').forEach(row => {
-          const actionsCell = row.querySelector('td:last-child');
+        const storesTable = document.querySelector("#stores-list table");
+        storesTable.querySelectorAll("tr").forEach((row) => {
+          const actionsCell = row.querySelector("td:last-child");
           if (actionsCell) {
             const storeData = {
               owner: row.cells[0].textContent,
               storeName: row.cells[1].textContent,
               activity: row.cells[2].textContent,
               contractStart: row.cells[5].textContent,
-              workingHours: row.cells[6].textContent
+              workingHours: row.cells[6].textContent,
             };
 
             actionsCell.innerHTML = `
-              <button class="btn-icon" title="عرض" onclick='openViewModal(${JSON.stringify(storeData).replace(/'/g, "\\'")}, "stores")'>
+              <button class="btn-icon" title="عرض" onclick='openViewModal(${JSON.stringify(
+                storeData
+              ).replace(/'/g, "\\'")}, "stores")'>
                 <i class="fas fa-eye"></i>
               </button>
               <button class="btn-icon" title="حذف" onclick="deleteStore(this)"><i class="fas fa-trash"></i></button>
@@ -1028,94 +1073,123 @@
 
       // فتح نافذة عرض التفاصيل بيانات المرفق
       function openViewModal(data, type) {
-        const modal = document.getElementById('viewEditModal');
-        const title = document.getElementById('viewEditModalTitle');
-        const fieldsContainer = document.getElementById('viewEditFields');
-        fieldsContainer.innerHTML = '';
+        const modal = document.getElementById("viewEditModal");
+        const title = document.getElementById("viewEditModalTitle");
+        const fieldsContainer = document.getElementById("viewEditFields");
+        fieldsContainer.innerHTML = "";
 
         let fields = [];
-        if (type === 'facilities') {
-          title.textContent = 'بيانات المرفق';
+        if (type === "facilities") {
+          title.textContent = "بيانات المرفق";
           fields = [
-            {label: 'مبلغ الإيجار', key: 'rent', type: 'number', group: 'rent-floor'},
-            {label: 'الدور', key: 'floor', type: 'text', group: 'rent-floor'},
-            {label: 'رقم عداد الماء', key: 'waterMeter', type: 'text', group: 'meters'},
-            {label: 'رقم عداد الكهرباء', key: 'electricityMeter', type: 'text', group: 'meters'},
-            {label: 'الموقع X', key: 'x', type: 'number', group: 'location'},
-            {label: 'الموقع Y', key: 'y', type: 'number', group: 'location'},
-            {label: 'العرض', key: 'width', type: 'number', group: 'dimensions'},
-            {label: 'الطول', key: 'height', type: 'number', group: 'dimensions'}
+            {
+              label: "مبلغ الإيجار",
+              key: "rent",
+              type: "number",
+              group: "rent-floor",
+            },
+            { label: "الدور", key: "floor", type: "text", group: "rent-floor" },
+            {
+              label: "رقم عداد الماء",
+              key: "waterMeter",
+              type: "text",
+              group: "meters",
+            },
+            {
+              label: "رقم عداد الكهرباء",
+              key: "electricityMeter",
+              type: "text",
+              group: "meters",
+            },
+            { label: "الموقع X", key: "x", type: "number", group: "location" },
+            { label: "الموقع Y", key: "y", type: "number", group: "location" },
+            {
+              label: "العرض",
+              key: "width",
+              type: "number",
+              group: "dimensions",
+            },
+            {
+              label: "الطول",
+              key: "height",
+              type: "number",
+              group: "dimensions",
+            },
           ];
-        } else if (type === 'tenants') {
-          title.textContent = 'بيانات صاحب المحل';
+        } else if (type === "tenants") {
+          title.textContent = "بيانات صاحب المحل";
           fields = [
-            {label: 'الاسم', key: 'name', type: 'text'},
-            {label: 'رقم الجوال', key: 'phone', type: 'tel'},
-            {label: 'البريد الإلكتروني', key: 'email', type: 'email'},
-            {label: 'المحلات المستأجرة', key: 'stores', type: 'text'},
-            {label: 'النوع', key: 'gender', type: 'select'},
-            {label: 'تاريخ الميلاد', key: 'birthdate', type: 'date'}
+            { label: "الاسم", key: "name", type: "text" },
+            { label: "رقم الجوال", key: "phone", type: "tel" },
+            { label: "البريد الإلكتروني", key: "email", type: "email" },
+            { label: "المحلات المستأجرة", key: "stores", type: "text" },
+            { label: "النوع", key: "gender", type: "select" },
+            { label: "تاريخ الميلاد", key: "birthdate", type: "date" },
           ];
           // توليد صفوف ثنائية
-          let fieldsHTML = '';
+          let fieldsHTML = "";
           for (let i = 0; i < fields.length; i += 2) {
             fieldsHTML += '<div class="fields-row">';
             for (let j = 0; j < 2; j++) {
               const field = fields[i + j];
               if (field) {
-                const value = data[field.key] || '';
+                const value = data[field.key] || "";
                 const fieldId = `view-field-${field.key}`;
                 fieldsHTML += `
                   <div class="field-row">
                     <label>${field.label}</label>
-                    <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
+                    <span id="${fieldId}" class="field-value">${
+                  field.type === "date" && value ? value.split("T")[0] : value
+                }</span>
                   </div>
                 `;
               }
             }
-            fieldsHTML += '</div>';
+            fieldsHTML += "</div>";
           }
           fieldsContainer.innerHTML = fieldsHTML;
           // لا تضف زر التعديل هنا
-          modal.style.display = 'block';
+          modal.style.display = "block";
           return;
-        } else if (type === 'stores') {
-          title.textContent = 'بيانات المحل';
+        } else if (type === "stores") {
+          title.textContent = "بيانات المحل";
           fields = [
-            {label: 'اسم المالك', key: 'owner', type: 'text'},
-            {label: 'اسم المحل', key: 'storeName', type: 'text'},
-            {label: 'النشاط', key: 'activity', type: 'text'},
-            {label: 'تاريخ بدء العقد', key: 'contractStart', type: 'date'},
-            {label: 'أوقات الدوام', key: 'workingHours', type: 'text'}
+            { label: "اسم المالك", key: "owner", type: "text" },
+            { label: "اسم المحل", key: "storeName", type: "text" },
+            { label: "النشاط", key: "activity", type: "text" },
+            { label: "تاريخ بدء العقد", key: "contractStart", type: "date" },
+            { label: "أوقات الدوام", key: "workingHours", type: "text" },
           ];
           // توليد صفوف ثنائية
-          let fieldsHTML = '';
+          let fieldsHTML = "";
           for (let i = 0; i < fields.length; i += 2) {
             fieldsHTML += '<div class="fields-row">';
             for (let j = 0; j < 2; j++) {
               const field = fields[i + j];
               if (field) {
-                const value = data[field.key] || '';
+                const value = data[field.key] || "";
                 const fieldId = `view-field-${field.key}`;
                 fieldsHTML += `
                   <div class="field-row">
                     <label>${field.label}</label>
-                    <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
+                    <span id="${fieldId}" class="field-value">${
+                  field.type === "date" && value ? value.split("T")[0] : value
+                }</span>
                   </div>
                 `;
               }
             }
-            fieldsHTML += '</div>';
+            fieldsHTML += "</div>";
           }
           fieldsContainer.innerHTML = fieldsHTML;
           // لا تضف زر التعديل هنا
-          modal.style.display = 'block';
+          modal.style.display = "block";
           return;
         }
 
         // إضافة زر التعديل في الزاوية
-        let fieldsHTML = '';
-        if (type === 'facilities') {
+        let fieldsHTML = "";
+        if (type === "facilities") {
           fieldsHTML = `
             <button type="button" class="edit-all-btn" title="تعديل جميع الحقول" onclick="enableAllFieldsEdit('${type}')">
               <i class="fas fa-edit"></i>
@@ -1124,13 +1198,13 @@
 
           // تجميع الحقول حسب المجموعات
           const groups = {
-            'rent-floor': [],
-            'meters': [],
-            'location': [],
-            'dimensions': []
+            "rent-floor": [],
+            meters: [],
+            location: [],
+            dimensions: [],
           };
 
-          fields.forEach(field => {
+          fields.forEach((field) => {
             if (groups[field.group]) {
               groups[field.group].push(field);
             }
@@ -1139,109 +1213,123 @@
           // إنشاء الصفوف المجمعة
           fieldsHTML += `
             <div class="fields-row">
-              ${createFieldRow(groups['rent-floor'], data)}
+              ${createFieldRow(groups["rent-floor"], data)}
             </div>
             <div class="fields-row">
-              ${createFieldRow(groups['meters'], data)}
+              ${createFieldRow(groups["meters"], data)}
             </div>
             <div class="fields-row">
-              ${createFieldRow(groups['location'], data)}
+              ${createFieldRow(groups["location"], data)}
             </div>
             <div class="fields-row">
-              ${createFieldRow(groups['dimensions'], data)}
+              ${createFieldRow(groups["dimensions"], data)}
             </div>
           `;
         } else {
           // توليد الحقول العادية للأنواع الأخرى
-        fields.forEach(field => {
-          const value = data[field.key] || '';
-          const fieldId = `view-field-${field.key}`;
+          fields.forEach((field) => {
+            const value = data[field.key] || "";
+            const fieldId = `view-field-${field.key}`;
             fieldsHTML += `
               <div class="field-row">
               <label>${field.label}</label>
-              <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
+              <span id="${fieldId}" class="field-value">${
+              field.type === "date" && value ? value.split("T")[0] : value
+            }</span>
               </div>
             `;
           });
         }
-        
+
         fieldsContainer.innerHTML = fieldsHTML;
-        modal.style.display = 'block';
+        modal.style.display = "block";
       }
 
       // دالة مساعدة لإنشاء صف من الحقول
       function createFieldRow(fields, data) {
-        return fields.map(field => {
-          const value = data[field.key] || '';
-          const fieldId = `view-field-${field.key}`;
-          return `
+        return fields
+          .map((field) => {
+            const value = data[field.key] || "";
+            const fieldId = `view-field-${field.key}`;
+            return `
             <div class="field-row">
               <label>${field.label}</label>
-              <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
+              <span id="${fieldId}" class="field-value">${
+              field.type === "date" && value ? value.split("T")[0] : value
+            }</span>
             </div>
             `;
-        }).join('');
+          })
+          .join("");
       }
 
       // دالة مساعدة للحصول على نوع الحقل
       function getFieldType(key, type) {
-          const fieldTypes = {
-              facilities: {
-                  rent: 'number',
-                  waterMeter: 'text',
-                  electricityMeter: 'text',
-                  floor: 'text',
-                  x: 'number',
-                  y: 'number',
-                  width: 'number',
-                  height: 'number'
-              },
-              tenants: {
-                  name: 'text',
-                  phone: 'tel',
-                  email: 'email',
-                  stores: 'text',
-                  gender: 'select',
-                  birthdate: 'date'
-              },
-              stores: {
-                  owner: 'text',
-                  storeName: 'text',
-                  activity: 'text',
-                  contractStart: 'date',
-                  workingHours: 'text'
-              }
-          };
-          return fieldTypes[type][key] || 'text';
+        const fieldTypes = {
+          facilities: {
+            rent: "number",
+            waterMeter: "text",
+            electricityMeter: "text",
+            floor: "text",
+            x: "number",
+            y: "number",
+            width: "number",
+            height: "number",
+          },
+          tenants: {
+            name: "text",
+            phone: "tel",
+            email: "email",
+            stores: "text",
+            gender: "select",
+            birthdate: "date",
+          },
+          stores: {
+            owner: "text",
+            storeName: "text",
+            activity: "text",
+            contractStart: "date",
+            workingHours: "text",
+          },
+        };
+        return fieldTypes[type][key] || "text";
       }
 
       // دالة تفعيل تعديل بيانات المرفق
       function enableAllFieldsEdit(type, forceCancel = false) {
-        const editBtn = document.querySelector('.edit-all-btn');
-        const fields = document.querySelectorAll('#viewEditFields .field-row');
-        const fieldsContainer = document.getElementById('viewEditFields');
-        let actionBtns = document.getElementById('edit-actions-bottom');
+        const editBtn = document.querySelector(".edit-all-btn");
+        const fields = document.querySelectorAll("#viewEditFields .field-row");
+        const fieldsContainer = document.getElementById("viewEditFields");
+        let actionBtns = document.getElementById("edit-actions-bottom");
 
         // إذا كان في وضع التعديل أو تم الضغط على زر الإلغاء
-        if (editBtn.classList.contains('editing') || forceCancel) {
-          editBtn.classList.remove('editing');
-          editBtn.style.display = '';
-          fields.forEach(field => {
-            const valueSpan = field.querySelector('.field-value');
+        if (editBtn.classList.contains("editing") || forceCancel) {
+          editBtn.classList.remove("editing");
+          editBtn.style.display = "";
+          fields.forEach((field) => {
+            const valueSpan = field.querySelector(".field-value");
             if (!valueSpan) {
               // إذا كان الحقل في وضع الإدخال، أعده إلى وضع العرض
-              const input = field.querySelector('.edit-input');
+              const input = field.querySelector(".edit-input");
               if (input) {
-                const fieldId = input.id.replace('edit-', '');
-                const originalValue = input.getAttribute('data-original-value') || '';
-                const span = document.createElement('span');
+                const fieldId = input.id.replace("edit-", "");
+                const originalValue =
+                  input.getAttribute("data-original-value") || "";
+                const span = document.createElement("span");
                 span.id = fieldId;
-                span.className = 'field-value';
+                span.className = "field-value";
                 span.textContent = originalValue;
-                field.querySelector('.edit-container').parentNode.replaceChild(span, field.querySelector('.edit-container'));
+                field
+                  .querySelector(".edit-container")
+                  .parentNode.replaceChild(
+                    span,
+                    field.querySelector(".edit-container")
+                  );
               }
             } else {
-              const originalValue = valueSpan.getAttribute('data-original-value');
+              const originalValue = valueSpan.getAttribute(
+                "data-original-value"
+              );
               if (originalValue !== null) {
                 cancelFieldEdit(valueSpan.id, originalValue);
               }
@@ -1250,22 +1338,26 @@
           if (actionBtns) actionBtns.remove();
         } else {
           // تفعيل وضع التعديل
-          editBtn.classList.add('editing');
-          editBtn.style.display = 'none';
-          fields.forEach(field => {
-            const valueSpan = field.querySelector('.field-value');
+          editBtn.classList.add("editing");
+          editBtn.style.display = "none";
+          fields.forEach((field) => {
+            const valueSpan = field.querySelector(".field-value");
             if (valueSpan) {
               const fieldId = valueSpan.id;
-              const fieldKey = fieldId.replace('view-field-', '');
+              const fieldKey = fieldId.replace("view-field-", "");
               const fieldType = getFieldType(fieldKey, type);
-              valueSpan.setAttribute('data-original-value', valueSpan.textContent);
+              valueSpan.setAttribute(
+                "data-original-value",
+                valueSpan.textContent
+              );
               enableFieldEdit(fieldId, fieldKey, fieldType, type);
             }
           });
-          if (!document.getElementById('edit-actions-bottom')) {
-            actionBtns = document.createElement('div');
-            actionBtns.id = 'edit-actions-bottom';
-            actionBtns.style = 'display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;';
+          if (!document.getElementById("edit-actions-bottom")) {
+            actionBtns = document.createElement("div");
+            actionBtns.id = "edit-actions-bottom";
+            actionBtns.style =
+              "display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;";
             actionBtns.innerHTML = `
               <button type=\"button\" class=\"btn-save btn-green\" onclick=\"saveAllFieldsEdit('${type}')\"><i class='fas fa-check'></i></button>
               <button type=\"button\" class=\"btn-cancel btn-secondary\" onclick=\"enableAllFieldsEdit('${type}', true)\"><i class='fas fa-times'></i></button>
@@ -1277,134 +1369,148 @@
 
       // دالة تفعيل تعديل حقل معين
       function enableFieldEdit(fieldId, fieldKey, fieldType, type) {
-          const span = document.getElementById(fieldId);
-          if (!span) return;
-          
-          const currentValue = span.textContent.trim();
-          
-          let inputElement;
-          if (fieldType === 'select') {
-              inputElement = document.createElement('select');
-              if (fieldKey === 'gender') {
-                  inputElement.innerHTML = `
-                      <option value="male" ${currentValue === 'ذكر' ? 'selected' : ''}>ذكر</option>
-                      <option value="female" ${currentValue === 'أنثى' ? 'selected' : ''}>أنثى</option>
+        const span = document.getElementById(fieldId);
+        if (!span) return;
+
+        const currentValue = span.textContent.trim();
+
+        let inputElement;
+        if (fieldType === "select") {
+          inputElement = document.createElement("select");
+          if (fieldKey === "gender") {
+            inputElement.innerHTML = `
+                      <option value="male" ${
+                        currentValue === "ذكر" ? "selected" : ""
+                      }>ذكر</option>
+                      <option value="female" ${
+                        currentValue === "أنثى" ? "selected" : ""
+                      }>أنثى</option>
                   `;
-              }
-          } else {
-              inputElement = document.createElement('input');
-              inputElement.type = fieldType;
-              inputElement.value = currentValue;
-              
-              // إضافة خصائص إضافية حسب نوع الحقل
-              if (fieldType === 'number') {
-                  inputElement.min = '0';
-                  inputElement.step = 'any';
-              }
-              if (fieldType === 'tel') {
-                  inputElement.pattern = '[0-9]{10}';
-                  inputElement.placeholder = '05XXXXXXXX';
-              }
-              if (fieldType === 'email') {
-                  inputElement.placeholder = 'example@domain.com';
-              }
           }
-          
-          inputElement.className = 'edit-input';
-          inputElement.id = `edit-${fieldId}`;
-          
-          // استبدال span بحقل الإدخال فقط (بدون أزرار)
-          const container = document.createElement('div');
-          container.className = 'edit-container';
-          container.appendChild(inputElement);
-          span.parentNode.replaceChild(container, span);
-          inputElement.focus();
+        } else {
+          inputElement = document.createElement("input");
+          inputElement.type = fieldType;
+          inputElement.value = currentValue;
+
+          // إضافة خصائص إضافية حسب نوع الحقل
+          if (fieldType === "number") {
+            inputElement.min = "0";
+            inputElement.step = "any";
+          }
+          if (fieldType === "tel") {
+            inputElement.pattern = "[0-9]{10}";
+            inputElement.placeholder = "05XXXXXXXX";
+          }
+          if (fieldType === "email") {
+            inputElement.placeholder = "example@domain.com";
+          }
+        }
+
+        inputElement.className = "edit-input";
+        inputElement.id = `edit-${fieldId}`;
+
+        // استبدال span بحقل الإدخال فقط (بدون أزرار)
+        const container = document.createElement("div");
+        container.className = "edit-container";
+        container.appendChild(inputElement);
+        span.parentNode.replaceChild(container, span);
+        inputElement.focus();
       }
 
       // دالة حفظ تعديل الحقل
       function saveFieldEdit(fieldId, fieldKey, type) {
-          const input = document.getElementById(`edit-${fieldId}`);
-          if (!input) return;
-          
-          const newValue = input.value.trim();
-          const container = input.parentNode;
-          
-          // التحقق من صحة البيانات
-          if (input.type === 'number' && isNaN(newValue)) {
-              alert('الرجاء إدخال رقم صحيح');
-              return;
-          }
-          if (input.type === 'tel' && !/^[0-9]{10}$/.test(newValue)) {
-              alert('الرجاء إدخال رقم جوال صحيح مكون من 10 أرقام');
-              return;
-          }
-          if (input.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newValue)) {
-              alert('الرجاء إدخال بريد إلكتروني صحيح');
-              return;
-          }
-          
-          // هنا يمكنك إضافة التحقق من صحة البيانات وإرسالها إلى الخادم
-          
-          // إعادة عرض القيمة المحدثة
-          const span = document.createElement('span');
-          span.id = fieldId;
-          span.className = 'field-value';
-          span.textContent = newValue;
-          
-          container.parentNode.replaceChild(span, container);
+        const input = document.getElementById(`edit-${fieldId}`);
+        if (!input) return;
+
+        const newValue = input.value.trim();
+        const container = input.parentNode;
+
+        // التحقق من صحة البيانات
+        if (input.type === "number" && isNaN(newValue)) {
+          alert("الرجاء إدخال رقم صحيح");
+          return;
+        }
+        if (input.type === "tel" && !/^[0-9]{10}$/.test(newValue)) {
+          alert("الرجاء إدخال رقم جوال صحيح مكون من 10 أرقام");
+          return;
+        }
+        if (
+          input.type === "email" &&
+          !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newValue)
+        ) {
+          alert("الرجاء إدخال بريد إلكتروني صحيح");
+          return;
+        }
+
+        // هنا يمكنك إضافة التحقق من صحة البيانات وإرسالها إلى الخادم
+
+        // إعادة عرض القيمة المحدثة
+        const span = document.createElement("span");
+        span.id = fieldId;
+        span.className = "field-value";
+        span.textContent = newValue;
+
+        container.parentNode.replaceChild(span, container);
       }
 
       // دالة إلغاء التعديل
       function cancelFieldEdit(fieldId, value) {
-          const span = document.createElement('span');
-          span.id = fieldId;
-          span.className = 'field-value';
-          span.textContent = value;
-          
-          const container = document.querySelector(`#edit-${fieldId}`)?.parentNode;
-          if (container) {
-              container.parentNode.replaceChild(span, container);
-          }
+        const span = document.createElement("span");
+        span.id = fieldId;
+        span.className = "field-value";
+        span.textContent = value;
+
+        const container = document.querySelector(
+          `#edit-${fieldId}`
+        )?.parentNode;
+        if (container) {
+          container.parentNode.replaceChild(span, container);
+        }
       }
 
       let rowToDelete = null;
       function deleteStore(btn) {
-        rowToDelete = btn.closest('tr');
-        document.getElementById('delete-modal-title').textContent = 'تأكيد الحذف';
-        document.getElementById('delete-confirm-message').innerHTML = 'هل أنت متأكد من حذف هذا السطر؟';
-        document.getElementById('delete-confirm-modal').style.display = 'block';
+        rowToDelete = btn.closest("tr");
+        document.getElementById("delete-modal-title").textContent =
+          "تأكيد الحذف";
+        document.getElementById("delete-confirm-message").innerHTML =
+          "هل أنت متأكد من حذف هذا السطر؟";
+        document.getElementById("delete-confirm-modal").style.display = "block";
       }
       function confirmDelete() {
         if (rowToDelete) rowToDelete.remove();
         closeDeleteModal();
       }
       function closeDeleteModal() {
-        document.getElementById('delete-confirm-modal').style.display = 'none';
+        document.getElementById("delete-confirm-modal").style.display = "none";
         rowToDelete = null;
       }
 
       // دالة لحفظ جميع الحقول دفعة واحدة
       function saveAllFieldsEdit(type) {
-        const editBtn = document.querySelector('.edit-all-btn');
-        const fields = document.querySelectorAll('#viewEditFields .field-row');
+        const editBtn = document.querySelector(".edit-all-btn");
+        const fields = document.querySelectorAll("#viewEditFields .field-row");
         let valid = true;
-        fields.forEach(field => {
-          const input = field.querySelector('.edit-input');
+        fields.forEach((field) => {
+          const input = field.querySelector(".edit-input");
           if (input) {
             let newValue = input.value.trim();
             // تحقق من صحة البيانات حسب النوع
-            if (input.type === 'number' && isNaN(newValue)) {
-              alert('الرجاء إدخال رقم صحيح');
+            if (input.type === "number" && isNaN(newValue)) {
+              alert("الرجاء إدخال رقم صحيح");
               valid = false;
               return;
             }
-            if (input.type === 'tel' && !/^[0-9]{10}$/.test(newValue)) {
-              alert('الرجاء إدخال رقم جوال صحيح مكون من 10 أرقام');
+            if (input.type === "tel" && !/^[0-9]{10}$/.test(newValue)) {
+              alert("الرجاء إدخال رقم جوال صحيح مكون من 10 أرقام");
               valid = false;
               return;
             }
-            if (input.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newValue)) {
-              alert('الرجاء إدخال بريد إلكتروني صحيح');
+            if (
+              input.type === "email" &&
+              !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newValue)
+            ) {
+              alert("الرجاء إدخال بريد إلكتروني صحيح");
               valid = false;
               return;
             }
@@ -1412,47 +1518,54 @@
         });
         if (!valid) return;
         // حفظ القيم الجديدة
-        fields.forEach(field => {
-          const input = field.querySelector('.edit-input');
+        fields.forEach((field) => {
+          const input = field.querySelector(".edit-input");
           if (input) {
-            const fieldId = input.id.replace('edit-', '');
-            const span = document.createElement('span');
+            const fieldId = input.id.replace("edit-", "");
+            const span = document.createElement("span");
             span.id = fieldId;
-            span.className = 'field-value';
+            span.className = "field-value";
             span.textContent = input.value.trim();
-            field.querySelector('.edit-container').parentNode.replaceChild(span, field.querySelector('.edit-container'));
+            field
+              .querySelector(".edit-container")
+              .parentNode.replaceChild(
+                span,
+                field.querySelector(".edit-container")
+              );
           }
         });
         // إعادة زر التعديل وإخفاء أزرار الحفظ/الإلغاء
-        editBtn.classList.remove('editing');
-        editBtn.style.display = '';
-        const actionBtns = document.getElementById('edit-actions-bottom');
+        editBtn.classList.remove("editing");
+        editBtn.style.display = "";
+        const actionBtns = document.getElementById("edit-actions-bottom");
         if (actionBtns) actionBtns.remove();
       }
 
       // أضف جافاسكريبت لتفعيل تمييز الزر النشط
       function setActiveBarBtn(btn) {
-        document.querySelectorAll('.header-bar .bar-btn').forEach(b => b.classList.remove('active-bar-btn'));
-        btn.classList.add('active-bar-btn');
+        document
+          .querySelectorAll(".header-bar .bar-btn")
+          .forEach((b) => b.classList.remove("active-bar-btn"));
+        btn.classList.add("active-bar-btn");
       }
     </script>
   </head>
-<body>
-      <!-- Authorization Check -->
-      <script>
+  <body>
+    <!-- Authorization Check -->
+    <script>
       // Check authorization before loading the page
       function checkAuthorization() {
-        const token = localStorage.getItem('token');
-        const userType = localStorage.getItem('user_type');
-        
+        const token = localStorage.getItem("token");
+        const userType = localStorage.getItem("user_type");
+
         // Check if token exists
         if (!token) {
-          window.location.href = '../login.html';
+          window.location.href = "../login.html";
           return;
         }
 
         // Check user type (admin = 4)
-        if (userType !== '1') {
+        if (userType !== "1") {
           // Create and show unauthorized message
           document.body.innerHTML = `
             <div style="
@@ -1495,227 +1608,390 @@
           `;
           return;
         }
-
-        
-        
       }
 
       // Run authorization check when page loads
-      $(document).ready(function() {
+      $(document).ready(function () {
         checkAuthorization();
       });
     </script>
 
-      <!-- Header Section -->
-  <header>
-    <div class="container navbar">
-      <h1>IEMM</h1>
-      <nav>
-        <a href="mall-dashboard.html" id="dashboard-link"><i class="fas fa-chart-line"></i> لوحة التحكم</a>
-        <a href="stores-management.html" id="stores-link" class="active"><i class="fas fa-store"></i> إدارة المحلات</a>
-        <a href="bills.html" id="bills-link"><i class="fas fa-file-invoice-dollar"></i> الفواتير</a>   
-      </nav>
-      <div style="display: flex; align-items: center; gap: 12px;">
+    <!-- Header Section -->
+    <header>
+      <div class="container navbar">
+        <h1>IEMM</h1>
+        <nav>
+          <a href="mall-dashboard.html" id="dashboard-link"
+            ><i class="fas fa-chart-line"></i> لوحة التحكم</a
+          >
+          <a href="stores-management.html" id="stores-link" class="active"
+            ><i class="fas fa-store"></i> إدارة المحلات</a
+          >
+          <a href="bills.html" id="bills-link"
+            ><i class="fas fa-file-invoice-dollar"></i> الفواتير</a
+          >
+        </nav>
+        <div style="display: flex; align-items: center; gap: 12px">
+          <button class="btn-dark convert"></button>
+          <!-- <button class="btn-dark " onclick="document.body.classList.toggle('dark')">الوضع الليلي</button> -->
 
-        <button class="btn-dark convert" ></button>
-        <!-- <button class="btn-dark " onclick="document.body.classList.toggle('dark')">الوضع الليلي</button> -->
-
-        <button id="chat-toggle" class="chat-toggle-btn" title="الدردشة مع أصحاب المحلات">
-          <i class="fas fa-comments"></i>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- نافذة الدردشة الجانبية -->
-  <div id="chat-panel" class="chat-panel">
-    <!-- قائمة جهات الاتصال -->
-    <div id="contacts-view">
-      <div class="chat-header">
-        <h3>الدردشة مع أصحاب المحلات</h3>
-        <button id="chat-close" class="chat-close-btn">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
-      <div id="contact-list" class="contact-list">
-        <!-- سيتم إنشاء قائمة جهات الاتصال عبر JavaScript -->
-      </div>
-    </div>
-
-    <!-- نافذة المحادثة -->
-    <div id="chat-conversation" class="chat-conversation">
-      <div class="conversation-header">
-        <button id="back-to-contacts" class="back-to-contacts">
-          <i class="fas fa-arrow-right"></i>
-        </button>
-        <div class="conversation-contact">
-          <div id="conversation-avatar" class="conversation-avatar">أ</div>
-          <div class="conversation-info">
-            <h4 id="conversation-title">أحمد محمد</h4>
-            <p id="conversation-store">مطعم الأصالة</p>
-          </div>
+          <button
+            id="chat-toggle"
+            class="chat-toggle-btn"
+            title="الدردشة مع أصحاب المحلات"
+          >
+            <i class="fas fa-comments"></i>
+          </button>
         </div>
       </div>
-      <div id="messages-container" class="messages-container">
-        <!-- سيتم إنشاء الرسائل عبر JavaScript -->
-      </div>
-      <form id="message-form" class="message-form">
-        <textarea id="message-input" class="message-input" placeholder="اكتب رسالتك هنا..." rows="1"></textarea>
-        <button type="submit" class="send-message-btn">
-          <i class="fas fa-paper-plane"></i>
-        </button>
-      </form>
-    </div>
-  </div>
+    </header>
 
-  <!-- Main Content -->
-  <div class="main">
-        <!-- Stores Management Section -->
-        <div class="section active" id="stores-section">
-          <div class="section-header">
-            <h2 class="section-title"><i class="fas fa-store"></i> إدارة المحلات</h2>
-            <div class="header-bar">
+    <!-- نافذة الدردشة الجانبية -->
+    <div id="chat-panel" class="chat-panel">
+      <!-- قائمة جهات الاتصال -->
+      <div id="contacts-view">
+        <div class="chat-header">
+          <h3>الدردشة مع أصحاب المحلات</h3>
+          <button id="chat-close" class="chat-close-btn">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div id="contact-list" class="contact-list">
+          <!-- سيتم إنشاء قائمة جهات الاتصال عبر JavaScript -->
+        </div>
+      </div>
+
+      <!-- نافذة المحادثة -->
+      <div id="chat-conversation" class="chat-conversation">
+        <div class="conversation-header">
+          <button id="back-to-contacts" class="back-to-contacts">
+            <i class="fas fa-arrow-right"></i>
+          </button>
+          <div class="conversation-contact">
+            <div id="conversation-avatar" class="conversation-avatar">أ</div>
+            <div class="conversation-info">
+              <h4 id="conversation-title">أحمد محمد</h4>
+              <p id="conversation-store">مطعم الأصالة</p>
+            </div>
+          </div>
+        </div>
+        <div id="messages-container" class="messages-container">
+          <!-- سيتم إنشاء الرسائل عبر JavaScript -->
+        </div>
+        <form id="message-form" class="message-form">
+          <textarea
+            id="message-input"
+            class="message-input"
+            placeholder="اكتب رسالتك هنا..."
+            rows="1"
+          ></textarea>
+          <button type="submit" class="send-message-btn">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main">
+      <!-- Stores Management Section -->
+      <div class="section active" id="stores-section">
+        <div class="section-header">
+          <h2 class="section-title">
+            <i class="fas fa-store"></i> إدارة المحلات
+          </h2>
+          <div class="header-bar">
             <div class="view-toggle-buttons">
-              <button class="btn-dark bar-btn active-bar-btn" id="table-view-btn" onclick="setActiveBarBtn(this); toggleView('table')">
+              <button
+                class="btn-dark bar-btn active-bar-btn"
+                id="table-view-btn"
+                onclick="setActiveBarBtn(this); toggleView('table')"
+              >
                 <i class="fas fa-table"></i>
                 عرض الجداول
               </button>
-              <button class="btn-dark bar-btn" id="map-view-btn" onclick="setActiveBarBtn(this); toggleView('map')">
+              <button
+                class="btn-dark bar-btn"
+                id="map-view-btn"
+                onclick="setActiveBarBtn(this); toggleView('map')"
+              >
                 <i class="fas fa-map"></i>
                 عرض الخريطة
               </button>
             </div>
             <div class="action-buttons">
-                <button class="btn-green bar-btn" onclick="setActiveBarBtn(this); toggleForm('newStoreForm')">
-                  <i class="fas fa-plus"></i>
-                  إضافة مرفق جديد
-                </button>
-                <button class="btn-green" onclick="toggleForm('newStoreFormContainer')">
-                  <i class="fas fa-user-plus"></i>
-                  إضافة صاحب محل
-                </button>
-              </div>
+              <button
+                class="btn-green bar-btn"
+                onclick="setActiveBarBtn(this); toggleForm('newStoreForm')"
+              >
+                <i class="fas fa-plus"></i>
+                إضافة مرفق جديد
+              </button>
+              <button
+                class="btn-green"
+                onclick="toggleForm('newStoreFormContainer')"
+              >
+                <i class="fas fa-user-plus"></i>
+                إضافة صاحب محل
+              </button>
             </div>
           </div>
-          <!-- نموذج إضافة مرفق جديد -->
-
-          <form id="newFacilityFormContainer" class="form-container" style="display:none;">
-                  <div class="form card">
-                    <h3>إضافة مرفق جديد</h3>
-                    <div class="form-grid">
-                      <input type="number" name="rant_price" id="rant_price" placeholder="مبلغ الإيجار" required />
-                      <input type="text" name="electricity_number" id="electricity_number" placeholder="رقم عداد الكهرباء" required />
-                      <input type="text" name="water_number" id="water_number" placeholder="رقم عداد الماء" required />
-                      <input type="number" name="floor_number" id="floor_number" placeholder="رقم الدور" required />
-                      <input type="number" name="X_Coordinates" id="X_Coordinates" placeholder="الموقع X" required />
-                      <input type="number" name="Y_Coordinates" id="Y_Coordinates" placeholder="الموقع Y" required />
-                      <input type="number" name="width" id="width" placeholder="العرض" required />
-                      <input type="number" name="length" id="length" placeholder="الطول" required />
-                    </div>
-                    <div class="form-actions">
-                      <button type="submit" class="btn-green">حفظ</button>
-                      <button type="button" class="btn-secondary" onclick="toggleForm('newFacilityFormContainer')">إلغاء</button>
-                    </div>
-                  </div>
-              </form>
-
-          <!-- نموذج إضافة صاحب محل -->
-          <form id="newStoreFormContainer" class="form-container" style="display:none;">
-            <div class="form card">
-              <h3>إضافة صاحب محل</h3>
-              
-              <!-- قسم بيانات المحل -->
-              <div class="form-section">
-                <h4>بيانات المحل</h4>
-                <div class="form-grid">
-                  <input type="text" name="shop_name" placeholder="اسم المحل" required />
-                  <input type="text" name="work_times" placeholder="أوقات المحل" required />
-                  <select name="facility_id" required>
-                    <option value="">اختر المرفق</option>
-                  </select>
-                  <input type="file" name="image" accept="image/jpeg,image/png,image/jpg" required />
-                </div>
-              </div>
-          
-              <!-- قسم بيانات صاحب المحل -->
-              <div class="form-section">
-                <h4>بيانات صاحب المحل</h4>
-                <div class="form-grid">
-                  <input type="text" name="owner_name" placeholder="اسم المستأجر الثنائي" required />
-                  <input type="text" name="username" placeholder="اسم المستخدم" required />
-                  <input type="email" name="email" placeholder="البريد الإلكتروني" required />
-                  <input type="tel" name="phone" placeholder="رقم الهاتف" required />
-                  <input type="password" name="password" placeholder="كلمة السر" required />
-                  <input type="password" name="password_confirmation" placeholder="تأكيد كلمة السر" required />
-                  <select name="sex" required>
-                    <option value="">اختر النوع</option>
-                    <option value="male">ذكر</option>
-                    <option value="female">أنثى</option>
-                  </select>
-                  <input type="date" name="birth_date" placeholder="تاريخ الميلاد" required />
-                </div>
-              </div>
-          
-        <div class="form-actions">
-              <button type="submit" class="btn-green">حفظ</button>
-              <button type="button" class="btn-secondary" onclick="toggleForm('newStoreFormContainer')">إلغاء</button>
         </div>
-      </div>
-    </form>
+        <!-- نموذج إضافة مرفق جديد -->
 
-          <!-- جداول البيانات -->
-          <div class="tables-container" id="tables-view">
-            <div class="table card">
-              <div class="list-toggle-bar">
-                <button class="btn-dark bar-btn active-bar-btn" onclick="setActiveBarBtn(this); toggleList('facilities-list')">
-                  <i class="fas fa-building"></i>
-                  قائمة المرافق
-                </button>
-                <button class="btn-dark bar-btn" onclick="setActiveBarBtn(this); toggleList('tenants-list')">
-                  <i class="fas fa-users"></i>
-                  قائمة أصحاب المحلات
-                </button>
-                <button class="btn-dark bar-btn" onclick="setActiveBarBtn(this); toggleList('stores-list')">
-                  <i class="fas fa-store"></i>
-                  قائمة المحلات
-                </button>
+        <form
+          id="newFacilityFormContainer"
+          class="form-container"
+          style="display: none"
+        >
+          <div class="form card">
+            <h3>إضافة مرفق جديد</h3>
+            <div class="form-grid">
+              <input
+                type="number"
+                name="rant_price"
+                id="rant_price"
+                placeholder="مبلغ الإيجار"
+                required
+              />
+              <input
+                type="text"
+                name="electricity_number"
+                id="electricity_number"
+                placeholder="رقم عداد الكهرباء"
+                required
+              />
+              <input
+                type="text"
+                name="water_number"
+                id="water_number"
+                placeholder="رقم عداد الماء"
+                required
+              />
+              <input
+                type="number"
+                name="floor_number"
+                id="floor_number"
+                placeholder="رقم الدور"
+                required
+              />
+              <input
+                type="number"
+                name="X_Coordinates"
+                id="X_Coordinates"
+                placeholder="الموقع X"
+                required
+              />
+              <input
+                type="number"
+                name="Y_Coordinates"
+                id="Y_Coordinates"
+                placeholder="الموقع Y"
+                required
+              />
+              <input
+                type="number"
+                name="width"
+                id="width"
+                placeholder="العرض"
+                required
+              />
+              <input
+                type="number"
+                name="length"
+                id="length"
+                placeholder="الطول"
+                required
+              />
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn-green">حفظ</button>
+              <button
+                type="button"
+                class="btn-secondary"
+                onclick="toggleForm('newFacilityFormContainer')"
+              >
+                إلغاء
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <!-- نموذج إضافة صاحب محل -->
+        <form
+          id="newStoreFormContainer"
+          class="form-container"
+          style="display: none"
+        >
+          <div class="form card">
+            <h3>إضافة صاحب محل</h3>
+
+            <!-- قسم بيانات المحل -->
+            <div class="form-section">
+              <h4>بيانات المحل</h4>
+              <div class="form-grid">
+                <input
+                  type="text"
+                  name="shop_name"
+                  placeholder="اسم المحل"
+                  required
+                />
+                <input
+                  type="text"
+                  name="work_times"
+                  placeholder="أوقات المحل"
+                  required
+                />
+                <select name="facility_id" required>
+                  <option value="">اختر المرفق</option>
+                </select>
+                <input
+                  type="file"
+                  name="image"
+                  accept="image/jpeg,image/png,image/jpg"
+                  required
+                />
               </div>
+            </div>
 
-              <!-- قائمة المرافق -->
-              <div id="facilities-list" class="list-section">
-                <div class="table-header">
-                  <h3>قائمة مرافق المول</h3>
-                  <div class="search-box">
-                    <input type="text" class="search-input" placeholder="ابحث في المرافق..." onkeyup="searchTable('facilities-list', this.value)">
-                    <i class="fas fa-search search-icon"></i>
-                  </div>
-                </div>
-                <div class="table-wrapper">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>رقم المرفق</th>
-                        <th>الدور</th>
-                        <th>المساحة</th>
-                        <th>الحالة</th>
-                        <th>صاحب المحل</th>
-                        <th>اسم المحل</th>
-                        <th>الإجراءات</th>
-                      </tr>
-                    </thead>
-                    <tbody class="facilities-table">
-                    </tbody>
-                  </table>
+            <!-- قسم بيانات صاحب المحل -->
+            <div class="form-section">
+              <h4>بيانات صاحب المحل</h4>
+              <div class="form-grid">
+                <input
+                  type="text"
+                  name="owner_name"
+                  placeholder="اسم المستأجر الثنائي"
+                  required
+                />
+                <input
+                  type="text"
+                  name="username"
+                  placeholder="اسم المستخدم"
+                  required
+                />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="البريد الإلكتروني"
+                  required
+                />
+                <input
+                  type="tel"
+                  name="phone"
+                  placeholder="رقم الهاتف"
+                  required
+                />
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="كلمة السر"
+                  required
+                />
+                <input
+                  type="password"
+                  name="password_confirmation"
+                  placeholder="تأكيد كلمة السر"
+                  required
+                />
+                <select name="sex" required>
+                  <option value="">اختر النوع</option>
+                  <option value="male">ذكر</option>
+                  <option value="female">أنثى</option>
+                </select>
+                <input
+                  type="date"
+                  name="birth_date"
+                  placeholder="تاريخ الميلاد"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn-green">حفظ</button>
+              <button
+                type="button"
+                class="btn-secondary"
+                onclick="toggleForm('newStoreFormContainer')"
+              >
+                إلغاء
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <!-- جداول البيانات -->
+        <div class="tables-container" id="tables-view">
+          <div class="table card">
+            <div class="list-toggle-bar">
+              <button
+                class="btn-dark bar-btn active-bar-btn"
+                onclick="setActiveBarBtn(this); toggleList('facilities-list')"
+              >
+                <i class="fas fa-building"></i>
+                قائمة المرافق
+              </button>
+              <button
+                class="btn-dark bar-btn"
+                onclick="setActiveBarBtn(this); toggleList('tenants-list')"
+              >
+                <i class="fas fa-users"></i>
+                قائمة أصحاب المحلات
+              </button>
+              <button
+                class="btn-dark bar-btn"
+                onclick="setActiveBarBtn(this); toggleList('stores-list')"
+              >
+                <i class="fas fa-store"></i>
+                قائمة المحلات
+              </button>
+            </div>
+
+            <!-- قائمة المرافق -->
+            <div id="facilities-list" class="list-section">
+              <div class="table-header">
+                <h3>قائمة مرافق المول</h3>
+                <div class="search-box">
+                  <input
+                    type="text"
+                    class="search-input"
+                    placeholder="ابحث في المرافق..."
+                    onkeyup="searchTable('facilities-list', this.value)"
+                  />
+                  <i class="fas fa-search search-icon"></i>
                 </div>
               </div>
+              <div class="table-wrapper">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>رقم المرفق</th>
+                      <th>الدور</th>
+                      <th>المساحة</th>
+                      <th>الحالة</th>
+                      <th>صاحب المحل</th>
+                      <th>اسم المحل</th>
+                      <th>الإجراءات</th>
+                    </tr>
+                  </thead>
+                  <tbody class="facilities-table"></tbody>
+                </table>
+              </div>
+            </div>
 
-              <!-- قائمة أصحاب المحلات -->
-              <div id="tenants-list" class="list-section" style="display: none;">
-                <div class="table-header">
-                  <h3>قائمة أصحاب المحلات</h3>
-                  <div class="search-box">
-                    <input type="text" class="search-input" placeholder="ابحث في أصحاب المحلات..." onkeyup="searchTable('tenants-list', this.value)">
-                    <i class="fas fa-search search-icon"></i>
+            <!-- قائمة أصحاب المحلات -->
+            <div id="tenants-list" class="list-section" style="display: none">
+              <div class="table-header">
+                <h3>قائمة أصحاب المحلات</h3>
+                <div class="search-box">
+                  <input
+                    type="text"
+                    class="search-input"
+                    placeholder="ابحث في أصحاب المحلات..."
+                    onkeyup="searchTable('tenants-list', this.value)"
+                  />
+                  <i class="fas fa-search search-icon"></i>
                 </div>
               </div>
               <div class="table-wrapper">
@@ -1730,502 +2006,718 @@
                     </tr>
                   </thead>
 
-                  <tbody class="owner-table">
-
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-              <!-- قائمة المحلات -->
-              <div id="stores-list" class="list-section" style="display: none;">
-                <div class="table-header">
-                  <h3>قائمة المحلات</h3>
-                  <div class="search-box">
-                    <input type="text" class="search-input" placeholder="ابحث في المحلات..." onkeyup="searchTable('stores-list', this.value)">
-                    <i class="fas fa-search search-icon"></i>
-                  </div>
-                </div>
-                <div class="table-wrapper">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>اسم المالك</th>
-                        <th>اسم المحل</th>
-                        <th>النشاط</th>
-                        <th>الدور</th>
-                        <th>الحالة</th>
-                        <th>تاريخ بداية العقد</th>
-                        <th>أوقات الدوام</th>
-                        <th>الإجراءات</th>
-                    </tr>
-                    </thead>
-
-                    <tbody class="stores-table">
-
-                  </tbody>
+                  <tbody class="owner-table"></tbody>
                 </table>
-                </div>
               </div>
             </div>
-          </div>
-        
-          <!-- خريطة المول -->
-          <div class="card" id="map-view" style="display: none;">
-            <h3>خريطة المول</h3>
-            <div class="floor-controls">
-              <button class="btn-green" onclick="decrementFloor()">-</button>
-              <span id="currentFloor">الدور: 0</span>
-              <button class="btn-green" onclick="incrementFloor()">+</button>
+
+            <!-- قائمة المحلات -->
+            <div id="stores-list" class="list-section" style="display: none">
+              <div class="table-header">
+                <h3>قائمة المحلات</h3>
+                <div class="search-box">
+                  <input
+                    type="text"
+                    class="search-input"
+                    placeholder="ابحث في المحلات..."
+                    onkeyup="searchTable('stores-list', this.value)"
+                  />
+                  <i class="fas fa-search search-icon"></i>
+                </div>
+              </div>
+              <div class="table-wrapper">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>اسم المالك</th>
+                      <th>اسم المحل</th>
+                      <th>النشاط</th>
+                      <th>الدور</th>
+                      <th>الحالة</th>
+                      <th>تاريخ بداية العقد</th>
+                      <th>أوقات الدوام</th>
+                      <th>الإجراءات</th>
+                    </tr>
+                  </thead>
+
+                  <tbody class="stores-table"></tbody>
+                </table>
+              </div>
             </div>
-            <div id="mall-map"></div>
           </div>
         </div>
-            <!-- نافذة تعديل المحل -->
-        <div id="editStoreModal" class="modal">
+
+        <!-- خريطة المول -->
+        <div class="card" id="map-view" style="display: none">
+          <h3>خريطة المول</h3>
+          <div class="floor-controls">
+            <button class="btn-green" onclick="decrementFloor()">-</button>
+            <span id="currentFloor">الدور: 0</span>
+            <button class="btn-green" onclick="incrementFloor()">+</button>
+          </div>
+          <div id="mall-map"></div>
+        </div>
+      </div>
+      <!-- نافذة تعديل المحل -->
+      <div id="editStoreModal" class="modal">
         <div class="modal-content">
-            <h3>تعديل بيانات المحل</h3>
-            <form class="form">
+          <h3>تعديل بيانات المحل</h3>
+          <form class="form">
             <div class="form-sections">
-                <!-- قسم بيانات المحل -->
-                <div class="form-section">
+              <!-- قسم بيانات المحل -->
+              <div class="form-section">
                 <h4>بيانات المحل</h4>
                 <div class="form-grid">
-                    <div class="form-group">
+                  <div class="form-group">
                     <label for="edit-store-number">رقم المحل</label>
-                    <input type="text" id="edit-store-number" placeholder="رقم المحل" required />
-                    </div>
-                    <div class="form-group">
+                    <input
+                      type="text"
+                      id="edit-store-number"
+                      placeholder="رقم المحل"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
                     <label for="edit-store-area">المساحة</label>
-                    <input type="number" id="edit-store-area" placeholder="المساحة" required />
-                    </div>
-                    <div class="form-group">
+                    <input
+                      type="number"
+                      id="edit-store-area"
+                      placeholder="المساحة"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
                     <label for="edit-store-activity">النشاط</label>
                     <select id="edit-store-activity" required>
-                        <option value="">اختر النشاط</option>
-                        <option value="restaurant">مطعم</option>
-                        <option value="clothing">ملابس</option>
-                        <option value="electronics">إلكترونيات</option>
-                        <option value="cosmetics">مستحضرات تجميل</option>
-                        <option value="services">خدمات</option>
-                        <option value="other">أخرى</option>
+                      <option value="">اختر النشاط</option>
+                      <option value="restaurant">مطعم</option>
+                      <option value="clothing">ملابس</option>
+                      <option value="electronics">إلكترونيات</option>
+                      <option value="cosmetics">مستحضرات تجميل</option>
+                      <option value="services">خدمات</option>
+                      <option value="other">أخرى</option>
                     </select>
-                    </div>
-                    <div class="form-group">
+                  </div>
+                  <div class="form-group">
                     <label for="edit-store-floor">رقم الدور</label>
-                    <input type="number" id="edit-store-floor" placeholder="رقم الدور" required />
-                    </div>
-                    <div class="form-group">
+                    <input
+                      type="number"
+                      id="edit-store-floor"
+                      placeholder="رقم الدور"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
                     <label for="edit-store-x">الموقع X</label>
-                    <input type="number" id="edit-store-x" placeholder="الموقع X" required />
-                    </div>
-                    <div class="form-group">
+                    <input
+                      type="number"
+                      id="edit-store-x"
+                      placeholder="الموقع X"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
                     <label for="edit-store-y">الموقع Y</label>
-                    <input type="number" id="edit-store-y" placeholder="الموقع Y" required />
-                    </div>
-                    <div class="form-group">
+                    <input
+                      type="number"
+                      id="edit-store-y"
+                      placeholder="الموقع Y"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
                     <label for="edit-store-width">العرض</label>
-                    <input type="number" id="edit-store-width" placeholder="العرض" required />
-                    </div>
-                    <div class="form-group">
+                    <input
+                      type="number"
+                      id="edit-store-width"
+                      placeholder="العرض"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
                     <label for="edit-store-height">الطول</label>
-                    <input type="number" id="edit-store-height" placeholder="الطول" required />
-                    </div>
+                    <input
+                      type="number"
+                      id="edit-store-height"
+                      placeholder="الطول"
+                      required
+                    />
+                  </div>
                 </div>
-                </div>
+              </div>
 
-                <!-- قسم بيانات صاحب المحل -->
-                <div class="form-section">
+              <!-- قسم بيانات صاحب المحل -->
+              <div class="form-section">
                 <h4>بيانات صاحب المحل</h4>
                 <div class="form-grid">
-                    <div class="form-group">
+                  <div class="form-group">
                     <label for="edit-tenant-name">اسم المستأجر</label>
-                    <input type="text" id="edit-tenant-name" placeholder="اسم المستأجر" required />
-                    </div>
-                    <div class="form-group">
+                    <input
+                      type="text"
+                      id="edit-tenant-name"
+                      placeholder="اسم المستأجر"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
                     <label for="edit-tenant-phone">رقم الجوال</label>
-                    <input type="tel" id="edit-tenant-phone" placeholder="رقم الجوال" required />
-                    </div>
-                    <div class="form-group">
+                    <input
+                      type="tel"
+                      id="edit-tenant-phone"
+                      placeholder="رقم الجوال"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
                     <label for="edit-tenant-email">البريد الإلكتروني</label>
-                    <input type="email" id="edit-tenant-email" placeholder="البريد الإلكتروني" />
-                    </div>
-                    <div class="form-group">
+                    <input
+                      type="email"
+                      id="edit-tenant-email"
+                      placeholder="البريد الإلكتروني"
+                    />
+                  </div>
+                  <div class="form-group">
                     <label for="edit-tenant-id">رقم الهوية</label>
-                    <input type="text" id="edit-tenant-id" placeholder="رقم الهوية" required />
-                    </div>
-                    <div class="form-group">
-                    <label for="edit-tenant-contract-start">تاريخ بداية العقد</label>
-                    <input type="date" id="edit-tenant-contract-start" required />
-                    </div>
-                    <div class="form-group">
-                    <label for="edit-tenant-contract-end">تاريخ نهاية العقد</label>
+                    <input
+                      type="text"
+                      id="edit-tenant-id"
+                      placeholder="رقم الهوية"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="edit-tenant-contract-start"
+                      >تاريخ بداية العقد</label
+                    >
+                    <input
+                      type="date"
+                      id="edit-tenant-contract-start"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="edit-tenant-contract-end"
+                      >تاريخ نهاية العقد</label
+                    >
                     <input type="date" id="edit-tenant-contract-end" required />
-                    </div>
+                  </div>
                 </div>
-                </div>
+              </div>
             </div>
             <div class="form-actions">
-                <button type="submit" class="btn-green">حفظ التغييرات</button>
-                <button type="button" class="btn-secondary" onclick="closeModal('editStoreModal')">إلغاء</button>
+              <button type="submit" class="btn-green">حفظ التغييرات</button>
+              <button
+                type="button"
+                class="btn-secondary"
+                onclick="closeModal('editStoreModal')"
+              >
+                إلغاء
+              </button>
             </div>
-            </form>
+          </form>
         </div>
-        </div>
+      </div>
 
-        <!-- نافذة عرض تفاصيل المحل -->
-        <div id="storeDetailsModal" class="modal">
-          <div class="modal-content" style="max-width: 600px;">
-            <h3 style="margin-bottom: 1.5rem; color: #2563eb; text-align: center;">تفاصيل المحل والمرفق</h3>
-            <div class="details-sections" style="display: flex; flex-direction: column; gap: 1.5rem;">
-              <!-- بيانات المرفق -->
-              <div class="details-section" style="background: #f8fafc; border-radius: 10px; padding: 1rem 1.5rem; box-shadow: 0 1px 4px #e2e8f0;">
-                <h4 style="color: #22c55e; margin-bottom: 1rem;"><i class="fas fa-building"></i> بيانات المرفق</h4>
-                <div class="details-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem 1.5rem;">
-                  <div><span class="detail-label">مبلغ الإيجار:</span> <span id="view-facility-rent"></span></div>
-                  <div><span class="detail-label">رقم عداد الماء:</span> <span id="view-facility-water-meter"></span></div>
-                  <div><span class="detail-label">رقم عداد الكهرباء:</span> <span id="view-facility-electricity-meter"></span></div>
-                  <div><span class="detail-label">العرض:</span> <span id="view-facility-width"></span></div>
-                  <div><span class="detail-label">الطول:</span> <span id="view-facility-height"></span></div>
+      <!-- نافذة عرض تفاصيل المحل -->
+      <div id="storeDetailsModal" class="modal">
+        <div class="modal-content" style="max-width: 600px">
+          <h3 style="margin-bottom: 1.5rem; color: #2563eb; text-align: center">
+            تفاصيل المحل والمرفق
+          </h3>
+          <div
+            class="details-sections"
+            style="display: flex; flex-direction: column; gap: 1.5rem"
+          >
+            <!-- بيانات المرفق -->
+            <div
+              class="details-section"
+              style="
+                background: #f8fafc;
+                border-radius: 10px;
+                padding: 1rem 1.5rem;
+                box-shadow: 0 1px 4px #e2e8f0;
+              "
+            >
+              <h4 style="color: #22c55e; margin-bottom: 1rem">
+                <i class="fas fa-building"></i> بيانات المرفق
+              </h4>
+              <div
+                class="details-grid"
+                style="
+                  display: grid;
+                  grid-template-columns: 1fr 1fr;
+                  gap: 0.7rem 1.5rem;
+                "
+              >
+                <div>
+                  <span class="detail-label">مبلغ الإيجار:</span>
+                  <span id="view-facility-rent"></span>
+                </div>
+                <div>
+                  <span class="detail-label">رقم عداد الماء:</span>
+                  <span id="view-facility-water-meter"></span>
+                </div>
+                <div>
+                  <span class="detail-label">رقم عداد الكهرباء:</span>
+                  <span id="view-facility-electricity-meter"></span>
+                </div>
+                <div>
+                  <span class="detail-label">العرض:</span>
+                  <span id="view-facility-width"></span>
+                </div>
+                <div>
+                  <span class="detail-label">الطول:</span>
+                  <span id="view-facility-height"></span>
                 </div>
               </div>
-            
-              <!-- بيانات المحل -->
-              <div class="details-section" style="background: #f8fafc; border-radius: 10px; padding: 1rem 1.5rem; box-shadow: 0 1px 4px #e2e8f0;">
-                <h4 style="color: #3b82f6; margin-bottom: 1rem;"><i class="fas fa-store"></i> بيانات المحل</h4>
-                <div class="details-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem 1.5rem;">
-                  <div><span class="detail-label">اسم المحل:</span> <span id="view-store-name"></span></div>
-                  <div><span class="detail-label">النشاط:</span> <span id="view-store-activity"></span></div>
-                  <div><span class="detail-label">تاريخ بدء العقد:</span> <span id="view-store-contract-start"></span></div>
-                  <div><span class="detail-label">أوقات الدوام:</span> <span id="view-store-working-hours"></span></div>
-                </div>
-
-              </div>
             </div>
-            <div class="modal-actions" style="margin-top: 2rem; text-align: left;">
-              <button class="btn-secondary" onclick="closeModal('storeDetailsModal')">إغلاق</button>
+
+            <!-- بيانات المحل -->
+            <div
+              class="details-section"
+              style="
+                background: #f8fafc;
+                border-radius: 10px;
+                padding: 1rem 1.5rem;
+                box-shadow: 0 1px 4px #e2e8f0;
+              "
+            >
+              <h4 style="color: #3b82f6; margin-bottom: 1rem">
+                <i class="fas fa-store"></i> بيانات المحل
+              </h4>
+              <div
+                class="details-grid"
+                style="
+                  display: grid;
+                  grid-template-columns: 1fr 1fr;
+                  gap: 0.7rem 1.5rem;
+                "
+              >
+                <div>
+                  <span class="detail-label">اسم المحل:</span>
+                  <span id="view-store-name"></span>
+                </div>
+                <div>
+                  <span class="detail-label">النشاط:</span>
+                  <span id="view-store-activity"></span>
+                </div>
+                <div>
+                  <span class="detail-label">تاريخ بدء العقد:</span>
+                  <span id="view-store-contract-start"></span>
+                </div>
+                <div>
+                  <span class="detail-label">أوقات الدوام:</span>
+                  <span id="view-store-working-hours"></span>
+                </div>
+              </div>
             </div>
           </div>
+          <div class="modal-actions" style="margin-top: 2rem; text-align: left">
+            <button
+              class="btn-secondary"
+              onclick="closeModal('storeDetailsModal')"
+            >
+              إغلاق
+            </button>
+          </div>
         </div>
-        <!-- نافذة عرض/تعديل ديناميكية -->
-         <form >
+      </div>
+      <!-- نافذة عرض/تعديل ديناميكية -->
+      <form>
         <div id="viewEditModal" class="modal">
-          <div class="modal-content" style="max-width: 600px;">
-            <h3 id="viewEditModalTitle" style="margin-bottom: 1.5rem; color: #2563eb; text-align: center;"></h3>
+          <div class="modal-content" style="max-width: 600px">
+            <h3
+              id="viewEditModalTitle"
+              style="margin-bottom: 1.5rem; color: #2563eb; text-align: center"
+            ></h3>
             <form id="viewEditForm" class="form">
-              <div id="viewEditFields" class="form-grid" style="gap: 1.2rem 1.5rem;"></div>
-              <div class="form-actions" style="margin-top: 2rem; text-align: left;">
-                <button type="button" class="btn-secondary" onclick="closeModal('viewEditModal')">إغلاق</button>
+              <div
+                id="viewEditFields"
+                class="form-grid"
+                style="gap: 1.2rem 1.5rem"
+              ></div>
+              <div
+                class="form-actions"
+                style="margin-top: 2rem; text-align: left"
+              >
+                <button
+                  type="button"
+                  class="btn-secondary"
+                  onclick="closeModal('viewEditModal')"
+                >
+                  إغلاق
+                </button>
               </div>
             </form>
-            </div>
-          </div>
-        </form>
-
-        <!-- نافذة عرض/تعديل ديناميكية -->
-        <div id="viewEditModal" class="modal">
-          <div class="modal-content" style="max-width: 600px;">
-            <h3 id="viewEditModalTitle" style="margin-bottom: 1.5rem; color: #2563eb; text-align: center;"></h3>
-            <form id="viewEditForm" class="form">
-              <div id="viewEditFields" class="form-grid" style="gap: 1.2rem 1.5rem;"></div>
-              <div class="form-actions" style="margin-top: 2rem; text-align: left;">
-                <button type="button" class="btn-secondary" onclick="closeModal('viewEditModal')">إغلاق</button>
-                </div>
-            </form>
-                </div>
-        </div>
-
-        <!-- نافذة تأكيد الحذف -->
-        <div id="delete-confirm-modal" class="modal" style="display:none;">
-          <div class="modal-content" style="max-width: 400px;">
-            <span class="close-modal" onclick="closeDeleteModal()">&times;</span>
-            <h3 id="delete-modal-title">تأكيد الحذف</h3>
-            <div class="delete-message" style="text-align: center; margin: 20px 0;">
-              <i class="fas fa-exclamation-triangle" style="color: #f59e0b; font-size: 3em; margin-bottom: 15px;"></i>
-              <p id="delete-confirm-message" style="color: #4b5563; font-size: 1.1em; line-height: 1.5;">هل أنت متأكد من حذف هذا السطر؟</p>
-            </div>
-            <div class="form-actions">
-              <button type="button" class="btn-secondary" onclick="confirmDelete()">حذف</button>
-              <button type="button" class="btn-green" onclick="closeDeleteModal()">إلغاء</button>
-            </div>
           </div>
         </div>
+      </form>
+
+      <!-- نافذة عرض/تعديل ديناميكية -->
+      <div id="viewEditModal" class="modal">
+        <div class="modal-content" style="max-width: 600px">
+          <h3
+            id="viewEditModalTitle"
+            style="margin-bottom: 1.5rem; color: #2563eb; text-align: center"
+          ></h3>
+          <form id="viewEditForm" class="form">
+            <div
+              id="viewEditFields"
+              class="form-grid"
+              style="gap: 1.2rem 1.5rem"
+            ></div>
+            <div
+              class="form-actions"
+              style="margin-top: 2rem; text-align: left"
+            >
+              <button
+                type="button"
+                class="btn-secondary"
+                onclick="closeModal('viewEditModal')"
+              >
+                إغلاق
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- نافذة تأكيد الحذف -->
+      <div id="delete-confirm-modal" class="modal" style="display: none">
+        <div class="modal-content" style="max-width: 400px">
+          <span class="close-modal" onclick="closeDeleteModal()">&times;</span>
+          <h3 id="delete-modal-title">تأكيد الحذف</h3>
+          <div
+            class="delete-message"
+            style="text-align: center; margin: 20px 0"
+          >
+            <i
+              class="fas fa-exclamation-triangle"
+              style="color: #f59e0b; font-size: 3em; margin-bottom: 15px"
+            ></i>
+            <p
+              id="delete-confirm-message"
+              style="color: #4b5563; font-size: 1.1em; line-height: 1.5"
+            >
+              هل أنت متأكد من حذف هذا السطر؟
+            </p>
+          </div>
+          <div class="form-actions">
+            <button
+              type="button"
+              class="btn-secondary"
+              onclick="confirmDelete()"
+            >
+              حذف
+            </button>
+            <button
+              type="button"
+              class="btn-green"
+              onclick="closeDeleteModal()"
+            >
+              إلغاء
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
-<script src="../views/js/mall-management/index.js"></script>
+    <script src="../views/js/mall-management/index.js"></script>
 
-<script src="../views/js/mall-management/sotores-management.js"></script>
+    <script src="../views/js/mall-management/sotores-management.js"></script>
 
-<script>
-  function toggleForm(formId) {
-    const form = document.getElementById(formId);
-    const allForms = document.querySelectorAll('.form-container');
-    const tablesContainer = document.getElementById('tables-view');
-    
-    if (form.style.display === 'block') {
-      form.style.display = 'none';
-      tablesContainer.style.display = 'block';
-      return;
-    }
-    
-    allForms.forEach(f => f.style.display = 'none');
-    form.style.display = 'block';
-    tablesContainer.style.display = 'none';
-  }
+    <script>
+      function toggleForm(formId) {
+        const form = document.getElementById(formId);
+        const allForms = document.querySelectorAll(".form-container");
+        const tablesContainer = document.getElementById("tables-view");
 
-  function toggleList(listId) {
-    // تحديث حالة الأزرار
-    const buttons = document.querySelectorAll('.list-toggle-bar .btn-dark');
-    buttons.forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
+        if (form.style.display === "block") {
+          form.style.display = "none";
+          tablesContainer.style.display = "block";
+          return;
+        }
 
-    // إخفاء جميع القوائم
-    const lists = document.querySelectorAll('.list-section');
-    lists.forEach(list => list.style.display = 'none');
+        allForms.forEach((f) => (f.style.display = "none"));
+        form.style.display = "block";
+        tablesContainer.style.display = "none";
+      }
 
-    // إظهار القائمة المطلوبة
-    document.getElementById(listId).style.display = 'block';
+      function toggleList(listId) {
+        // تحديث حالة الأزرار
+        const buttons = document.querySelectorAll(".list-toggle-bar .btn-dark");
+        buttons.forEach((btn) => btn.classList.remove("active"));
+        event.target.classList.add("active");
 
-    if (typeof StoreManagement === 'function') {
-        window.storeManagement = new StoreManagement();
-    } 
-   }
+        // إخفاء جميع القوائم
+        const lists = document.querySelectorAll(".list-section");
+        lists.forEach((list) => (list.style.display = "none"));
 
+        // إظهار القائمة المطلوبة
+        document.getElementById(listId).style.display = "block";
 
-
-  // تهيئة القوائم عند تحميل الصفحة
-  document.addEventListener('DOMContentLoaded', function() {
-    // إظهار قائمة المرافق افتراضياً
-    document.querySelector('.list-toggle-bar .btn-dark').classList.add('active');
-    document.getElementById('facilities-list').style.display = 'block';
-  });
-
-  function searchTable(listId, searchText) {
-    const table = document.querySelector(`#${listId} table`);
-    const rows = table.getElementsByTagName('tr');
-    
-    // تحويل نص البحث إلى حروف صغيرة
-    searchText = searchText.toLowerCase();
-    
-    // بدء من الصف الثاني (تخطي رأس الجدول)
-    for (let i = 1; i < rows.length; i++) {
-      const row = rows[i];
-      const cells = row.getElementsByTagName('td');
-      let found = false;
-      
-      // البحث في كل خلية في الصف
-      for (let j = 0; j < cells.length; j++) {
-        const cell = cells[j];
-        if (cell.textContent.toLowerCase().indexOf(searchText) > -1) {
-          found = true;
-          break;
+        if (typeof StoreManagement === "function") {
+          window.storeManagement = new StoreManagement();
         }
       }
-      
-      // إظهار أو إخفاء الصف بناءً على نتيجة البحث
-      row.style.display = found ? '' : 'none';
-    }
-  }
 
-  // دالة مساعدة لإنشاء صف من الحقول
-  function createFieldRow(fields, data) {
-    return fields.map(field => {
-      const value = data[field.key] || '';
-      const fieldId = `view-field-${field.key}`;
-      return `
+      // تهيئة القوائم عند تحميل الصفحة
+      document.addEventListener("DOMContentLoaded", function () {
+        // إظهار قائمة المرافق افتراضياً
+        document
+          .querySelector(".list-toggle-bar .btn-dark")
+          .classList.add("active");
+        document.getElementById("facilities-list").style.display = "block";
+      });
+
+      function searchTable(listId, searchText) {
+        const table = document.querySelector(`#${listId} table`);
+        const rows = table.getElementsByTagName("tr");
+
+        // تحويل نص البحث إلى حروف صغيرة
+        searchText = searchText.toLowerCase();
+
+        // بدء من الصف الثاني (تخطي رأس الجدول)
+        for (let i = 1; i < rows.length; i++) {
+          const row = rows[i];
+          const cells = row.getElementsByTagName("td");
+          let found = false;
+
+          // البحث في كل خلية في الصف
+          for (let j = 0; j < cells.length; j++) {
+            const cell = cells[j];
+            if (cell.textContent.toLowerCase().indexOf(searchText) > -1) {
+              found = true;
+              break;
+            }
+          }
+
+          // إظهار أو إخفاء الصف بناءً على نتيجة البحث
+          row.style.display = found ? "" : "none";
+        }
+      }
+
+      // دالة مساعدة لإنشاء صف من الحقول
+      function createFieldRow(fields, data) {
+        return fields
+          .map((field) => {
+            const value = data[field.key] || "";
+            const fieldId = `view-field-${field.key}`;
+            return `
         <div class="field-row">
           <label>${field.label}</label>
-          <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
+          <span id="${fieldId}" class="field-value">${
+              field.type === "date" && value ? value.split("T")[0] : value
+            }</span>
         </div>
         `;
-    }).join('');
-  }
+          })
+          .join("");
+      }
 
-  // دالة مساعدة للحصول على نوع الحقل
-  function getFieldType(key, type) {
-      const fieldTypes = {
+      // دالة مساعدة للحصول على نوع الحقل
+      function getFieldType(key, type) {
+        const fieldTypes = {
           facilities: {
-              rent: 'number',
-              waterMeter: 'text',
-              electricityMeter: 'text',
-              floor: 'text',
-              x: 'number',
-              y: 'number',
-              width: 'number',
-              height: 'number'
+            rent: "number",
+            waterMeter: "text",
+            electricityMeter: "text",
+            floor: "text",
+            x: "number",
+            y: "number",
+            width: "number",
+            height: "number",
           },
           tenants: {
-              name: 'text',
-              phone: 'tel',
-              email: 'email',
-              stores: 'text',
-              gender: 'select',
-              birthdate: 'date'
+            name: "text",
+            phone: "tel",
+            email: "email",
+            stores: "text",
+            gender: "select",
+            birthdate: "date",
           },
           stores: {
-              owner: 'text',
-              storeName: 'text',
-              activity: 'text',
-              contractStart: 'date',
-              workingHours: 'text'
-          }
-      };
-      return fieldTypes[type][key] || 'text';
-  }
+            owner: "text",
+            storeName: "text",
+            activity: "text",
+            contractStart: "date",
+            workingHours: "text",
+          },
+        };
+        return fieldTypes[type][key] || "text";
+      }
 
+      // دالة تفعيل تعديل حقل معين
+      function enableFieldEdit(fieldId, fieldKey, fieldType, type) {
+        const span = document.getElementById(fieldId);
+        if (!span) return;
 
-  // دالة تفعيل تعديل حقل معين
-  function enableFieldEdit(fieldId, fieldKey, fieldType, type) {
-      const span = document.getElementById(fieldId);
-      if (!span) return;
-      
-      const currentValue = span.textContent.trim();
-      
-      let inputElement;
-      if (fieldType === 'select') {
-          inputElement = document.createElement('select');
-          if (fieldKey === 'gender') {
-              inputElement.innerHTML = `
-                  <option value="male" ${currentValue === 'ذكر' ? 'selected' : ''}>ذكر</option>
-                  <option value="female" ${currentValue === 'أنثى' ? 'selected' : ''}>أنثى</option>
+        const currentValue = span.textContent.trim();
+
+        let inputElement;
+        if (fieldType === "select") {
+          inputElement = document.createElement("select");
+          if (fieldKey === "gender") {
+            inputElement.innerHTML = `
+                  <option value="male" ${
+                    currentValue === "ذكر" ? "selected" : ""
+                  }>ذكر</option>
+                  <option value="female" ${
+                    currentValue === "أنثى" ? "selected" : ""
+                  }>أنثى</option>
               `;
           }
-      } else {
-          inputElement = document.createElement('input');
+        } else {
+          inputElement = document.createElement("input");
           inputElement.type = fieldType;
           inputElement.value = currentValue;
-          
+
           // إضافة خصائص إضافية حسب نوع الحقل
-          if (fieldType === 'number') {
-              inputElement.min = '0';
-              inputElement.step = 'any';
+          if (fieldType === "number") {
+            inputElement.min = "0";
+            inputElement.step = "any";
           }
-          if (fieldType === 'tel') {
-              inputElement.pattern = '[0-9]{10}';
-              inputElement.placeholder = '05XXXXXXXX';
+          if (fieldType === "tel") {
+            inputElement.pattern = "[0-9]{10}";
+            inputElement.placeholder = "05XXXXXXXX";
           }
-          if (fieldType === 'email') {
-              inputElement.placeholder = 'example@domain.com';
+          if (fieldType === "email") {
+            inputElement.placeholder = "example@domain.com";
           }
-      }
-      
-      inputElement.className = 'edit-input';
-      inputElement.id = `edit-${fieldId}`;
-      
-      // استبدال span بحقل الإدخال فقط (بدون أزرار)
-      const container = document.createElement('div');
-      container.className = 'edit-container';
-      container.appendChild(inputElement);
-      span.parentNode.replaceChild(container, span);
-      inputElement.focus();
-  }
+        }
 
-  // دالة حفظ تعديل الحقل
-  function saveFieldEdit(fieldId, fieldKey, type) {
-      const input = document.getElementById(`edit-${fieldId}`);
-      if (!input) return;
-      
-      const newValue = input.value.trim();
-      const container = input.parentNode;
-      
-      // التحقق من صحة البيانات
-      if (input.type === 'number' && isNaN(newValue)) {
-          alert('الرجاء إدخال رقم صحيح');
-          return;
-      }
-      if (input.type === 'tel' && !/^[0-9]{10}$/.test(newValue)) {
-          alert('الرجاء إدخال رقم جوال صحيح مكون من 10 أرقام');
-          return;
-      }
-      if (input.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newValue)) {
-          alert('الرجاء إدخال بريد إلكتروني صحيح');
-          return;
-      }
-      
-      // هنا يمكنك إضافة التحقق من صحة البيانات وإرسالها إلى الخادم
-      
-      // إعادة عرض القيمة المحدثة
-      const span = document.createElement('span');
-      span.id = fieldId;
-      span.className = 'field-value';
-      span.textContent = newValue;
-      
-      container.parentNode.replaceChild(span, container);
-  }
+        inputElement.className = "edit-input";
+        inputElement.id = `edit-${fieldId}`;
 
-  // دالة إلغاء التعديل
-  function cancelFieldEdit(fieldId, value) {
-      const span = document.createElement('span');
-      span.id = fieldId;
-      span.className = 'field-value';
-      span.textContent = value;
-      
-      const container = document.querySelector(`#edit-${fieldId}`)?.parentNode;
-      if (container) {
-          container.parentNode.replaceChild(span, container);
+        // استبدال span بحقل الإدخال فقط (بدون أزرار)
+        const container = document.createElement("div");
+        container.className = "edit-container";
+        container.appendChild(inputElement);
+        span.parentNode.replaceChild(container, span);
+        inputElement.focus();
       }
-  }
 
-  function confirmDelete() {
-    if (rowToDelete) rowToDelete.remove();
-    closeDeleteModal();
-  }
-  function closeDeleteModal() {
-    document.getElementById('delete-confirm-modal').style.display = 'none';
-    rowToDelete = null;
-  }
+      // دالة حفظ تعديل الحقل
+      function saveFieldEdit(fieldId, fieldKey, type) {
+        const input = document.getElementById(`edit-${fieldId}`);
+        if (!input) return;
 
-  // دالة لحفظ جميع الحقول دفعة واحدة
-  function saveAllFieldsEdit(type) {
-    const editBtn = document.querySelector('.edit-all-btn');
-    const fields = document.querySelectorAll('#viewEditFields .field-row');
-    let valid = true;
-    fields.forEach(field => {
-      const input = field.querySelector('.edit-input');
-      if (input) {
-        let newValue = input.value.trim();
-        // تحقق من صحة البيانات حسب النوع
-        if (input.type === 'number' && isNaN(newValue)) {
-          alert('الرجاء إدخال رقم صحيح');
-          valid = false;
+        const newValue = input.value.trim();
+        const container = input.parentNode;
+
+        // التحقق من صحة البيانات
+        if (input.type === "number" && isNaN(newValue)) {
+          alert("الرجاء إدخال رقم صحيح");
           return;
         }
-        if (input.type === 'tel' && !/^[0-9]{10}$/.test(newValue)) {
-          alert('الرجاء إدخال رقم جوال صحيح مكون من 10 أرقام');
-          valid = false;
+        if (input.type === "tel" && !/^[0-9]{10}$/.test(newValue)) {
+          alert("الرجاء إدخال رقم جوال صحيح مكون من 10 أرقام");
           return;
         }
-        if (input.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newValue)) {
-          alert('الرجاء إدخال بريد إلكتروني صحيح');
-          valid = false;
+        if (
+          input.type === "email" &&
+          !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newValue)
+        ) {
+          alert("الرجاء إدخال بريد إلكتروني صحيح");
           return;
         }
-      }
-    });
-    if (!valid) return;
-    // حفظ القيم الجديدة
-    fields.forEach(field => {
-      const input = field.querySelector('.edit-input');
-      if (input) {
-        const fieldId = input.id.replace('edit-', '');
-        const span = document.createElement('span');
+
+        // هنا يمكنك إضافة التحقق من صحة البيانات وإرسالها إلى الخادم
+
+        // إعادة عرض القيمة المحدثة
+        const span = document.createElement("span");
         span.id = fieldId;
-        span.className = 'field-value';
-        span.textContent = input.value.trim();
-        field.querySelector('.edit-container').parentNode.replaceChild(span, field.querySelector('.edit-container'));
-      }
-    });
-    // إعادة زر التعديل وإخفاء أزرار الحفظ/الإلغاء
-    editBtn.classList.remove('editing');
-    editBtn.style.display = '';
-    const actionBtns = document.getElementById('edit-actions-bottom');
-    if (actionBtns) actionBtns.remove();
-  }
+        span.className = "field-value";
+        span.textContent = newValue;
 
-  // أضف جافاسكريبت لتفعيل تمييز الزر النشط
-  function setActiveBarBtn(btn) {
-    document.querySelectorAll('.header-bar .bar-btn').forEach(b => b.classList.remove('active-bar-btn'));
-    btn.classList.add('active-bar-btn');
-  }
-</script>
-</body>
+        container.parentNode.replaceChild(span, container);
+      }
+
+      // دالة إلغاء التعديل
+      function cancelFieldEdit(fieldId, value) {
+        const span = document.createElement("span");
+        span.id = fieldId;
+        span.className = "field-value";
+        span.textContent = value;
+
+        const container = document.querySelector(
+          `#edit-${fieldId}`
+        )?.parentNode;
+        if (container) {
+          container.parentNode.replaceChild(span, container);
+        }
+      }
+
+      function confirmDelete() {
+        if (rowToDelete) rowToDelete.remove();
+        closeDeleteModal();
+      }
+      function closeDeleteModal() {
+        document.getElementById("delete-confirm-modal").style.display = "none";
+        rowToDelete = null;
+      }
+
+      // دالة لحفظ جميع الحقول دفعة واحدة
+      function saveAllFieldsEdit(type) {
+        const editBtn = document.querySelector(".edit-all-btn");
+        const fields = document.querySelectorAll("#viewEditFields .field-row");
+        let valid = true;
+        fields.forEach((field) => {
+          const input = field.querySelector(".edit-input");
+          if (input) {
+            let newValue = input.value.trim();
+            // تحقق من صحة البيانات حسب النوع
+            if (input.type === "number" && isNaN(newValue)) {
+              alert("الرجاء إدخال رقم صحيح");
+              valid = false;
+              return;
+            }
+            if (input.type === "tel" && !/^[0-9]{10}$/.test(newValue)) {
+              alert("الرجاء إدخال رقم جوال صحيح مكون من 10 أرقام");
+              valid = false;
+              return;
+            }
+            if (
+              input.type === "email" &&
+              !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newValue)
+            ) {
+              alert("الرجاء إدخال بريد إلكتروني صحيح");
+              valid = false;
+              return;
+            }
+          }
+        });
+        if (!valid) return;
+        // حفظ القيم الجديدة
+        fields.forEach((field) => {
+          const input = field.querySelector(".edit-input");
+          if (input) {
+            const fieldId = input.id.replace("edit-", "");
+            const span = document.createElement("span");
+            span.id = fieldId;
+            span.className = "field-value";
+            span.textContent = input.value.trim();
+            field
+              .querySelector(".edit-container")
+              .parentNode.replaceChild(
+                span,
+                field.querySelector(".edit-container")
+              );
+          }
+        });
+        // إعادة زر التعديل وإخفاء أزرار الحفظ/الإلغاء
+        editBtn.classList.remove("editing");
+        editBtn.style.display = "";
+        const actionBtns = document.getElementById("edit-actions-bottom");
+        if (actionBtns) actionBtns.remove();
+      }
+
+      // أضف جافاسكريبت لتفعيل تمييز الزر النشط
+      function setActiveBarBtn(btn) {
+        document
+          .querySelectorAll(".header-bar .bar-btn")
+          .forEach((b) => b.classList.remove("active-bar-btn"));
+        btn.classList.add("active-bar-btn");
+      }
+    </script>
+  </body>
 </html>

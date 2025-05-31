@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Chat;
 use App\Models\Mall;
 use App\Models\Facility;
 use App\Models\Shop;
@@ -223,11 +224,29 @@ class MallController extends Controller
             ], 404);
         }
 
+        $chats = Chat::with(['shop.owner', 'shop'])->where(['mall_id' => $id])->get()->map(function ($chat) {
+            // Tenant name
+
+            // Shop name
+            $chat->shop_name = $chat->shop ? $chat->shop->name : "غير مستأجر";
+            // Space
+            $chat->shop_image_url = null;
+            
+            $imagePath = storage_path('app/public/shops/' . $chat->shop->id . ' image.png');
+            if (file_exists($imagePath)) {
+                $chat->shop_image_url = 'localhost/IEMM/Back-end/storage/app/public/shops/' . $chat->shop->id . ' image.png';
+            } 
+            
+            $chat->shop_owner_name = $chat->shop->owner->f_name .' ' .$chat->shop->owner->l_name;
+            unset($chat->shop);
+            return $chat;
+        });
+
         return response()->json([
             'status' => 'success',
             'code' => 200,
-            'message' => 'تم استرجاع المنشأت بنجاح',
-            'data' => $mall->chats
+            'message' => 'تم استرجاع المحادثات بنجاح',
+            'data' => $chats
         ]);
     }
 
@@ -258,6 +277,55 @@ class MallController extends Controller
             'data' => $mall
         ]);
     }
+    public function money_logs(Request $request, $id)
+    {
+        $mall = Mall::find($id);
+
+        if (!$mall) {
+            return response()->json([
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'المول غير موجود',
+                'data' => null
+            ], 404);
+        }
+
+        // Get all shop IDs for this mall
+        $shopIds = $mall->shops()->pluck('id');
+
+        // Get money logs for these shops
+        $moneyLogs = MoneyLog::with('shop')
+            ->whereIn('shop_id', $shopIds)
+            ->orderBy('date', 'desc')
+            ->get()
+            ->groupBy(function ($log) {
+                return $log->shop_id . '-' . date('Y-m', strtotime($log->date));
+            })
+            ->map(function ($logs) {
+                $firstLog = $logs->first();
+                return [
+                    'shop_id' => $firstLog->shop_id,
+                    'shop_name' => $firstLog->shop ? $firstLog->shop->name : null,
+                    'shop_owner_name' => $firstLog->shop->owner->f_name . ' ' . $firstLog->shop->owner->l_name,
+                    'month' => date('Y-m', strtotime($firstLog->date)),
+                    'electricity' => $logs->where('type_id', 1)->sum('amount'),
+                    'water' => $logs->where('type_id', 2)->sum('amount'),
+                    'rent' => $logs->where('type_id', 3)->sum('amount'),
+
+                    'remaining_total' => $logs->sum('amount') - $logs->sum('paid_amount'),
+                    'total' => $logs->sum('amount')
+                ];
+            })
+            ->values();
+
+        return response()->json([
+            'status' => 'success',
+            'code' => 200,
+            'message' => 'تم استرجاع السجلات المالية بنجاح',
+            'data' => $moneyLogs
+        ]);
+    }
+
     public function admin(Request $request, $id)
     {
         try {

@@ -15,7 +15,7 @@ use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
-    
+
 
     public function register(Request $request)
     {
@@ -92,7 +92,7 @@ class AuthController extends Controller
                     'token' => $token,
                     'shop_id' => $shop->id,
                     'user_type' => $user->user_type,
-                    'is_owner' => $shop->owner_id == $user->id ? true:false
+                    'is_owner' => $shop->owner_id == $user->id ? true : false
                 ]
             ]);
         } else if ($user->user_type == 1) {
@@ -116,8 +116,17 @@ class AuthController extends Controller
                 'code' => 200,
                 'message' => 'تم تسجيل الدخول بنجاح',
                 'data' => [
-                    'user_name' => $user->f_name . ' ' . $user->l_name,
-                    'user_id' => $user->id,
+                    'user' => [
+                        'id' => $user->id,
+                        'f_name' => $user->f_name,
+                        'l_name' => $user->l_name,
+                        'email' => $user->email,
+                        'phone' => $user->phone,
+                        'sex' => $user->sex,
+                        'created_at' => $user->created_at,
+                        'updated_at' => $user->updated_at
+                    ],
+
                     'token' => $token,
                     'user_type' => $user->user_type
                 ]
@@ -142,7 +151,7 @@ class AuthController extends Controller
         $request->user()->currentAccessToken()->delete();
         $user->remebrer_token = null;
         $user->save();
-        
+
         if ($user->user_type == 2) {
             $shop = Shop::find($user->shop_id);
             $shop->update(['state' => false]);
