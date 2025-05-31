@@ -21,6 +21,7 @@ class MoneyLogController extends Controller
                 return [
                     'shop_id' => $firstLog->shop_id,
                     'shop_name' => $firstLog->shop ? $firstLog->shop->name : null,
+                    'shop_owner_name' => $firstLog->shop->owner->f_name . ' ' . $firstLog->shop->owner->l_name,
                     'month' => date('Y-m', strtotime($firstLog->date)),
                     'electricity' => $logs->where('type_id', 1)->sum('amount'),
                     'water' => $logs->where('type_id', 2)->sum('amount'),
