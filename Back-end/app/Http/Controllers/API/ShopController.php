@@ -6,10 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Shop;
 use App\Models\Mall;
 use App\Models\Warehouse;
+use App\Models\Stock;
 use App\Models\Bill;
 use App\Models\Sale;
 use App\Models\Product;
 use App\Models\User;
+use App\Models\Review;
 use Illuminate\Http\Request;
 
 class ShopController extends Controller
@@ -61,7 +63,194 @@ class ShopController extends Controller
             'data' => $shop
         ]);
     }
+    public function dashboardData(Request $request, $id)
+    {
+        $shop = Shop::find($id);
+        if (!$shop) {
+            return response()->json([
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'المتجر غير موجود',
+                'data' => null
+            ], 404);
+        }
 
+        // Today's date
+        $today = now()->toDateString();
+        $yesterday = now()->subDay()->toDateString();
+        $startOfMonth = now()->startOfMonth()->toDateString();
+
+        // جلب فواتير اليوم وفواتير أمس للمتجر
+        $todayStart = $today . ' 00:00:00';
+        $todayEnd = $today . ' 23:59:59';
+        $yesterdayStart = $yesterday . ' 00:00:00';
+        $yesterdayEnd = $yesterday . ' 23:59:59';
+        // var_dump($todayStart);
+        $todayBills = Bill::where('shop_id', $shop->id)
+            ->where('date', '>=', $todayStart)
+            ->where('date', '<=', $todayEnd)
+            ->pluck('id');
+
+        $yesterdayBills = Bill::where('shop_id', $shop->id)
+            ->where('date', '>=', $yesterdayStart)
+            ->where('date', '<=', $yesterdayEnd)
+            ->pluck('id');
+        // var_dump($todayBills);
+        // مبيعات اليوم: مجموع (الكمية * سعر الوحدة) لكل المبيعات المرتبطة بفواتير اليوم
+        $todaySales = Sale::whereIn('bill_id', $todayBills)
+            ->get()
+            ->sum(function ($sale) {
+                return $sale->quantity * $sale->unit_price;
+            });
+
+        // مبيعات أمس: مجموع (الكمية * سعر الوحدة) لكل المبيعات المرتبطة بفواتير أمس
+        $yesterdaySales = Sale::whereIn('bill_id', $yesterdayBills)
+            ->get()
+            ->sum(function ($sale) {
+                return $sale->quantity * $sale->unit_price;
+            });
+
+        // متوسط قيمة الطلب: متوسط (الكمية * سعر الوحدة) لكل المبيعات المرتبطة بفواتير المتجر
+        $allBills = Bill::where('shop_id', $shop->id)->pluck('id');
+        $allSales = Sale::whereIn('bill_id', $allBills)->get();
+        $avgOrderValue = $allSales->count() > 0
+            ? round($allSales->sum(function ($sale) {
+                return $sale->quantity * $sale->unit_price;
+            }) / $allSales->count(), 2)
+            : 0;
+
+        // عدد المعاملات اليوم
+        $todayTransactions = Bill::where('shop_id', $shop->id)
+            ->where('date', '>=', $todayStart)
+            ->where('date', '<=', $todayEnd)
+            ->count();
+
+        // نسبة نمو المبيعات هذا الشهر
+        $monthBills = Bill::where('shop_id', $shop->id)
+            ->whereBetween('created_at', [$startOfMonth, $today])
+            ->pluck('id');
+        $lastMonthStart = now()->subMonth()->startOfMonth()->toDateString();
+        $lastMonthEnd = now()->subMonth()->endOfMonth()->toDateString();
+        $lastMonthBills = Bill::where('shop_id', $shop->id)
+            ->whereBetween('created_at', [$lastMonthStart, $lastMonthEnd])
+            ->pluck('id');
+        $monthSales = Sale::whereIn('bill_id', $monthBills)
+            ->get()
+            ->sum(function ($sale) {
+                return $sale->quantity * $sale->unit_price;
+            });
+        $lastMonthSales = Sale::whereIn('bill_id', $lastMonthBills)
+            ->get()
+            ->sum(function ($sale) {
+                return $sale->quantity * $sale->unit_price;
+            });
+        $salesGrowth = $lastMonthSales > 0 ? round(- (($monthSales - $lastMonthSales) / $lastMonthSales) * 100, 2) : null;
+
+        // المنتجات الفعالة
+        $onlineShowedProducts = Product::where('shop_id', $shop->id)->where('is_showed_online', true)->count();
+        $totalProducts = Product::where('shop_id', $shop->id)->count();
+
+        // منتجات قليلة المخزون (من المخزن الرئيسي فقط)
+        $lowStockProducts = 0;
+        $products = Product::where('shop_id', $shop->id)->get();
+        foreach ($products as $product) {
+            $primaryStocks = $product->stocks()->whereHas('warehouse', function ($q) {
+                $q->where('is_primary', true);
+            })->get();
+            foreach ($primaryStocks as $stock) {
+                if ($stock->quantity < $stock->minimum_quantity) {
+                    $lowStockProducts++;
+                    break; // Count product only once even if multiple low stocks
+                }
+            }
+        }
+        $nearExpire = 0;
+        $products = Product::where('shop_id', $shop->id)->get();
+        // var_dump(now()->subDays(10));
+        foreach ($products as $product) {
+            $stocks = $product->stocks; // get all stocks for all warehouses
+            
+            foreach ($stocks as $stock) {
+
+                if ($stock->expiration_date < now()->addDays(10) && $stock->expiration_date != null) {
+                    $nearExpire++;
+                }
+            }
+        }
+        // رضا العملاء (متوسط تقييمات المنتجات من جدول التقييمات)
+        $customerSatisfaction = null;
+        $productIds = Product::where('shop_id', $shop->id)->pluck('id');
+        if ($productIds->count() > 0) {
+            $customerSatisfaction = round(Review::whereIn('product_id', $productIds)->avg('rating'), 2);
+        }
+        $satisfactionPercent = $customerSatisfaction ? round(($customerSatisfaction / 5) * 100) : null;
+
+        $data = [
+            [
+                'title' => 'مبيعات اليوم',
+                'value' => $todaySales,
+                'unit' => 'ريال',
+                'change' => $yesterdaySales > 0 ? round((($todaySales - $yesterdaySales) / $yesterdaySales) * 100, 2) : null,
+                'change_text' => $yesterdaySales > 0 ? (($todaySales - $yesterdaySales) >= 0 ? '+' : '') . round((($todaySales - $yesterdaySales) / $yesterdaySales) * 100, 2) . '% عن أمس' : null,
+            ],
+            [
+                'title' => 'متوسط قيمة الطلب',
+                'value' => $avgOrderValue,
+                'unit' => 'ريال',
+                'change' => null,
+                'change_text' => null,
+            ],
+            [
+                'title' => 'عدد المعاملات',
+                'value' => $todayTransactions,
+                'unit' => '',
+                'change' => null,
+                'change_text' => 'معاملة اليوم',
+            ],
+            [
+                'title' => 'نسبة نمو المبيعات',
+                'value' => $salesGrowth,
+                'unit' => '%',
+                'change' => null,
+                'change_text' => 'هذا الشهر',
+            ],
+            [
+                'title' => 'المنتجات المعروضة أونلاين',
+                'value' => $onlineShowedProducts,
+                'unit' => '',
+                'change' => null,
+                'change_text' => 'من أصل ' . $totalProducts,
+            ],
+            [
+                'title' => 'منتجات قليلة المخزون',
+                'value' => $lowStockProducts,
+                'unit' => '',
+                'change' => null,
+                'change_text' => $lowStockProducts > 0 ? 'تحتاج للتجديد' : '',
+            ],
+            [
+                'title' => 'رضا العملاء',
+                'value' => $customerSatisfaction ? $customerSatisfaction . '/5' : null,
+                'unit' => '',
+                'change' => null,
+                'change_text' => $satisfactionPercent ? $satisfactionPercent . '% راضون' : null,
+            ],
+            [
+                'title' => 'متجات شارفت على الانتهاء',
+                'value' => $nearExpire ? $nearExpire : null,
+                'unit' => '',
+                'change' => null,
+                'change_text' => 'تحتاج للتصريف',
+            ],
+        ];
+
+        return response()->json([
+            'status' => 'success',
+            'code' => 200,
+            'message' => 'تم استرجاع بيانات لوحة التحكم بنجاح',
+            'data' => $data
+        ]);
+    }
     public function store(Request $request)
     {
         try {

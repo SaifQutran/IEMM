@@ -799,71 +799,11 @@
       });
 
       // دالة فتح نافذة العرض/تعديل الحقل
-
       function openViewModal(data, type) {
         const modal = document.getElementById('viewEditModal');
         const title = document.getElementById('viewEditModalTitle');
         const fieldsContainer = document.getElementById('viewEditFields');
         fieldsContainer.innerHTML = '';
-
-        // تعريف الحقول حسب النوع
-        let fields = [];
-        if (type === 'facilities') {
-          title.textContent = 'بيانات المرفق';
-          fields = [
-            {label: 'مبلغ الإيجار', key: 'rent', type: 'number'},
-            {label: 'رقم عداد الماء', key: 'waterMeter', type: 'text'},
-            {label: 'رقم عداد الكهرباء', key: 'electricityMeter', type: 'text'},
-            {label: 'الدور', key: 'floor', type: 'text'},
-            {label: 'الموقع X', key: 'x', type: 'number'},
-            {label: 'الموقع Y', key: 'y', type: 'number'},
-            {label: 'العرض', key: 'width', type: 'number'},
-            {label: 'الطول', key: 'height', type: 'number'}
-          ];
-        } else if (type === 'tenants') {
-          title.textContent = 'بيانات صاحب المحل';
-          fields = [
-            {label: 'الاسم', key: 'name', type: 'text'},
-            {label: 'رقم الجوال', key: 'phone', type: 'tel'},
-            {label: 'البريد الإلكتروني', key: 'email', type: 'email'},
-            {label: 'المحلات المستأجرة', key: 'stores', type: 'text'},
-            {label: 'النوع', key: 'gender', type: 'select', options: [{value:'male',label:'ذكر'},{value:'female',label:'أنثى'}]},
-            {label: 'تاريخ الميلاد', key: 'birthdate', type: 'date'}
-          ];
-        } else if (type === 'stores') {
-          title.textContent = 'بيانات المحل';
-          fields = [
-            {label: 'اسم المالك', key: 'owner', type: 'text'},
-            {label: 'اسم المحل', key: 'storeName', type: 'text'},
-            {label: 'النشاط', key: 'activity', type: 'text'},
-            {label: 'تاريخ بدء العقد', key: 'contractStart', type: 'date'},
-            {label: 'أوقات الدوام', key: 'workingHours', type: 'text'}
-          ];
-        }
-
-        // توليد الحقول
-        fields.forEach(field => {
-          const value = data[field.key] || '';
-          const fieldId = `view-field-${field.key}`;
-          const fieldDiv = document.createElement('div');
-          fieldDiv.className = 'form-group';
-          fieldDiv.style.position = 'relative';
-          // إذا كان النوع facilities أضف زر التعديل، غير ذلك لا تضف الزر
-          if (type === 'facilities') {
-            fieldDiv.innerHTML = `
-              <label>${field.label}</label>
-              <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
-              <button type="button" class="btn-icon edit-field-btn" title="تعديل" onclick="enableFieldEdit('${fieldId}', '${field.key}', '${field.type}', '${type}')" style="position:absolute; left:0; top:50%; transform:translateY(-50%);"><i class='fas fa-edit'></i></button>
-            `;
-          } else {
-            fieldDiv.innerHTML = `
-              <label>${field.label}</label>
-              <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
-            `;
-          }
-          fieldsContainer.appendChild(fieldDiv);
-        });
-
         modal.style.display = 'block';
       }
 
@@ -1524,71 +1464,11 @@
   }
 
   // دالة فتح نافذة العرض/تعديل الحقل
-
-  // function openViewModal(data, type) {
-  //   const modal = document.getElementById('viewEditModal');
-  //   const title = document.getElementById('viewEditModalTitle');
-  //   const fieldsContainer = document.getElementById('viewEditFields');
-  //   fieldsContainer.innerHTML = '';
-
-  //   // تعريف الحقول حسب النوع
-  //   let fields = [];
-  //   if (type === 'facilities') {
-  //     title.textContent = 'بيانات المرفق';
-  //     fields = [
-  //       {label: 'مبلغ الإيجار', key: 'rent', type: 'number'},
-  //       {label: 'رقم عداد الماء', key: 'waterMeter', type: 'text'},
-  //       {label: 'رقم عداد الكهرباء', key: 'electricityMeter', type: 'text'},
-  //       {label: 'الدور', key: 'floor', type: 'text'},
-  //       {label: 'الموقع X', key: 'x', type: 'number'},
-  //       {label: 'الموقع Y', key: 'y', type: 'number'},
-  //       {label: 'العرض', key: 'width', type: 'number'},
-  //       {label: 'الطول', key: 'height', type: 'number'}
-  //     ];
-  //   } else if (type === 'tenants') {
-  //     title.textContent = 'بيانات صاحب المحل';
-  //     fields = [
-  //       {label: 'الاسم', key: 'name', type: 'text'},
-  //       {label: 'رقم الجوال', key: 'phone', type: 'tel'},
-  //       {label: 'البريد الإلكتروني', key: 'email', type: 'email'},
-  //       {label: 'المحلات المستأجرة', key: 'stores', type: 'text'},
-  //       {label: 'النوع', key: 'gender', type: 'select', options: [{value:'male',label:'ذكر'},{value:'female',label:'أنثى'}]},
-  //       {label: 'تاريخ الميلاد', key: 'birthdate', type: 'date'}
-  //     ];
-  //   } else if (type === 'stores') {
-  //     title.textContent = 'بيانات المحل';
-  //     fields = [
-  //       {label: 'اسم المالك', key: 'owner', type: 'text'},
-  //       {label: 'اسم المحل', key: 'storeName', type: 'text'},
-  //       {label: 'النشاط', key: 'activity', type: 'text'},
-  //       {label: 'تاريخ بدء العقد', key: 'contractStart', type: 'date'},
-  //       {label: 'أوقات الدوام', key: 'workingHours', type: 'text'}
-  //     ];
-  //   }
-
-    // توليد الحقول
-    fields.forEach(field => {
-      const value = data[field.key] || '';
-      const fieldId = `view-field-${field.key}`;
-      const fieldDiv = document.createElement('div');
-      fieldDiv.className = 'form-group';
-      fieldDiv.style.position = 'relative';
-      // إذا كان النوع facilities أضف زر التعديل، غير ذلك لا تضف الزر
-      if (type === 'facilities') {
-        fieldDiv.innerHTML = `
-          <label>${field.label}</label>
-          <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
-          <button type="button" class="btn-icon edit-field-btn" title="تعديل" onclick="enableFieldEdit('${fieldId}', '${field.key}', '${field.type}', '${type}')" style="position:absolute; left:0; top:50%; transform:translateY(-50%);"><i class='fas fa-edit'></i></button>
-        `;
-      } else {
-        fieldDiv.innerHTML = `
-          <label>${field.label}</label>
-          <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
-        `;
-      }
-      fieldsContainer.appendChild(fieldDiv);
-    });
-
+  function openViewModal(data, type) {
+    const modal = document.getElementById('viewEditModal');
+    const title = document.getElementById('viewEditModalTitle');
+    const fieldsContainer = document.getElementById('viewEditFields');
+    fieldsContainer.innerHTML = '';
     modal.style.display = 'block';
   }
 

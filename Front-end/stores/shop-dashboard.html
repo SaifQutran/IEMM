@@ -1,16 +1,98 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>IEMM - بوابة صاحب المحل</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="../views/css/styles.css">
-  <link rel="stylesheet" href="../views/css/chat.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script src="../views/js/script.js" defer></script>
-  <script src="../views/js/stores/chat.js" defer></script>
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IEMM - إدارة المنتجات</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="../views/css/styles.css" />
+    <link rel="stylesheet" href="../views/css/chat.css" />
+    <link rel="stylesheet" href="../views/css/product-modal.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script src="../views/js/script.js" defer></script>
+    <script src="../views/js/theme-manager.js" defer></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../views/js/stores/chat.js" defer></script>
+    <script src="../views/js/stores/product-modal.js" defer></script>
+    <script src="../views/js/stores/shop-dashboard.js" defer></script>
+  </head>
+  <body>
+    <!-- Authorization Check -->
+    <script>
+      // Check authorization before loading the page
+      function checkAuthorization() {
+        const token = localStorage.getItem("token");
+        const userType = localStorage.getItem("user_type");
+
+        // Check if token exists
+        if (!token) {
+          window.location.href = "../login.html";
+          return;
+        }
+
+        // Check user type (shop manager = 2)
+        if (userType !== "2") {
+          // Create and show unauthorized message
+          document.body.innerHTML = `
+          <div style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f8fafc;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+          ">
+            <i class="fas fa-exclamation-triangle" style="
+              font-size: 64px;
+              color: #ef4444;
+              margin-bottom: 20px;
+            "></i>
+            <h1 style="
+              color: #1e293b;
+              font-size: 24px;
+              margin-bottom: 16px;
+            ">غير مصرح لك بالوصول</h1>
+            <p style="
+              color: #64748b;
+              font-size: 16px;
+              margin-bottom: 24px;
+            ">عذراً، ليس لديك الصلاحية للوصول إلى هذه الصفحة</p>
+            <button onclick="window.location.href='../login.html'" style="
+              background-color: #2563eb;
+              color: white;
+              border: none;
+              padding: 12px 24px;
+              border-radius: 8px;
+              font-size: 16px;
+              cursor: pointer;
+              transition: background-color 0.3s;
+            ">العودة إلى صفحة تسجيل الدخول</button>
+          </div>
+        `;
+          return;
+        }
+
+        // Verify token with backend
+      }
+
+      // Run authorization check when page loads
+      $(document).ready(function () {
+        // checkAuthorization();
+
+        // // Check is_owner status and toggle Employees page button
+        // const isOwner = localStorage.getItem("is_owner") === "true";
+        // const staffLink = document.getElementById("staff-link");
+        // if (staffLink) {
+        //   staffLink.style.display = isOwner ? "block" : "none";
+        // }
+      });
+    </script>
 <body>
   
   <!-- Header Section -->

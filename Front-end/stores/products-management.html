@@ -82,14 +82,14 @@
 
       // Run authorization check when page loads
       $(document).ready(function () {
-        checkAuthorization();
+        // checkAuthorization();
 
-        // Check is_owner status and toggle Employees page button
-        const isOwner = localStorage.getItem("is_owner") === "true";
-        const staffLink = document.getElementById("staff-link");
-        if (staffLink) {
-          staffLink.style.display = isOwner ? "block" : "none";
-        }
+        // // Check is_owner status and toggle Employees page button
+        // const isOwner = localStorage.getItem("is_owner") === "true";
+        // const staffLink = document.getElementById("staff-link");
+        // if (staffLink) {
+        //   staffLink.style.display = isOwner ? "block" : "none";
+        // }
       });
     </script>
 

@@ -141,6 +141,7 @@ Route::apiResource('facilities', FacilityController::class);
 // get : /shops/{id}/users
 // get : /shops/{id}/products
 // get : /shops/{id}/bills
+// get : /shops/{id}/dashboard
 // post : /shops
 // delete : /shops/{id}
 // put : /shops/{id}
@@ -148,7 +149,7 @@ Route::apiResource('shops', ShopController::class);
 Route::get('/shops/{id}/users', [ShopController::class, 'shopUsers']);
 Route::get('/shops/{id}/products', [ShopController::class, 'shopProducts']);
 Route::get('/shops/{id}/bills', [ShopController::class, 'shopBills']);
-
+Route::get('/shops/{id}/dashboard', [ShopController::class, 'dashboardData']);
 // Money Logs
 // get : /money-logs
 // post : /money-logs
