@@ -9,14 +9,36 @@ class StoreManagement {
     constructor() {
         this.initializeEventListeners();
         this.loadStores();
+        this.loadFacilitiesForDropdown();
     }
 
     // Initialize event listeners
     initializeEventListeners() {
         // Handle new store form submission
-        $('#newStoreFormContainer form').on('submit', (e) => {
+        $('#newStoreFormContainer').on('submit', (e) => {
             e.preventDefault();
-            this.addStore($(e.target).serialize());
+            const formData = new FormData(e.target);
+            const storeData = {
+                shop_name: formData.get('shop_name'),
+                mall_id: "1",
+                owner_name: formData.get('owner_name'),
+                facility_id: formData.get('facility_id'),
+                work_times: formData.get('work_times'),
+                username: formData.get('username'),
+                email: formData.get('email'),
+                sex: formData.get('sex') === 'male' ? 'true' : 'false',
+                password: formData.get('password'),
+                phone: formData.get('phone'),
+                birth_date: formData.get('birth_date')
+            };
+
+            // Get the image file
+            const imageFile = formData.get('image');
+            if (imageFile) {
+                storeData.image = imageFile;
+            }
+            
+            this.addStore(storeData);
         });
         
         // Handle modal close buttons
@@ -59,16 +81,50 @@ class StoreManagement {
         });
     }
    
+    // Load facilities for dropdown
+    loadFacilitiesForDropdown() {
+        $.ajax({
+            url: facility_API_URL,
+            method: 'GET',
+            success: (response) => {
+                const facilitySelect = $('select[name="facility_id"]');
+                facilitySelect.empty();
+                facilitySelect.append('<option value="">اختر المرفق</option>');
+                
+                response.data.forEach(facility => {
+                    if (facility.facility_state === "فارغ") { // Only show available facilities
+                        facilitySelect.append(`<option value="${facility.id}">مرفق ${facility.id} - الدور ${facility.floor_number}</option>`);
+                    }
+                });
+            },
+            error: (xhr, status, error) => {
+                alert('حدث خطأ أثناء تحميل بيانات المرافق');
+                console.error(error);
+            }
+        });
+    }
+
     // Add new store
     addStore(storeData) {
+        const formData = new FormData();
+        
+        // Append all store data to FormData
+        Object.keys(storeData).forEach(key => {
+            formData.append(key, storeData[key]);
+        });
+
         $.ajax({
-            url: API_URL,
+            url: 'http://127.0.0.1:8000/api/shops/',
             method: 'POST',
-            data: storeData,
+            data: formData,
+            processData: false,
+            contentType: false,
             success: (response) => {
                 alert('تم إضافة المحل بنجاح');
                 this.loadStores();
                 this.closeModal('newStoreFormContainer');
+                // Reset form
+                $('#newStoreFormContainer form')[0].reset();
             },
             error: (xhr, status, error) => {
                 alert('حدث خطأ أثناء إضافة المحل');
@@ -98,11 +154,10 @@ class StoreManagement {
         }
 
         fieldsContainer.innerHTML = '';
+        title.textContent = 'بيانات المحل';
 
         // تعريف الحقول حسب النوع
-        let fields = [];
-        title.textContent = 'بيانات المحل';
-        fields = [
+        const fields = [
             {label: 'اسم المالك', key: 'owner_name', type: 'text'},
             {label: 'اسم المحل', key: 'name', type: 'text'},
             {label: 'الدور', key: 'floor', type: 'number'},
@@ -341,14 +396,14 @@ class StoreOwnerManagement {
 
         // تعريف الحقول حسب النوع
         let fields = [];
-        title.textContent = 'بيانات المحل';
+        title.textContent = 'بيانات صاحب المحل';
         fields = [
             {label: 'الاسم', key: 'owner_name', type: 'text'},
             {label: 'رقم الجوال', key: 'phone', type: 'tel'},
             {label: 'البريد الإلكتروني', key: 'owner_email', type: 'email'},
             {label: 'المحلات المستأجرة', key: 'facilities', type: 'text'},
-            {label: 'النوع', key: 'gender', type: 'select', options: [{value:'male',label:'ذكر'},{value:'female',label:'أنثى'}]},
-            {label: 'تاريخ الميلاد', key: 'birthdate', type: 'date'}
+            {label: 'النوع', key: 'owner_sex', type: 'select', options: [{value:'male',label:'ذكر'},{value:'female',label:'أنثى'}]},
+            {label: 'تاريخ الميلاد', key: 'owner_birth_date', type: 'date'}
           ];
         // توليد الحقول
         fields.forEach(field => {
@@ -360,7 +415,7 @@ class StoreOwnerManagement {
             fieldDiv.innerHTML = `
                 <label>${field.label}</label>
                 <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
-                <button type="button" class="btn-icon edit-field-btn" title="تعديل" onclick="StoreOwnerManagement.enableFieldEdit('${fieldId}', '${field.key}', '${field.type}')" style="position:absolute; left:0; top:50%; transform:translateY(-50%);")'><i class='fas fa-edit'></i></button>
+                
             `;
             fieldsContainer.appendChild(fieldDiv);
         });
@@ -549,7 +604,6 @@ class FacilitiesManagement {
 
     // Add new facility
     addFacility(facilityData) {
-        alert("Enter in Post");
         $.ajax({
             url: 'http://127.0.0.1:8000/api/facilities',
             method: 'POST',
@@ -561,6 +615,11 @@ class FacilitiesManagement {
                 this.closeModal('newFacilityFormContainer');
                 // Reset form
                 $('#newFacilityFormContainer')[0].reset();
+                // Show table view
+                $('#tables-view').show();
+                $('#map-view').hide();
+                $('#table-view-btn').addClass('active');
+                $('#map-view-btn').removeClass('active');
             },
             error: (xhr, status, error) => {
                 alert('حدث خطأ أثناء إضافة المرفق');
@@ -593,129 +652,76 @@ class FacilitiesManagement {
         $(`#${modalId}`).hide();
     }
 
-    // static openViewModal(data) {
-    //     const modal = document.getElementById('viewEditModal');
-    //     if (!modal) {
-    //         console.error('Modal element not found! Make sure you have an element with id="viewEditModal"');
-    //         return;
-    //     }
+    static openViewModal(data) {
+        const modal = document.getElementById('viewEditModal');
+        if (!modal) {
+            console.error('Modal element not found! Make sure you have an element with id="viewEditModal"');
+            return;
+        }
 
-    //     const title = document.getElementById('viewEditModalTitle');
-    //     if (!title) {
-    //         console.error('Modal title element not found! Make sure you have an element with id="viewEditModalTitle"');
-    //         return;
-    //     }
+        const title = document.getElementById('viewEditModalTitle');
+        if (!title) {
+            console.error('Modal title element not found! Make sure you have an element with id="viewEditModalTitle"');
+            return;
+        }
 
-    //     const fieldsContainer = document.getElementById('viewEditFields');
-    //     if (!fieldsContainer) {
-    //         console.error('Fields container not found! Make sure you have an element with id="viewEditFields"');
-    //         return;
-    //     }
+        const fieldsContainer = document.getElementById('viewEditFields');
+        if (!fieldsContainer) {
+            console.error('Fields container not found! Make sure you have an element with id="viewEditFields"');
+            return;
+        }
 
-    //     fieldsContainer.innerHTML = '';
-    //     title.textContent = 'بيانات المرفق';
+        fieldsContainer.innerHTML = '';
+        title.textContent = 'بيانات المرفق';
+
+        // تعريف الحقول حسب النوع
+        const fields = [
+            {label: 'رقم المرفق', key: 'id', type: 'text'},
+            {label: 'الدور', key: 'floor_number', type: 'number'},
+            {label: 'المساحة', key: 'space', type: 'text'},
+            {label: 'الحالة', key: 'facility_state', type: 'text'},
+            {label: 'اسم المالك', key: 'owner_name', type: 'text'},
+            {label: 'اسم المحل', key: 'shop_name', type: 'text'}
+        ];
+
+        // توليد الحقول
+        fields.forEach(field => {
+            const value = data[field.key] || '';
+            const fieldId = `view-field-${field.key}`;
+            const fieldDiv = document.createElement('div');
+            fieldDiv.className = 'form-group';
+            fieldDiv.style.position = 'relative';
+            fieldDiv.innerHTML = `
+                <label>${field.label}</label>
+                <span id="${fieldId}" class="field-value">${value}</span>
+                <button type="button" class="btn-icon edit-field-btn" title="تعديل" onclick="FacilitiesManagement.enableFieldEdit('${fieldId}', '${field.key}', '${field.type}')" style="position:absolute; left:0; top:50%; transform:translateY(-50%);")'><i class='fas fa-edit'></i></button>
+            `;
+            fieldsContainer.appendChild(fieldDiv);
+        });
+
+        // Show the modal
+        modal.style.display = 'block';
         
-    //     const fields = [
-    //         {label: 'اسم المرفق', key: 'name', type: 'text'},
-    //         {label: 'الدور', key: 'floor', type: 'number'},
-    //         {label: 'مبلغ الإيجار', key: 'rent', type: 'number'},
-    //         {label: 'رقم عداد الماء', key: 'water_meter', type: 'text'},
-    //         {label: 'رقم عداد الكهرباء', key: 'electricity_meter', type: 'text'},
-    //         {label: 'الحالة', key: 'state', type: 'text'}
-    //     ];
+        // Add close button functionality if not already present
+        const closeBtn = modal.querySelector('.close-modal');
+        if (closeBtn) {
+            closeBtn.onclick = function() {
+                modal.style.display = 'none';
+            };
+        }
 
-    //     // Create view mode elements
-    //     fields.forEach(field => {
-    //         const value = data[field.key] || '';
-    //         const fieldId = `view-field-${field.key}`;
-    //         const fieldDiv = document.createElement('div');
-    //         fieldDiv.className = 'form-group';
-    //         fieldDiv.innerHTML = `
-    //             <label>${field.label}</label>
-    //             <span id="${fieldId}" class="field-value">${value}</span>
-    //         `;
-    //         fieldsContainer.appendChild(fieldDiv);
-    //     });
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        };
+    }
 
-    //     // Add edit button
-    //     const editButton = document.createElement('button');
-    //     editButton.className = 'btn btn-primary';
-    //     editButton.textContent = 'تعديل البيانات';
-    //     editButton.onclick = () => {
-    //         // Switch to edit mode
-    //         fieldsContainer.innerHTML = '';
-    //         const form = document.createElement('form');
-    //         form.id = 'editFacilityForm';
-
-    //         fields.forEach(field => {
-    //             const value = data[field.key] || '';
-    //             const fieldDiv = document.createElement('div');
-    //             fieldDiv.className = 'form-group';
-                
-    //             const label = document.createElement('label');
-    //             label.textContent = field.label;
-                
-    //             const input = document.createElement('input');
-    //             input.type = field.type;
-    //             input.name = field.key;
-    //             input.value = value;
-    //             input.className = 'form-control';
-                
-    //             fieldDiv.appendChild(label);
-    //             fieldDiv.appendChild(input);
-    //             form.appendChild(fieldDiv);
-    //         });
-
-    //         // Add update button
-    //         const updateButton = document.createElement('button');
-    //         updateButton.type = 'submit';
-    //         updateButton.className = 'btn btn-success';
-    //         updateButton.textContent = 'حفظ التغييرات';
-    //         form.appendChild(updateButton);
-
-    //         // Add cancel button
-    //         const cancelButton = document.createElement('button');
-    //         cancelButton.type = 'button';
-    //         cancelButton.className = 'btn btn-secondary';
-    //         cancelButton.textContent = 'إلغاء';
-    //         cancelButton.onclick = () => {
-    //             // Return to view mode
-    //             FacilitiesManagement.openViewModal(data);
-    //         };
-    //         form.appendChild(cancelButton);
-
-    //         // Handle form submission
-    //         form.onsubmit = (e) => {
-    //             e.preventDefault();
-    //             const formData = new FormData(form);
-    //             const updateData = {};
-    //             formData.forEach((value, key) => {
-    //                 updateData[key] = value;
-    //             });
-
-    //             // Call API to update facility
-    //             $.ajax({
-    //                 url: `${facility_API_URL}/${data.id}`,
-    //                 method: 'PUT',
-    //                 data: updateData,
-    //                 success: (response) => {
-    //                     alert('تم تحديث البيانات بنجاح');
-    //                     modal.style.display = 'none';
-    //                     window.facilitiesManagement.loadFacilities();
-    //                 },
-    //                 error: (xhr, status, error) => {
-    //                     alert('حدث خطأ أثناء تحديث البيانات');
-    //                     console.error(error);
-    //                 }
-    //             });
-    //         };
-
-    //         fieldsContainer.appendChild(form);
-    //     };
-
-    //     fieldsContainer.appendChild(editButton);
-    //     modal.style.display = 'block';
-    // }
+    static enableFieldEdit(fieldId, fieldKey, fieldType) {
+        // Add your field editing logic here
+        console.log('Editing field:', fieldId, fieldKey, fieldType);
+    }
 }
 
 // Initialize all management instances when document is ready

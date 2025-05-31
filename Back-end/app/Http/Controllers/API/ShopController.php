@@ -7,6 +7,7 @@ use App\Models\Shop;
 use App\Models\Mall;
 use App\Models\Warehouse;
 use App\Models\Bill;
+use App\Models\Facility;
 use App\Models\Sale;
 use App\Models\Product;
 use App\Models\User;
@@ -103,6 +104,9 @@ class ShopController extends Controller
                 'mall_id' => $validatedData['mall_id'],
                 'owner_id' => $user->id,
             ]);
+        $facility = Facility::find($validatedData['facility_id']);
+        $facility->update(['status'=>true]);
+        $facility->save();
 
             // Handle image upload
             if ($request->hasFile('image')) {

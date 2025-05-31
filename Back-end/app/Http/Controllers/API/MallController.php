@@ -99,7 +99,7 @@ class MallController extends Controller
                 $owners[$ownerId] = [
                     'owner_name' => $shop->owner->f_name . ' ' . $shop->owner->l_name,
                     'owner_email' => $shop->owner->email,
-                    'owner_sex' => $shop->owner->sex,
+                    'owner_sex' => $shop->owner->sex == 'ture' ? "ذكر" : "أنثى",
                     'owner_birth_date' => $shop->owner->birth_date,
                     'phone' => $shop->owner->phone,
                     'facilities' => []

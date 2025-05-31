@@ -577,146 +577,81 @@
         }
       }
 
-      // دالة فتح نافذة التعديل
-      function openEditModal(data, type) {
-        const modal = document.getElementById('editStoreModal');
-        const modalContent = modal.querySelector('.modal-content');
-        
-        // تحديد المحتوى المناسب حسب نوع القائمة
-        let formContent = '';
-        
+      // دالة فتح نافذة العرض/تعديل الحقل
+      function openViewModal(data, type) {
+        const modal = document.getElementById('viewEditModal');
+        const title = document.getElementById('viewEditModalTitle');
+        const fieldsContainer = document.getElementById('viewEditFields');
+        fieldsContainer.innerHTML = '';
+
+        // تعريف الحقول حسب النوع
+        let fields = [];
         if (type === 'facilities') {
-          formContent = `
-            <h3>تعديل بيانات المرفق</h3>
-            <form class="form">
-              <div class="form-grid">
-                <div class="form-group">
-                  <label>مبلغ الإيجار</label>
-                  <input type="number" id="edit-rent" value="${data.rent || ''}" required />
-                </div>
-                <div class="form-group">
-                  <label>رقم عداد الماء</label>
-                  <input type="text" id="edit-water-meter" value="${data.waterMeter || ''}" required />
-                </div>
-                <div class="form-group">
-                  <label>رقم عداد الكهرباء</label>
-                  <input type="text" id="edit-electricity-meter" value="${data.electricityMeter || ''}" required />
-                </div>
-                <div class="form-group">
-                  <label>الدور</label>
-                  <input type="number" id="edit-floor" value="${data.floor || ''}" required />
-                </div>
-                <div class="form-group">
-                 <label>الموقع X</label>
-                  <input type="number" id="edit-x" value="${data.x || ''}" required />
-                </div>
-                <div class="form-group">
-                  <label>الموقع Y</label>
-                  <input type="number" id="edit-y" value="${data.y || ''}" required />
-                </div>
-                <div class="form-group">
-                  <label>العرض</label>
-                  <input type="number" id="edit-width" value="${data.width || ''}" required />
-                </div>
-                <div class="form-group">
-                  <label>الطول</label>
-                  <input type="number" id="edit-height" value="${data.height || ''}" required />
-                </div>
-              </div>
-              <div class="form-actions">
-                <button type="submit" class="btn-green">حفظ التغييرات</button>
-                <button type="button" class="btn-secondary" onclick="closeModal('editStoreModal')">إلغاء</button>
-              </div>
-            </form>
-          `;
+          title.textContent = 'بيانات المرفق';
+          fields = [
+            {label: 'مبلغ الإيجار', key: 'rent', type: 'number'},
+            {label: 'رقم عداد الماء', key: 'waterMeter', type: 'text'},
+            {label: 'رقم عداد الكهرباء', key: 'electricityMeter', type: 'text'},
+            {label: 'الدور', key: 'floor', type: 'text'},
+            {label: 'الموقع X', key: 'x', type: 'number'},
+            {label: 'الموقع Y', key: 'y', type: 'number'},
+            {label: 'العرض', key: 'width', type: 'number'},
+            {label: 'الطول', key: 'height', type: 'number'}
+          ];
         } else if (type === 'tenants') {
-          formContent = `
-            <h3>تعديل بيانات صاحب المحل</h3>
-            <form class="form">
-              <div class="form-grid">
-                <div class="form-group">
-                  <label>الاسم</label>
-                  <input type="text" id="edit-name" value="${data.name || ''}" required />
-                </div>
-                <div class="form-group">
-                  <label>رقم الجوال</label>
-                  <input type="tel" id="edit-phone" value="${data.phone || ''}" required />
-                </div>
-                <div class="form-group">
-                  <label>البريد الإلكتروني</label>
-                  <input type="email" id="edit-email" value="${data.email || ''}" required />
-                </div>
-                <div class="form-group">
-                  <label>المحلات المستأجرة</label>
-                  <input type="text" id="edit-stores" value="${data.stores || ''}" required />
-                </div>
-                <div class="form-group">
-                  <label>النوع</label>
-                  <select id="edit-gender" required>
-                    <option value="male" ${data.gender === 'male' ? 'selected' : ''}>ذكر</option>
-                    <option value="female" ${data.gender === 'female' ? 'selected' : ''}>أنثى</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label>كلمة السر</label>
-                  <input type="password" id="edit-password" placeholder="اتركها فارغة إذا لم ترد تغييرها" />
-                </div>
-                <div class="form-group">
-                  <label>تاريخ الميلاد</label>
-                  <input type="date" id="edit-birthdate" value="${data.birthdate || ''}" required />
-                </div>
-              </div>
-              <div class="form-actions">
-                <button type="submit" class="btn-green">حفظ التغييرات</button>
-                <button type="button" class="btn-secondary" onclick="closeModal('editStoreModal')">إلغاء</button>
-              </div>
-            </form>
-          `;
+          title.textContent = 'بيانات صاحب المحل';
+          fields = [
+            {label: 'الاسم', key: 'name', type: 'text'},
+            {label: 'رقم الجوال', key: 'phone', type: 'tel'},
+            {label: 'البريد الإلكتروني', key: 'email', type: 'email'},
+            {label: 'المحلات المستأجرة', key: 'stores', type: 'text'},
+            {label: 'النوع', key: 'gender', type: 'select', options: [{value:'male',label:'ذكر'},{value:'female',label:'أنثى'}]},
+            {label: 'تاريخ الميلاد', key: 'birthdate', type: 'date'}
+          ];
         } else if (type === 'stores') {
-          formContent = `
-            <h3>تعديل بيانات المحل</h3>
-            <form class="form">
-              <div class="form-grid">
-                <div class="form-group">
-                  <label>اسم المالك</label>
-                  <input type="text" id="edit-owner" value="${data.owner || ''}" required />
-                </div>
-                <div class="form-group">
-                  <label>اسم المحل</label>
-                  <input type="text" id="edit-store-name" value="${data.storeName || ''}" required />
-                </div>
-                <div class="form-group">
-                  <label>النشاط</label>
-                  <input type="text" id="edit-activity" value="${data.activity || ''}" required />
-                </div>
-                <div class="form-group">
-                  <label>تاريخ بدء العقد</label>
-                  <input type="date" id="edit-contract-start" value="${data.contractStart || ''}" required />
-                </div>
-                <div class="form-group">
-                  <label>أوقات الدوام</label>
-                  <input type="text" id="edit-working-hours" value="${data.workingHours || ''}" required />
-                </div>
-              </div>
-              <div class="form-actions">
-                <button type="submit" class="btn-green">حفظ التغييرات</button>
-                <button type="button" class="btn-secondary" onclick="closeModal('editStoreModal')">إلغاء</button>
-              </div>
-            </form>
-          `;
+          title.textContent = 'بيانات المحل';
+          fields = [
+            {label: 'اسم المالك', key: 'owner', type: 'text'},
+            {label: 'اسم المحل', key: 'storeName', type: 'text'},
+            {label: 'النشاط', key: 'activity', type: 'text'},
+            {label: 'تاريخ بدء العقد', key: 'contractStart', type: 'date'},
+            {label: 'أوقات الدوام', key: 'workingHours', type: 'text'}
+          ];
         }
-        
-        modalContent.innerHTML = formContent;
+
+        // توليد الحقول
+        fields.forEach(field => {
+          const value = data[field.key] || '';
+          const fieldId = `view-field-${field.key}`;
+          const fieldDiv = document.createElement('div');
+          fieldDiv.className = 'form-group';
+          fieldDiv.style.position = 'relative';
+          // إذا كان النوع facilities أضف زر التعديل، غير ذلك لا تضف الزر
+          if (type === 'facilities') {
+            fieldDiv.innerHTML = `
+              <label>${field.label}</label>
+              <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
+              <button type="button" class="btn-icon edit-field-btn" title="تعديل" onclick="enableFieldEdit('${fieldId}', '${field.key}', '${field.type}', '${type}')" style="position:absolute; left:0; top:50%; transform:translateY(-50%);"><i class='fas fa-edit'></i></button>
+            `;
+          } else {
+            fieldDiv.innerHTML = `
+              <label>${field.label}</label>
+              <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
+            `;
+          }
+          fieldsContainer.appendChild(fieldDiv);
+        });
+
         modal.style.display = 'block';
       }
 
-      // دالة إغلاق النافذة المنبثقة
-      function closeModal(modalId) {
-        document.getElementById(modalId).style.display = 'none';
+      // دالة إلغاء التعديل
+      function cancelFieldEdit(fieldId, value) {
+        const span = document.getElementById(fieldId);
+        span.outerHTML = `<span id='${fieldId}' class='field-value'>${value}</span>`;
       }
 
-      // دالة حذف المحل
-
+      let rowToDelete = null;
       function deleteStore(btn) {
         if (confirm('هل أنت متأكد من حذف هذا السطر؟')) {
           // احذف الصف من الجدول
@@ -801,98 +736,6 @@
           }
         });
       });
-
-      // دالة فتح نافذة العرض/تعديل الحقل
-
-      function openViewModal(data, type) {
-        const modal = document.getElementById('viewEditModal');
-        const title = document.getElementById('viewEditModalTitle');
-        const fieldsContainer = document.getElementById('viewEditFields');
-        fieldsContainer.innerHTML = '';
-
-        // تعريف الحقول حسب النوع
-        let fields = [];
-        if (type === 'facilities') {
-          title.textContent = 'بيانات المرفق';
-          fields = [
-            {label: 'مبلغ الإيجار', key: 'rent', type: 'number'},
-            {label: 'رقم عداد الماء', key: 'waterMeter', type: 'text'},
-            {label: 'رقم عداد الكهرباء', key: 'electricityMeter', type: 'text'},
-            {label: 'الدور', key: 'floor', type: 'text'},
-            {label: 'الموقع X', key: 'x', type: 'number'},
-            {label: 'الموقع Y', key: 'y', type: 'number'},
-            {label: 'العرض', key: 'width', type: 'number'},
-            {label: 'الطول', key: 'height', type: 'number'}
-          ];
-        } else if (type === 'tenants') {
-          title.textContent = 'بيانات صاحب المحل';
-          fields = [
-            {label: 'الاسم', key: 'name', type: 'text'},
-            {label: 'رقم الجوال', key: 'phone', type: 'tel'},
-            {label: 'البريد الإلكتروني', key: 'email', type: 'email'},
-            {label: 'المحلات المستأجرة', key: 'stores', type: 'text'},
-            {label: 'النوع', key: 'gender', type: 'select', options: [{value:'male',label:'ذكر'},{value:'female',label:'أنثى'}]},
-            {label: 'تاريخ الميلاد', key: 'birthdate', type: 'date'}
-          ];
-        } else if (type === 'stores') {
-          title.textContent = 'بيانات المحل';
-          fields = [
-            {label: 'اسم المالك', key: 'owner', type: 'text'},
-            {label: 'اسم المحل', key: 'storeName', type: 'text'},
-            {label: 'النشاط', key: 'activity', type: 'text'},
-            {label: 'تاريخ بدء العقد', key: 'contractStart', type: 'date'},
-            {label: 'أوقات الدوام', key: 'workingHours', type: 'text'}
-          ];
-        }
-
-        // توليد الحقول
-        fields.forEach(field => {
-          const value = data[field.key] || '';
-          const fieldId = `view-field-${field.key}`;
-          const fieldDiv = document.createElement('div');
-          fieldDiv.className = 'form-group';
-          fieldDiv.style.position = 'relative';
-          // إذا كان النوع facilities أضف زر التعديل، غير ذلك لا تضف الزر
-          if (type === 'facilities') {
-            fieldDiv.innerHTML = `
-              <label>${field.label}</label>
-              <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
-              <button type="button" class="btn-icon edit-field-btn" title="تعديل" onclick="enableFieldEdit('${fieldId}', '${field.key}', '${field.type}', '${type}')" style="position:absolute; left:0; top:50%; transform:translateY(-50%);"><i class='fas fa-edit'></i></button>
-            `;
-          } else {
-            fieldDiv.innerHTML = `
-              <label>${field.label}</label>
-              <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
-            `;
-          }
-          fieldsContainer.appendChild(fieldDiv);
-        });
-
-        modal.style.display = 'block';
-
-      }
-
-      // دالة إلغاء التعديل
-      function cancelFieldEdit(fieldId, value) {
-        const span = document.getElementById(fieldId);
-        span.outerHTML = `<span id='${fieldId}' class='field-value'>${value}</span>`;
-      }
-
-      let rowToDelete = null;
-      function deleteStore(btn) {
-        rowToDelete = btn.closest('tr');
-        document.getElementById('delete-modal-title').textContent = 'تأكيد الحذف';
-        document.getElementById('delete-confirm-message').innerHTML = 'هل أنت متأكد من حذف هذا السطر؟';
-        document.getElementById('delete-confirm-modal').style.display = 'block';
-      }
-      function confirmDelete() {
-        if (rowToDelete) rowToDelete.remove();
-        closeDeleteModal();
-      }
-      function closeDeleteModal() {
-        document.getElementById('delete-confirm-modal').style.display = 'none';
-        rowToDelete = null;
-      }
     </script>
   </head>
 <body>
@@ -983,7 +826,7 @@
                   <i class="fas fa-plus"></i>
                   إضافة مرفق جديد
                 </button>
-                <button class="btn-green" onclick="toggleForm('newTenantForm')">
+                <button class="btn-green" onclick="toggleForm('newStoreFormContainer')">
                   <i class="fas fa-user-plus"></i>
                   إضافة صاحب محل
                 </button>
@@ -1013,49 +856,48 @@
               </form>
 
           <!-- نموذج إضافة صاحب محل -->
-          <div id="newTenantForm" class="form-container" style="display:none;">
-                  <div class="form card">
-                    <h3>إضافة صاحب محل</h3>
-                    
-                    <!-- قسم بيانات المحل -->
-                    <div class="form-section">
-                      <h4>بيانات المحل</h4>
-                      <div class="form-grid">
-                        <input type="text" placeholder="اسم المحل" required />
-                        <input type="text" placeholder="أوقات المحل" required />
-                        <select required>
-                          <option value="">اختر المرفق</option>
-                          <option value="electricity">كهرباء</option>
-                          <option value="water">ماء</option>
-                          <option value="both">كهرباء وماء</option>
-                        </select>
-                      </div>
-                    </div>
-                
-                    <!-- قسم بيانات صاحب المحل -->
-                    <div class="form-section">
-                      <h4>بيانات صاحب المحل</h4>
-                      <div class="form-grid">
-                        <input type="text" placeholder="اسم المستأجر الثنائي" required />
-                        <select required>
-                          <option value="">اختر النوع</option>
-                          <option value="male">ذكر</option>
-                          <option value="female">أنثى</option>
-                        </select>
-                        <input type="email" placeholder="البريد الإلكتروني" required />
-                        <input type="tel" placeholder="رقم الهاتف" required />
-                        <input type="password" placeholder="كلمة السر" required />
-                        <input type="password" placeholder="تأكيد كلمة السر" required />
-                        <input type="date" placeholder="تاريخ الميلاد" required />
-                      </div>
-                    </div>
-                
-              <div class="form-actions">
-                    <button class="btn-green">حفظ</button>
-                <button type="button" class="btn-secondary" onclick="toggleForm('newTenantForm')">إلغاء</button>
+          <form id="newStoreFormContainer" class="form-container" style="display:none;">
+            <div class="form card">
+              <h3>إضافة صاحب محل</h3>
+              
+              <!-- قسم بيانات المحل -->
+              <div class="form-section">
+                <h4>بيانات المحل</h4>
+                <div class="form-grid">
+                  <input type="text" name="shop_name" placeholder="اسم المحل" required />
+                  <input type="text" name="work_times" placeholder="أوقات المحل" required />
+                  <select name="facility_id" required>
+                    <option value="">اختر المرفق</option>
+                  </select>
+                  <input type="file" name="image" accept="image/jpeg,image/png,image/jpg" required />
+                </div>
               </div>
-            </div>
-          </div>
+          
+              <!-- قسم بيانات صاحب المحل -->
+              <div class="form-section">
+                <h4>بيانات صاحب المحل</h4>
+                <div class="form-grid">
+                  <input type="text" name="owner_name" placeholder="اسم المستأجر الثنائي" required />
+                  <input type="text" name="username" placeholder="اسم المستخدم" required />
+                  <input type="email" name="email" placeholder="البريد الإلكتروني" required />
+                  <input type="tel" name="phone" placeholder="رقم الهاتف" required />
+                  <input type="password" name="password" placeholder="كلمة السر" required />
+                  <input type="password" name="password_confirmation" placeholder="تأكيد كلمة السر" required />
+                  <select name="sex" required>
+                    <option value="">اختر النوع</option>
+                    <option value="male">ذكر</option>
+                    <option value="female">أنثى</option>
+                  </select>
+                  <input type="date" name="birth_date" placeholder="تاريخ الميلاد" required />
+                </div>
+              </div>
+          
+        <div class="form-actions">
+              <button type="submit" class="btn-green">حفظ</button>
+              <button type="button" class="btn-secondary" onclick="toggleForm('newStoreFormContainer')">إلغاء</button>
+        </div>
+      </div>
+    </form>
 
           <!-- جداول البيانات -->
           <div class="tables-container" id="tables-view">
@@ -1303,6 +1145,7 @@
           </div>
         </div>
         <!-- نافذة عرض/تعديل ديناميكية -->
+         <form >
         <div id="viewEditModal" class="modal">
           <div class="modal-content" style="max-width: 600px;">
             <h3 id="viewEditModalTitle" style="margin-bottom: 1.5rem; color: #2563eb; text-align: center;"></h3>
@@ -1312,34 +1155,9 @@
                 <button type="button" class="btn-secondary" onclick="closeModal('viewEditModal')">إغلاق</button>
               </div>
             </form>
-
-              <!-- بيانات المالك -->
-              <div class="details-section" style="background: #f8fafc; border-radius: 10px; padding: 1rem 1.5rem; box-shadow: 0 1px 4px #e2e8f0;">
-                <h4 style="color: #2563eb; margin-bottom: 1rem;"><i class="fas fa-user"></i> بيانات المالك</h4>
-                <div class="details-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem 1.5rem;">
-                  <div><span class="detail-label">اسم المالك:</span> <span id="view-owner-name"></span></div>
-                  <div><span class="detail-label">رقم الجوال:</span> <span id="view-owner-phone"></span></div>
-                  <div><span class="detail-label">البريد الإلكتروني:</span> <span id="view-owner-email"></span></div>
-                  <div><span class="detail-label">النوع:</span> <span id="view-owner-gender"></span></div>
-                  <div><span class="detail-label">تاريخ الميلاد:</span> <span id="view-owner-birthdate"></span></div>
-                </div>
-                </div>
-              <!-- بيانات المحل -->
-              <div class="details-section" style="background: #f8fafc; border-radius: 10px; padding: 1rem 1.5rem; box-shadow: 0 1px 4px #e2e8f0;">
-                <h4 style="color: #3b82f6; margin-bottom: 1rem;"><i class="fas fa-store"></i> بيانات المحل</h4>
-                <div class="details-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem 1.5rem;">
-                  <div><span class="detail-label">اسم المحل:</span> <span id="view-store-name"></span></div>
-                  <div><span class="detail-label">النشاط:</span> <span id="view-store-activity"></span></div>
-                  <div><span class="detail-label">تاريخ بدء العقد:</span> <span id="view-store-contract-start"></span></div>
-                  <div><span class="detail-label">أوقات الدوام:</span> <span id="view-store-working-hours"></span></div>
-                </div>
-                </div>
-                </div>
-            <div class="modal-actions" style="margin-top: 2rem; text-align: left;">
-              <button class="btn-secondary" onclick="closeModal('storeDetailsModal')">إغلاق</button>
             </div>
-                </div>
-                </div>
+          </div>
+        </form>
 
         <!-- نافذة عرض/تعديل ديناميكية -->
         <div id="viewEditModal" class="modal">
