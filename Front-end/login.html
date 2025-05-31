@@ -1,34 +1,136 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>تسجيل الدخول - IEMM</title>
-  <link rel="stylesheet" href="views/css/styles.css">
-  <script src="views/js/script.js" defer></script>
-</head>
-<body>
-  <!-- Navbar -->
-  <header>
-    <div class="container navbar">
-      <h1 style="font-size:1.25rem;font-weight:bold;">IEMM</h1>
- <button class="btn-dark convert" ></button>
-        <!-- <button class="btn-dark " onclick="document.body.classList.toggle('dark')">الوضع الليلي</button> -->    </div>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>تسجيل الدخول - IEMM</title>
+    <link rel="stylesheet" href="views/css/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="views/js/script.js" defer></script>
+  </head>
+  <body>
+    <!-- Hidden form for redirection -->
+    <form id="redirectForm" method="POST" style="display: none">
+      <input type="hidden" name="user_data" id="userData" />
+    </form>
 
-  <!-- Login Section -->
-  <section class="hero">
-    <div class="hero-content">
-      <div class="hero-text" style="text-align:center;">
-        <h2 class="hero-title">تسجيل الدخول</h2>
-        <p class="hero-desc">يرجى إدخال بيانات الدخول الخاصة بك للوصول إلى النظام.</p>
-        <form class="contact-form" style="margin-top: 32px;">
-          <input type="email" placeholder="البريد الإلكتروني" required>
-          <input type="password" placeholder="كلمة المرور" required>
-          <button type="submit">تسجيل الدخول</button>
-        </form>
+    <!-- Navbar -->
+    <header>
+      <div class="container navbar">
+        <h1 style="font-size: 1.25rem; font-weight: bold">IEMM</h1>
+        <button class="btn-dark convert"></button>
+        <!-- <button class="btn-dark " onclick="document.body.classList.toggle('dark')">الوضع الليلي</button> -->
       </div>
-    </div>
-  </section>
-</body>
+    </header>
+
+    <!-- Login Section -->
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-text" style="text-align: center">
+          <h2 class="hero-title">تسجيل الدخول</h2>
+          <p class="hero-desc">
+            يرجى إدخال بيانات الدخول الخاصة بك للوصول إلى النظام.
+          </p>
+          <form method="POST" class="contact-form" style="margin-top: 32px">
+            <input
+              type="email"
+              placeholder="البريد الإلكتروني أو اسم المستخدم"
+              name="login"
+              required
+            />
+            <input
+              type="password"
+              placeholder="كلمة المرور"
+              name="password"
+              required
+            />
+            <button type="submit">تسجيل الدخول</button>
+            <div
+              id="error-message"
+              style="color: red; margin-top: 10px; display: none"
+            ></div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </body>
+  <script>
+    $(document).ready(function () {
+      $("form").on("submit", function (e) {
+        e.preventDefault();
+
+        const login = $('input[name="login"]').val();
+        const password = $('input[name="password"]').val();
+
+        $.ajax({
+          url: "http://localhost/IEMM/Back-end/public/api/auth/login",
+          type: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({
+            login: login,
+            password: password,
+          }),
+
+          success: function (response) {
+            if (response.code === 200) {
+              let redirectPath = "";
+              switch (response.data.user_type) {
+                case 1:
+                  localStorage.setItem("mall_id", response.data.mall_id);
+                  redirectPath = "mallManager/mall-dashboard.html";
+                  break;
+                case 2:
+                  localStorage.setItem("shop_id", response.data.shop_id);
+                  localStorage.setItem("is_owner", response.data.is_owner);
+                  redirectPath = "stores/shop-dashboard.html";
+                  break;
+                case 4:
+                  redirectPath = "admin/admin-dashboard.html";
+                  break;
+                default:
+                  $("#error-message")
+                    .html(
+                      '<i class="fas fa-exclamation-circle"></i> <span style="font-size: 1.2em;">نوع المستخدم غير معروف</span>'
+                    )
+                    .show();
+                  return;
+              }
+
+              // Store user data and token in localStorage
+
+              localStorage.setItem("token", response.data.token);
+              localStorage.setItem("user_type", response.data.user_type);
+
+              // Create and submit a form to handle the redirect
+              const redirectForm = document.getElementById("redirectForm");
+              redirectForm.action = redirectPath;
+              document.getElementById("userData").value = JSON.stringify(
+                response.data
+              );
+              redirectForm.submit();
+            }
+          },
+          error: function (xhr, status, error) {
+            if (xhr.status === 401) {
+              $("#error-message")
+                .html(
+                  '<i class="fas fa-exclamation-circle"></i> <span style="font-size: 1.2em;">بيانات الدخول غير صحيحة</span>'
+                )
+                .show();
+            } else {
+              $("#error-message")
+                .html(
+                  '<i class="fas fa-exclamation-triangle"></i> حدث خطأ أثناء تسجيل الدخول'
+                )
+                .show();
+            }
+          },
+        });
+      });
+    });
+  </script>
 </html>

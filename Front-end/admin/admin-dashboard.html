@@ -30,15 +30,107 @@
     <title>IEMM - لوحة التحكم</title>
     <link rel="stylesheet" href="../views/css/styles.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Add jQuery before your custom scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../views/js/admin/admin-dashboard.js" defer></script>
   </head>
   <body>
+    <!-- Authorization Check -->
+    <script>
+      // Check authorization before loading the page
+      function checkAuthorization() {
+        const token = localStorage.getItem('token');
+        const userType = localStorage.getItem('user_type');
+        
+        // Check if token exists
+        if (!token) {
+          window.location.href = '../login.html';
+          return;
+        }
+
+        // Check user type (admin = 4)
+        if (userType !== '4') {
+          // Create and show unauthorized message
+          document.body.innerHTML = `
+            <div style="
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              height: 100vh;
+              background-color: #f8fafc;
+              font-family: Arial, sans-serif;
+              text-align: center;
+              padding: 20px;
+            ">
+              <i class="fas fa-exclamation-triangle" style="
+                font-size: 64px;
+                color: #ef4444;
+                margin-bottom: 20px;
+              "></i>
+              <h1 style="
+                color: #1e293b;
+                font-size: 24px;
+                margin-bottom: 16px;
+              ">غير مصرح لك بالوصول</h1>
+              <p style="
+                color: #64748b;
+                font-size: 16px;
+                margin-bottom: 24px;
+              ">عذراً، ليس لديك الصلاحية للوصول إلى هذه الصفحة</p>
+              <button onclick="window.location.href='../login.html'" style="
+                background-color: #2563eb;
+                color: white;
+                border: none;
+                padding: 12px 24px;
+                border-radius: 8px;
+                font-size: 16px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+              ">العودة إلى صفحة تسجيل الدخول</button>
+            </div>
+          `;
+          return;
+        }
+
+        // Verify token with backend
+        $.ajax({
+          url: 'http://localhost/IEMM/Back-end/public/api/verify-token',
+          method: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function(response) {
+            if (!response.success) {
+              localStorage.removeItem('token');
+              localStorage.removeItem('user_type');
+              window.location.href = '../login.html';
+            }
+          },
+          error: function() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user_type');
+            window.location.href = '../login.html';
+          }
+        });
+      }
+
+      // Run authorization check when page loads
+      $(document).ready(function() {
+        checkAuthorization();
+      });
+    </script>
+
     <header>
       <div class="container navbar">
         <h1>IEMM</h1>
         <nav>
           <a href="admin-dashboard.html" id="dashboard-link" class="active"
             ><i class="fa-solid fa-chart-bar"></i> لوحة التحكم</a
+            ><i class="fa-solid fa-chart-bar"></i> لوحة التحكم</a
           >
+          <a href="mall-management.html" id="malls-link"><i class="fa-solid fa-city"></i> إدارة المجمعات</a>
+          <a href="settings.html" id="settings-link"><i class="fa-solid fa-gear"></i> الإعدادات العامة</a>
           <a href="mall-management.html" id="malls-link"><i class="fa-solid fa-city"></i> إدارة المجمعات</a>
           <a href="settings.html" id="settings-link"><i class="fa-solid fa-gear"></i> الإعدادات العامة</a>
         </nav>
@@ -51,12 +143,11 @@
     <div class="main">
       <div class="section active" id="dashboard-section">
         <h2 class="section-title"><i class="fa-solid fa-chart-bar"></i> لوحة التحكم</h2>
+        <h2 class="section-title"><i class="fa-solid fa-chart-bar"></i> لوحة التحكم</h2>
         <!-- بطاقات الإحصائيات -->
         <div class="stats-grid"></div>
       </div>
     </div>
   </div>
-
-  <script src="../views/js/admin/admin-dashboard.js"></script>
 </body>
 </html>

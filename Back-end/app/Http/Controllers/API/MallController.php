@@ -9,6 +9,8 @@ use App\Models\Shop;
 use App\Models\Floor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
+use App\Models\MoneyLog;
 
 class MallController extends Controller
 {
@@ -232,7 +234,7 @@ class MallController extends Controller
     public function show($id)
     {
         $mall = Mall::find($id);
-        $mall->floors_count = Floor::where(['mall_id'=>$id])->count();
+        $mall->floors_count = Floor::where(['mall_id' => $id])->count();
         if (!$mall) {
             return response()->json([
                 'status' => 'error',
@@ -256,7 +258,98 @@ class MallController extends Controller
             'data' => $mall
         ]);
     }
+    public function admin(Request $request, $id)
+    {
+        try {
+            $mall = Mall::findOrFail($id);
 
+            // Get total facilities with proper relationship check
+            $totalFacilities = $mall->facilities()->count();
+
+            // Get total rented facilities with proper status check
+            $totalRentedFacilities = $mall->facilities()
+                ->where('status', 'true')
+                ->count();
+
+            // Get total shops
+            $totalShops = $mall->shops()->count();
+
+            $totalOpenedShops = $mall->shops()->where('state', 1)->count();
+            $totalClosedShops = $mall->shops()->where('state', 0)->count();
+
+
+            // Get total rents for the last month
+            $lastMonth = now()->subMonth();
+            $totalRentsLastMonth = MoneyLog::whereHas('shop', function ($query) use ($mall) {
+                $query->where('mall_id', $mall->id);
+            })
+                ->where('type_id', 1) // Assuming 2 is for water
+                ->sum('paid_amount') ?? 0;
+            // var_dump($totalRentsLastMonth);
+
+            // Get remaining payments from MoneyLog
+            $remainingPayments = [
+                'water' => MoneyLog::whereHas('shop', function ($query) use ($mall) {
+                    $query->where('mall_id', $mall->id);
+                })
+                    ->where('type_id', 2) // Assuming 2 is for water
+                    ->where('paid_amount', '<', DB::raw('amount'))
+                    ->sum(DB::raw('amount - paid_amount')) ?? 0,
+
+                'electricity' => MoneyLog::whereHas('shop', function ($query) use ($mall) {
+                    $query->where('mall_id', $mall->id);
+                })
+                    ->where('type_id', 3) // Assuming 3 is for electricity
+                    ->where('paid_amount', '<', DB::raw('amount'))
+                    ->sum(DB::raw('amount - paid_amount')) ?? 0,
+
+                'rent' => MoneyLog::whereHas('shop', function ($query) use ($mall) {
+                    $query->where('mall_id', $mall->id);
+                })
+                    ->where('type_id', 1) // Assuming 1 is for rent
+                    ->where('paid_amount', '<', DB::raw('amount'))
+                    ->sum(DB::raw('amount - paid_amount')) ?? 0
+            ];
+
+            // Calculate total remaining
+            $totalRemaining = array_sum($remainingPayments);
+            $data = [
+                'total_facilities' => $totalFacilities,
+                'total_rented_facilities' => $totalRentedFacilities,
+                'total_shops' => $totalShops,
+                'total_opened_shops' => $totalOpenedShops,
+                'total_closed_shops' => $totalClosedShops,
+                'total_rents_last_month' => $totalRentsLastMonth,
+                'remaining_payments' => [
+                    'water' => $remainingPayments['water'],
+                    'electricity' => $remainingPayments['electricity'],
+                    'rent' => $remainingPayments['rent'],
+                    'total' => $totalRemaining
+                ]
+            ];
+            // var_dump($data);
+            return response()->json([
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'تم جلب بيانات لوحة التحكم بنجاح',
+                'data' => $data
+            ], 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Mall not found'
+            ], 404);
+        } catch (\Exception $e) {
+            // Use Illuminate\Support\Facades\Log instead of \Log
+            \Illuminate\Support\Facades\Log::error('Mall Dashboard Error: ' . $e->getMessage());
+            \Illuminate\Support\Facades\Log::error($e->getTraceAsString());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Error fetching mall statistics: ' . $e->getMessage()
+            ], 500);
+        }
+    }
     public function store(Request $request)
     {
         try {

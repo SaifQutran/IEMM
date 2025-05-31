@@ -105,6 +105,7 @@ Route::get('/user', function (Request $request) {
 // Malls
 // get : /malls
 // get : /malls/{id}
+// get : /malls/{id}/admin
 // post : /malls
 // delete : /malls/{id}
 // put : /malls/{id}
@@ -124,6 +125,7 @@ Route::get('/malls/{id}/chats', [MallController::class, 'facilities']);
 Route::get('/malls/{id}/products', [MallController::class, 'products']);
 Route::get('/malls/{id}/all_products', [MallController::class, 'products']);
 Route::put('/malls/{id}/owner', [MallController::class, 'changeTheOwner']);
+Route::get('/malls/{id}/admin', [MallController::class, 'admin']);
 
 // Facilities
 // get : /facilities
@@ -279,3 +281,69 @@ Note: apiResource automatically creates the following routes for each resource:
 - PUT/PATCH /resource/{id} - update (update existing)
 - DELETE /resource/{id} - destroy (delete)
 */
+
+// Protected Routes (Authentication Required)
+// Route::middleware('auth:sanctum')->group(function () {
+//     // Auth Routes
+//     Route::prefix('auth')->group(function () {
+//         Route::post('/logout', [AuthController::class, 'logout']);
+//         Route::get('/verify-token', [AuthController::class, 'verifyToken']);
+//     });
+
+//     // User Routes
+//     Route::get('/user', function (Request $request) {
+//         return response()->json([
+//             'status' => 'success',
+//             'code' => 200,
+//             'message' => 'User retrieved successfully',
+//             'data' => $request->user()
+//         ]);
+//     });
+
+//     // Admin Routes
+//     Route::get('/admin', [AdminPageController::class, 'index']);
+
+//     // Resource Routes
+//     Route::apiResource('countries', CountryController::class);
+//     Route::apiResource('governorates', GovernorateController::class);
+//     Route::apiResource('categories', CategoryController::class);
+//     Route::apiResource('cities', CityController::class);
+//     Route::apiResource('companies', CompanyController::class);
+//     Route::apiResource('malls', MallController::class);
+//     Route::apiResource('facilities', FacilityController::class);
+//     Route::apiResource('shops', ShopController::class);
+//     Route::apiResource('money-logs', MoneyLogController::class);
+//     Route::apiResource('floors', FloorController::class);
+//     Route::apiResource('products', ProductController::class);
+//     Route::apiResource('warehouses', WarehouseController::class);
+//     Route::apiResource('stocks', StockController::class);
+//     Route::apiResource('bills', BillController::class);
+//     Route::apiResource('sales', SaleController::class);
+//     Route::apiResource('reviews', ReviewController::class);
+//     Route::apiResource('chats', ChatController::class);
+//     Route::apiResource('messages', MessageController::class);
+//     Route::apiResource('notifications', NotificationController::class);
+//     Route::apiResource('reservations', ReservationController::class);
+//     Route::apiResource('users', UserController::class);
+
+//     // Additional Routes
+//     Route::get('/categories/{category}/products', [CategoryController::class, 'products']);
+//     Route::get('/cities/{id}/malls', [CityController::class, 'malls']);
+//     Route::get('/cities/{id}/malls/shops', [CityController::class, 'shops']);
+//     Route::get('/malls/{id}/shops', [MallController::class, 'shops']);
+//     Route::get('/malls/{id}/shops/owners', [MallController::class, 'shopsOwners']);
+//     Route::get('/malls/{id}/facilities', [MallController::class, 'facilities']);
+//     Route::get('/malls/{id}/floors', [MallController::class, 'floors']);
+//     Route::get('/malls/{id}/chats', [MallController::class, 'facilities']);
+//     Route::get('/malls/{id}/products', [MallController::class, 'products']);
+//     Route::get('/malls/{id}/all_products', [MallController::class, 'products']);
+//     Route::put('/malls/{id}/owner', [MallController::class, 'changeTheOwner']);
+//     Route::get('/shops/{id}/users', [ShopController::class, 'shopUsers']);
+//     Route::get('/shops/{id}/products', [ShopController::class, 'shopProducts']);
+//     Route::get('/shops/{id}/bills', [ShopController::class, 'shopBills']);
+//     Route::get('/floors/{id}/shops', [FloorController::class, 'shops']);
+//     Route::get('/floors/{id}/facilities', [FloorController::class, 'facilities']);
+//     Route::post('/products/{id}/add-image', [ProductController::class, 'addImage']);
+//     Route::delete('/products/{id}/delete-image', [ProductController::class, 'deleteImage']);
+//     Route::get('/chats/{id}/messages', [ChatController::class, 'messages']);
+// });
