@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IEMM - إدارة الحجوزات</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="../views/css/styles.css">
+  <link rel="stylesheet" href="../views/css/chat.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="../views/js/script.js" defer></script>
+  <script src="../views/js/stores/chat.js" defer></script>
+  <script src="../views/js/stores/reservations.js" defer></script>
+</head>
+<body>
+    
+    
+  
+  <!-- Header Section -->
+  <header>
+    <div class="container navbar">
+      <h1>IEMM</h1>
+      <nav>
+        <a href="shop-dashboard.html" id="dashboard-link"><i class="fas fa-chart-line"></i> لوحة التحكم</a>
+        <a href="products-management.html" id="products-link"><i class="fas fa-shopping-bag"></i> إدارة المنتجات</a>
+        <a href="inventory.html" id="inventory-link"><i class="fas fa-box"></i> المخزون</a>
+        <a href="employees.html" id="staff-link"><i class="fas fa-users"></i> إدارة العاملين</a>
+        <a href="bills-stores.html" id="bills-link"><i class="fas fa-file-invoice-dollar"></i> الفواتير</a>
+        <a href="reservations.html" id="reservations-link" class="active"><i class="fas fa-calendar-check"></i> إدارة الحجوزات</a>
+      </nav>
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <button class="btn-dark" onclick="document.body.classList.toggle('dark')">الوضع الليلي</button>
+        <button id="chat-toggle" class="chat-toggle-btn" title="الدردشة مع مدير المول">
+          <i class="fas fa-comments"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- نافذة الدردشة الجانبية -->
+  <div id="chat-panel" class="chat-panel">
+    <div class="chat-header">
+      <div class="mall-logo-container">
+        <img id="mall-logo" alt="شعار المول" class="mall-logo">
+        <h3>الدردشة مع مدير المول</h3>
+      </div>
+      <button id="chat-close" class="chat-close-btn">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div id="messages-container" class="messages-container">
+      <!-- سيتم إنشاء الرسائل عبر JavaScript -->
+    </div>
+    <form id="message-form" class="message-form">
+      <textarea id="message-input" class="message-input" placeholder="اكتب رسالتك هنا..." rows="1"></textarea>
+      <button type="submit" class="send-message-btn">
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </form>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main">    
+    <!-- Reservations Management Section -->
+    <div class="section active" id="reservations-section">
+      <div class="section-header">
+        <h2 class="section-title"><i class="fas fa-calendar-check"></i> إدارة الحجوزات</h2>
+      </div>
+
+      <!-- Reservations Table -->
+      <div class="table card">
+        <div class="table-wrapper">
+          <div class="table-search-container">
+            <input type="text" id="search-input" placeholder="ابحث عن اسم العميل أو المنتج..." />
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th class="column-customer">اسم العميل</th>
+                <th class="column-product">اسم المنتج</th>
+                <th class="column-date">
+                  تاريخ الحجز
+                  <div class="filter-container">
+                    <input type="date" id="reservation-date-filter" class="filter-input" onchange="filterReservations()">
+                  </div>
+                </th>
+                <th class="column-date">
+                  تاريخ الاستلام
+                  <div class="filter-container">
+                    <input type="date" id="pickup-date-filter" class="filter-input" onchange="filterReservations()">
+                  </div>
+                </th>
+                <th class="column-quantity">الكمية</th>
+                <th class="column-status">
+                  الحالة
+                  <div class="filter-container">
+                    <select id="status-filter" class="filter-input" onchange="filterReservations()">
+                      <option value="">الكل</option>
+                      <option value="pending">في انتظار الموافقة</option>
+                      <option value="accepted">تم القبول</option>
+                      <option value="rejected">مرفوض</option>
+                      <option value="completed">تم الاستلام</option>
+                    </select>
+                  </div>
+                </th>
+                <th class="column-actions">الإجراءات</th>
+              </tr>
+            </thead>
+            <tbody id="reservations-table-body">
+              <!-- سيتم ملء الجدول عبر JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة تأكيد القبول -->
+  <div id="accept-confirm-modal" class="modal" style="display:none;">
+    <div class="modal-content" style="max-width: 400px;">
+      <span class="close-modal" onclick="closeAcceptModal()">&times;</span>
+      <h3 id="accept-modal-title">تأكيد قبول الحجز</h3>
+      <div class="delete-message" style="text-align: center; margin: 20px 0;">
+        <i class="fas fa-check-circle" style="color: #22c55e; font-size: 3em; margin-bottom: 15px;"></i>
+        <p id="accept-confirm-message" style="color: #4b5563; font-size: 1.1em; line-height: 1.5;"></p>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" onclick="confirmAccept()">قبول</button>
+        <button type="button" class="btn-green" onclick="closeAcceptModal()">إلغاء</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة تأكيد الرفض -->
+  <div id="reject-confirm-modal" class="modal" style="display:none;">
+    <div class="modal-content" style="max-width: 400px;">
+      <span class="close-modal" onclick="closeRejectModal()">&times;</span>
+      <h3 id="reject-modal-title">تأكيد رفض الحجز</h3>
+      <div class="delete-message" style="text-align: center; margin: 20px 0;">
+        <i class="fas fa-times-circle" style="color: #ef4444; font-size: 3em; margin-bottom: 15px;"></i>
+        <p id="reject-confirm-message" style="color: #4b5563; font-size: 1.1em; line-height: 1.5;"></p>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" onclick="confirmReject()">رفض</button>
+        <button type="button" class="btn-green" onclick="closeRejectModal()">إلغاء</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة تأكيد الاستلام -->
+  <div id="complete-confirm-modal" class="modal" style="display:none;">
+    <div class="modal-content" style="max-width: 400px;">
+      <span class="close-modal" onclick="closeCompleteModal()">&times;</span>
+      <h3 id="complete-modal-title">تأكيد استلام الحجز</h3>
+      <div class="delete-message" style="text-align: center; margin: 20px 0;">
+        <i class="fas fa-handshake" style="color: #3b82f6; font-size: 3em; margin-bottom: 15px;"></i>
+        <p id="complete-confirm-message" style="color: #4b5563; font-size: 1.1em; line-height: 1.5;"></p>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" onclick="confirmComplete()">تأكيد الاستلام</button>
+        <button type="button" class="btn-green" onclick="closeCompleteModal()">إلغاء</button>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    /* تنسيق الجدول والأعمدة */
+    .table-wrapper table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    .table-wrapper th {
+      padding: 12px 8px 4px 8px;
+      text-align: right;
+      background-color: #f8fafc;
+      border-bottom: 2px solid #e2e8f0;
+      font-weight: 600;
+      color: #1e293b;
+      vertical-align: top;
+    }
+
+    .table-wrapper td {
+      padding: 12px 8px;
+      border-bottom: 1px solid #e2e8f0;
+      color: #1e293b;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* تحديد عرض الأعمدة */
+    .column-customer {
+      width: 15%;
+    }
+
+    .column-product {
+      width: 15%;
+    }
+
+    .column-date {
+      width: 15%;
+    }
+
+    .column-quantity {
+      width: 10%;
+    }
+
+    .column-status {
+      width: 15%;
+    }
+
+    .column-actions {
+      width: 10%;
+    }
+
+    /* تنسيق الفلاتر */
+    .filter-container {
+      margin-top: 8px;
+      width: 100%;
+    }
+
+    .filter-input {
+      width: 100%;
+      padding: 6px 8px;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      font-size: 0.875rem;
+      background-color: white;
+      color: #1e293b;
+      transition: all 0.2s;
+      box-sizing: border-box;
+    }
+
+    .filter-input:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+    }
+
+    .filter-input::placeholder {
+      color: #94a3b8;
+    }
+
+    /* تنسيق قائمة الحالة */
+    #status-filter {
+      width: 100%;
+      cursor: pointer;
+    }
+
+    #status-filter option {
+      padding: 4px;
+    }
+
+    /* تعديل موضع thead */
+    .table-wrapper thead {
+      position: sticky;
+      top: 60px;
+      z-index: 2;
+    }
+
+    /* الوضع الليلي */
+    body.dark .table-wrapper th {
+      background-color: #1e293b;
+      border-bottom-color: #334155;
+      color: #f8fafc;
+    }
+
+    body.dark .table-wrapper td {
+      border-bottom-color: #334155;
+      color: #f8fafc;
+    }
+
+    body.dark .filter-input {
+      background-color: #0f172a;
+      border-color: #334155;
+      color: #f8fafc;
+    }
+
+    body.dark .filter-input::placeholder {
+      color: #64748b;
+    }
+
+    body.dark .filter-input:focus {
+      border-color: #60a5fa;
+      box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.1);
+    }
+
+    /* تنسيق شريط التمرير */
+    .table-wrapper::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    .table-wrapper::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 4px;
+    }
+
+    .table-wrapper::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+
+    .table-wrapper::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    body.dark .table-wrapper::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+
+    body.dark .table-wrapper::-webkit-scrollbar-thumb {
+      background: #334155;
+    }
+
+    body.dark .table-wrapper::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+
+    /* تنسيق شارات الحالة */
+    .status-badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      white-space: nowrap;
+      text-align: center;
+      min-width: 100px;
+    }
+
+    /* تنسيق أزرار الإجراءات */
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      white-space: nowrap;
+    }
+
+    /* تنسيق الجدول */
+    .table-wrapper {
+      max-height: 400px; /* ارتفاع ثابت لعرض 5 صفوف تقريباً */
+      overflow-y: auto;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+    }
+
+    .table-wrapper thead {
+      position: sticky;
+      top: 0;
+      background-color: #f8fafc;
+      z-index: 1;
+    }
+
+    .table-wrapper th {
+      padding: 12px;
+      text-align: right;
+      background-color: #f8fafc;
+      border-bottom: 2px solid #e2e8f0;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .table-wrapper td {
+      padding: 12px;
+      border-bottom: 1px solid #e2e8f0;
+      color: #1e293b;
+    }
+
+    /* الوضع الليلي للجدول */
+    body.dark .table-wrapper {
+      border-color: #334155;
+    }
+
+    body.dark .table-wrapper thead {
+      background-color: #1e293b;
+    }
+
+    body.dark .table-wrapper th {
+      background-color: #1e293b;
+      border-bottom-color: #334155;
+      color: #f8fafc;
+    }
+
+    body.dark .table-wrapper td {
+      border-bottom-color: #334155;
+      color: #f8fafc;
+    }
+
+    /* تنسيق حقل البحث */
+    .table-search-container {
+      padding: 15px;
+      background-color: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+
+    .table-search-container input {
+      width: 100%;
+      padding: 10px 15px;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      background-color: white;
+      transition: all 0.2s;
+    }
+
+    .table-search-container input:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+    }
+
+    .table-search-container input::placeholder {
+      color: #94a3b8;
+    }
+
+    /* الوضع الليلي */
+    body.dark .table-search-container {
+      background-color: #1e293b;
+      border-bottom-color: #334155;
+    }
+
+    body.dark .table-search-container input {
+      background-color: #0f172a;
+      border-color: #334155;
+      color: #f8fafc;
+    }
+
+    body.dark .table-search-container input::placeholder {
+      color: #64748b;
+    }
+
+    body.dark .table-search-container input:focus {
+      border-color: #60a5fa;
+      box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.1);
+    }
+
+    /* تنسيق النوافذ المنبثقة */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      overflow-y: auto;
+    }
+
+    .modal-content {
+      position: relative;
+      background-color: #fff;
+      margin: 20px auto;
+      padding: 20px;
+      width: 90%;
+      max-width: 800px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      max-height: calc(100vh - 40px);
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      position: sticky;
+      top: 0;
+      background-color: #fff;
+      z-index: 1;
+      padding: 10px 0;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .modal-header h3 {
+      margin: 0;
+      color: #1e3a8a;
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #64748b;
+    }
+
+    .close-modal:hover {
+      color: #1e3a8a;
+    }
+
+    /* الوضع الليلي للنوافذ المنبثقة */
+    body.dark .modal-content {
+      background-color: #1e293b;
+    }
+
+    body.dark .modal-header {
+      background-color: #1e293b;
+      border-bottom-color: #334155;
+    }
+
+    body.dark .modal-header h3 {
+      color: #f8fafc;
+    }
+
+    body.dark .close-modal {
+      color: #94a3b8;
+    }
+
+    body.dark .close-modal:hover {
+      color: #f8fafc;
+    }
+
+    body.dark .delete-message p {
+      color: #e2e8f0;
+    }
+
+    /* تنسيق الأزرار */
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    body.dark .form-actions {
+      border-top-color: #334155;
+    }
+  </style>
+
+</body>
+</html> 
