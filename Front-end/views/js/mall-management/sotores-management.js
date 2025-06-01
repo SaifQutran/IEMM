@@ -329,72 +329,7 @@ class FacilitiesManagement {
         });
     }
 
-    static openViewModal(data) {
-        const modal = document.getElementById('viewEditModal');
-        if (!modal) {
-            console.error('Modal element not found! Make sure you have an element with id="viewEditModal"');
-            return;
-        }
-
-        const title = document.getElementById('viewEditModalTitle');
-        if (!title) {
-            console.error('Modal title element not found! Make sure you have an element with id="viewEditModalTitle"');
-            return;
-        }
-
-        const fieldsContainer = document.getElementById('viewEditFields');
-        if (!fieldsContainer) {
-            console.error('Fields container not found! Make sure you have an element with id="viewEditFields"');
-            return;
-        }
-
-        fieldsContainer.innerHTML = '';
-        title.textContent = 'بيانات المرفق';
-        
-        const fields = [
-            {label: 'مبلغ الإيجار', key: 'rent', type: 'number'},
-            {label: 'رقم عداد الماء', key: 'waterMeter', type: 'text'},
-            {label: 'رقم عداد الكهرباء', key: 'electricityMeter', type: 'text'},
-            {label: 'الدور', key: 'floor', type: 'text'},
-            {label: 'الموقع X', key: 'x', type: 'number'},
-            {label: 'الموقع Y', key: 'y', type: 'number'},
-            {label: 'العرض', key: 'width', type: 'number'},
-            {label: 'الطول', key: 'height', type: 'number'}
-        ];
-
-        // توليد الحقول
-        fields.forEach(field => {
-            const value = data[field.key] || '';
-            const fieldId = `view-field-${field.key}`;
-            const fieldDiv = document.createElement('div');
-            fieldDiv.className = 'form-group';
-            fieldDiv.style.position = 'relative';
-            fieldDiv.innerHTML = `
-                <label>${field.label}</label>
-                <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
-                <button type="button" class="btn-icon edit-field-btn" title="تعديل" onclick="FacilitiesManagement.enableFieldEdit('${fieldId}', '${field.key}', '${field.type}')" style="position:absolute; left:0; top:50%; transform:translateY(-50%);"><i class='fas fa-edit'></i></button>
-            `;
-            fieldsContainer.appendChild(fieldDiv);
-        });
-
-        // Show the modal
-        modal.style.display = 'block';
-        
-        // Add close button functionality if not already present
-        const closeBtn = modal.querySelector('.close-modal');
-        if (closeBtn) {
-            closeBtn.onclick = function() {
-                modal.style.display = 'none';
-            };
-        }
-
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            if (event.target === modal) {
-                modal.style.display = 'none';
-            }
-        };
-    }
+    
 
     static enableFieldEdit(fieldId, fieldKey, fieldType) {
         // Add your field editing logic here
@@ -520,71 +455,7 @@ class FacilitiesManagement {
         $(`#${modalId}`).hide();
     }
 
-    static openViewModal(data) {
-        const modal = document.getElementById('viewEditModal');
-        if (!modal) {
-            console.error('Modal element not found! Make sure you have an element with id="viewEditModal"');
-            return;
-        }
-
-        const title = document.getElementById('viewEditModalTitle');
-        if (!title) {
-            console.error('Modal title element not found! Make sure you have an element with id="viewEditModalTitle"');
-            return;
-        }
-
-        const fieldsContainer = document.getElementById('viewEditFields');
-        if (!fieldsContainer) {
-            console.error('Fields container not found! Make sure you have an element with id="viewEditFields"');
-            return;
-        }
-
-        fieldsContainer.innerHTML = '';
-        title.textContent = 'بيانات المرفق';
-
-        // تعريف الحقول حسب النوع
-        const fields = [
-            {label: 'رقم المرفق', key: 'id', type: 'text'},
-            {label: 'الدور', key: 'floor_number', type: 'number'},
-            {label: 'المساحة', key: 'space', type: 'text'},
-            {label: 'الحالة', key: 'facility_state', type: 'text'},
-            {label: 'اسم المالك', key: 'owner_name', type: 'text'},
-            {label: 'اسم المحل', key: 'shop_name', type: 'text'}
-        ];
-
-        // توليد الحقول
-        fields.forEach(field => {
-            const value = data[field.key] || '';
-            const fieldId = `view-field-${field.key}`;
-            const fieldDiv = document.createElement('div');
-            fieldDiv.className = 'form-group';
-            fieldDiv.style.position = 'relative';
-            fieldDiv.innerHTML = `
-                <label>${field.label}</label>
-                <span id="${fieldId}" class="field-value">${value}</span>
-                <button type="button" class="btn-icon edit-field-btn" title="تعديل" onclick="FacilitiesManagement.enableFieldEdit('${fieldId}', '${field.key}', '${field.type}')" style="position:absolute; left:0; top:50%; transform:translateY(-50%);")'><i class='fas fa-edit'></i></button>
-            `;
-            fieldsContainer.appendChild(fieldDiv);
-        });
-
-        // Show the modal
-        modal.style.display = 'block';
-        
-        // Add close button functionality if not already present
-        const closeBtn = modal.querySelector('.close-modal');
-       if (closeBtn) {
-            closeBtn.onclick = function() {
-                modal.style.display = 'none';
-            };
-        }
-
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            if (event.target === modal) {
-                modal.style.display = 'none';
-            }
-        };
-    }
+    
 
     static enableFieldEdit(fieldId, fieldKey, fieldType) {
         // Add your field editing logic here
