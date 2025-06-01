@@ -231,13 +231,13 @@ class MallController extends Controller
             $chat->shop_name = $chat->shop ? $chat->shop->name : "غير مستأجر";
             // Space
             $chat->shop_image_url = null;
-            
+
             $imagePath = storage_path('app/public/shops/' . $chat->shop->id . ' image.png');
             if (file_exists($imagePath)) {
                 $chat->shop_image_url = 'localhost/IEMM/Back-end/storage/app/public/shops/' . $chat->shop->id . ' image.png';
-            } 
-            
-            $chat->shop_owner_name = $chat->shop->owner->f_name .' ' .$chat->shop->owner->l_name;
+            }
+
+            $chat->shop_owner_name = $chat->shop->owner->f_name . ' ' . $chat->shop->owner->l_name;
             unset($chat->shop);
             return $chat;
         });
@@ -294,7 +294,7 @@ class MallController extends Controller
         $shopIds = $mall->shops()->pluck('id');
 
         // Get money logs for these shops
-        $moneyLogs = MoneyLog::with('shop')
+        $moneyLogs = MoneyLog::with(['shop.facility'])
             ->whereIn('shop_id', $shopIds)
             ->orderBy('date', 'desc')
             ->get()
@@ -303,16 +303,37 @@ class MallController extends Controller
             })
             ->map(function ($logs) {
                 $firstLog = $logs->first();
+                $rentLog = $logs->where('type_id', 1)->first();
+                $electricityLog = $logs->where('type_id', 2)->first();
+                $waterLog = $logs->where('type_id', 3)->first();
+
                 return [
                     'shop_id' => $firstLog->shop_id,
                     'shop_name' => $firstLog->shop ? $firstLog->shop->name : null,
                     'shop_owner_name' => $firstLog->shop->owner->f_name . ' ' . $firstLog->shop->owner->l_name,
                     'month' => date('Y-m', strtotime($firstLog->date)),
-                    'electricity' => $logs->where('type_id', 1)->sum('amount'),
-                    'water' => $logs->where('type_id', 2)->sum('amount'),
-                    'rent' => $logs->where('type_id', 3)->sum('amount'),
 
+                    // Electricity details
+                    'electricity_log_id' => $electricityLog ? $electricityLog->id : null,
+                    'facility_electricity_id' => $electricityLog ? $firstLog->shop->facility->electricity_id_number : null,
+                    'electricity_month' => $logs->where('type_id', 2)->sum('amount'),
+                    'electricity_total_remaining' => $logs->where('type_id', 2)->sum('amount') - $logs->where('type_id', 2)->sum('paid_amount'),
+
+                    // Water details
+                    'water_log_id' => $waterLog ? $waterLog->id : null,
+                    'facility_water_id' => $waterLog ? $firstLog->shop->facility->water_id_number : null,
+                    'water_month' => $logs->where('type_id', 3)->sum('amount'),
+                    'water_total_remaining' => $logs->where('type_id', 3)->sum('amount') - $logs->where('type_id', 3)->sum('paid_amount'),
+
+                    // Rent details
+                    'rent_log_id' => $rentLog ? $rentLog->id : null,
+                    'facility_id' => $firstLog->shop->facility->id,
+                    'rent_month' => $logs->where('type_id', 1)->sum('amount'),
+                    'rent_total_remaining' => $logs->where('type_id', 1)->sum('amount') - $logs->where('type_id', 1)->sum('paid_amount'),
+
+                    // Totals
                     'remaining_total' => $logs->sum('amount') - $logs->sum('paid_amount'),
+                    'paid_total' => $logs->sum('paid_amount'),
                     'total' => $logs->sum('amount')
                 ];
             })

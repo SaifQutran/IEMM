@@ -36,7 +36,6 @@ function showDeleteModal(message, onConfirm) {
         }
     });
 }
-
 class StoreManagement {
     constructor() {
         this.initializeEventListeners();
@@ -81,7 +80,7 @@ class StoreManagement {
 
     // Load all stores
     loadStores() {
-        $.ajax({
+        $.ajax({    
             url: API_URL,
             method: 'GET',
             headers: {
@@ -343,76 +342,123 @@ class StoreOwnerManagement {
             }
         });
     }
-    static openOwnerViewModal(data) {
-        const modal = document.getElementById('viewEditModal');
-        if (!modal) {
-            console.error('Modal element not found! Make sure you have an element with id="viewEditModal"');
-            return;
-        }
+// <<<<<<< HEAD
+//     static openOwnerViewModal(data) {
+//         const modal = document.getElementById('viewEditModal');
+//         if (!modal) {
+//             console.error('Modal element not found! Make sure you have an element with id="viewEditModal"');
+//             return;
+//         }
 
-        const title = document.getElementById('viewEditModalTitle');
-        if (!title) {
-            console.error('Modal title element not found! Make sure you have an element with id="viewEditModalTitle"');
-            return;
-        }
+//         const title = document.getElementById('viewEditModalTitle');
+//         if (!title) {
+//             console.error('Modal title element not found! Make sure you have an element with id="viewEditModalTitle"');
+//             return;
+//         }
 
-        const fieldsContainer = document.getElementById('viewEditFields');
-        if (!fieldsContainer) {
-            console.error('Fields container not found! Make sure you have an element with id="viewEditFields"');
-            return;
-        }
+//         const fieldsContainer = document.getElementById('viewEditFields');
+//         if (!fieldsContainer) {
+//             console.error('Fields container not found! Make sure you have an element with id="viewEditFields"');
+//             return;
+//         }
 
-        fieldsContainer.innerHTML = '';
+//         fieldsContainer.innerHTML = '';
 
-        // تعريف الحقول حسب النوع
-        let fields = [];
-        title.textContent = 'بيانات صاحب المحل';
-        fields = [
-            {label: 'الاسم', key: 'owner_name', type: 'text'},
-            {label: 'رقم الجوال', key: 'phone', type: 'tel'},
-            {label: 'البريد الإلكتروني', key: 'owner_email', type: 'email'},
-            {label: 'المحلات المستأجرة', key: 'facilities', type: 'text'},
-            {label: 'النوع', key: 'owner_sex', type: 'select', options: [{value:'male',label:'ذكر'},{value:'female',label:'أنثى'}]},
-            {label: 'تاريخ الميلاد', key: 'owner_birth_date', type: 'date'}
-          ];
-        // توليد الحقول
-        fields.forEach(field => {
-            const value = data[field.key] || '';
-            const fieldId = `view-field-${field.key}`;
-            const fieldDiv = document.createElement('div');
-            fieldDiv.className = 'form-group';
-            fieldDiv.style.position = 'relative';
-            fieldDiv.innerHTML = `
-                <label>${field.label}</label>
-                <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
+//         // تعريف الحقول حسب النوع
+//         let fields = [];
+//         title.textContent = 'بيانات صاحب المحل';
+//         fields = [
+//             {label: 'الاسم', key: 'owner_name', type: 'text'},
+//             {label: 'رقم الجوال', key: 'phone', type: 'tel'},
+//             {label: 'البريد الإلكتروني', key: 'owner_email', type: 'email'},
+//             {label: 'المحلات المستأجرة', key: 'facilities', type: 'text'},
+//             {label: 'النوع', key: 'owner_sex', type: 'select', options: [{value:'male',label:'ذكر'},{value:'female',label:'أنثى'}]},
+//             {label: 'تاريخ الميلاد', key: 'owner_birth_date', type: 'date'}
+//           ];
+//         // توليد الحقول
+//         fields.forEach(field => {
+//             const value = data[field.key] || '';
+//             const fieldId = `view-field-${field.key}`;
+//             const fieldDiv = document.createElement('div');
+//             fieldDiv.className = 'form-group';
+//             fieldDiv.style.position = 'relative';
+//             fieldDiv.innerHTML = `
+//                 <label>${field.label}</label>
+//                 <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
                 
-            `;
-            fieldsContainer.appendChild(fieldDiv);
-        });
+//             `;
+//             fieldsContainer.appendChild(fieldDiv);
+//         });
 
-        // Show the modal
-        modal.style.display = 'block';
+//         // Show the modal
+//         modal.style.display = 'block';
         
-        // Add close button functionality if not already present
-        const closeBtn = modal.querySelector('.close-modal');
-        if (closeBtn) {
-            closeBtn.onclick = function() {
-                modal.style.display = 'none';
-            };
-        }
+//         // Add close button functionality if not already present
+//         const closeBtn = modal.querySelector('.close-modal');
+//         if (closeBtn) {
+//             closeBtn.onclick = function() {
+//                 modal.style.display = 'none';
+//             };
+//         }
 
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            if (event.target === modal) {
-                modal.style.display = 'none';
-            }
-        };
-    }
-    static enableFieldEdit(fieldId, fieldKey, fieldType) {
-        // Add your field editing logic here
-        console.log('Editing field:', fieldId, fieldKey, fieldType);
-    }
+//         // Close modal when clicking outside
+//         window.onclick = function(event) {
+//             if (event.target === modal) {
+//                 modal.style.display = 'none';
+//             }
+//         };
+//     }
+//     static enableFieldEdit(fieldId, fieldKey, fieldType) {
+//         // Add your field editing logic here
+//         console.log('Editing field:', fieldId, fieldKey, fieldType);
+//     }
     
+// =======
+
+//     // Add new store owner
+//     addStoreOwner(ownerData) {
+//         $.ajax({
+//             url: OWNER_API_URL,
+//             method: 'POST',
+//             data: ownerData,
+//             headers: {
+//                 'Authorization': 'Bearer ' + localStorage.getItem('token')
+//             },
+//             success: (response) => {
+//                 alert('تم إضافة صاحب المحل بنجاح');
+//                 this.loadStoreOwners();
+//                 this.closeModal('newOwnerFormContainer');
+//             },
+//             error: (xhr, status, error) => {
+//                 alert('حدث خطأ أثناء إضافة صاحب المحل');
+//                 console.error(error);
+//             }
+//         });
+//     }
+
+
+//     // Delete store owner
+//     deleteStoreOwner(ownerId) {
+//         if (confirm('هل أنت متأكد من حذف صاحب المحل؟')) {
+//             $.ajax({
+//                 url: `http://localhost/IEMM/Back-end/public/api/owners/${ownerId}`,
+//                 method: 'DELETE',
+//                 headers: {
+//                     'Authorization': 'Bearer ' + localStorage.getItem('token')
+//                 },
+//                 success: (response) => {
+//                     alert('تم حذف صاحب المحل بنجاح');
+//                     this.loadStoreOwners();
+//                 },
+//                 error: (xhr, status, error) => {
+//                     alert('حدث خطأ أثناء حذف صاحب المحل');
+//                     console.error(error);
+//                 }
+//             });
+//         }
+//     }
+
+// >>>>>>> 5608c021ee61b17f2977baf540ab84dfd5e8dc38
     // Helper function to close modals
     closeModal(modalId) {
         $(`#${modalId}`).hide();
@@ -451,7 +497,6 @@ class FacilitiesManagement {
             $(this).closest('.modal').hide();
         });
     }
-
 
     importEvents() {
         return $.ajax({
@@ -570,6 +615,7 @@ class FacilitiesManagement {
     closeModal(modalId) {
         $(`#${modalId}`).hide();
     }
+
 
     static openViewModal(data) {
         const modal = document.getElementById('viewEditModal');
@@ -791,3 +837,83 @@ $(document).ready(() => {
         }
     });
 });
+
+// Modal for store and owner view (single modal for both)
+if (!document.getElementById('customViewModal')) {
+    const modalHtml = `
+    <div id="customViewModal" class="modal" style="display:none;z-index:9999;">
+      <div class="modal-content" style="max-width:600px;direction:rtl;">
+        <span class="close-modal" style="float:left;font-size:28px;cursor:pointer;">&times;</span>
+        <h2 id="customViewModalTitle" style="color:#2176ff;text-align:center;margin-bottom:16px;"></h2>
+        <div id="customViewModalGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:18px 18px;margin-bottom:24px;"></div>
+        <button class="btn btn-secondary" id="customViewModalCloseBtn" style="margin-top:8px;">إغلاق</button>
+      </div>
+    </div>`;
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    document.getElementById('customViewModalCloseBtn').onclick = document.querySelector('#customViewModal .close-modal').onclick = function() {
+        document.getElementById('customViewModal').style.display = 'none';
+    };
+    window.onclick = function(event) {
+        if (event.target === document.getElementById('customViewModal')) {
+            document.getElementById('customViewModal').style.display = 'none';
+        }
+    };
+}
+
+window.showStoreOwnerModal = function(data) {
+    const modal = document.getElementById('customViewModal');
+    const title = document.getElementById('customViewModalTitle');
+    const grid = document.getElementById('customViewModalGrid');
+    title.textContent = 'بيانات صاحب المحل';
+    grid.innerHTML = '';
+    const fields = [
+        {label: 'الاسم', key: 'owner_name'},
+        {label: 'رقم الجوال', key: 'phone'},
+        {label: 'المحلات المستأجرة', key: 'facilities'},
+        {label: 'البريد الإلكتروني', key: 'owner_email'},
+        {label: 'تاريخ الميلاد', key: 'birthdate'},
+        {label: 'النوع', key: 'gender'}
+    ];
+    fields.forEach(field => {
+        const value = data[field.key] || '';
+        const card = document.createElement('div');
+        card.style.background = '#f7fafd';
+        card.style.borderRadius = '12px';
+        card.style.padding = '18px 12px';
+        card.style.display = 'flex';
+        card.style.flexDirection = 'column';
+        card.style.alignItems = 'flex-start';
+        card.innerHTML = `<div style='color:#2176ff;font-weight:500;margin-bottom:6px;'>${field.label}</div><div>${value}</div>`;
+        grid.appendChild(card);
+    });
+    modal.style.display = 'block';
+};
+
+window.showStoreModal = function(data) {
+    const modal = document.getElementById('customViewModal');
+    const title = document.getElementById('customViewModalTitle');
+    const grid = document.getElementById('customViewModalGrid');
+    title.textContent = 'بيانات المحل';
+    grid.innerHTML = '';
+    const fields = [
+        {label: 'اسم المالك', key: 'owner_name'},
+        {label: 'اسم المحل', key: 'name'},
+        {label: 'الدور', key: 'floor'},
+        {label: 'النشاط', key: 'shop_state'},
+        {label: 'تاريخ بدء العقد', key: 'rent_began_At'},
+        {label: 'أوقات الدوام', key: 'work_times'}
+    ];
+    fields.forEach(field => {
+        const value = data[field.key] || '';
+        const card = document.createElement('div');
+        card.style.background = '#f7fafd';
+        card.style.borderRadius = '12px';
+        card.style.padding = '18px 12px';
+        card.style.display = 'flex';
+        card.style.flexDirection = 'column';
+        card.style.alignItems = 'flex-start';
+        card.innerHTML = `<div style='color:#2176ff;font-weight:500;margin-bottom:6px;'>${field.label}</div><div>${value}</div>`;
+        grid.appendChild(card);
+    });
+    modal.style.display = 'block';
+};
