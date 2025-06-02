@@ -11,8 +11,9 @@
     <link rel="stylesheet" href="../views/css/malls-dashbboard/mall.css">
     <link rel="stylesheet" href="../views/css/chat.css"> 
     <script src="../views/js/script.js" defer></script>
-    <script src="../views/js/chat.js" defer></script>
+    <!-- <script src="../views/js/chat.js" defer></script> -->
     <script src="../views/js/theme-manager.js" defer></script>
+    <script src="../views/js/MallManagerChat.js" defer></script>
     <!-- <script src="../views/js/mall-management/sotores-management.js" defer></script> -->
     <!-- إضافة مكتبة Font Awesome للأيقونات -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -859,6 +860,30 @@
         min-width: 100px;
         font-size: 1.05rem;
       }
+
+      .view-fields {
+        display: grid;
+        gap: 1rem;
+        padding: 1rem;
+      }
+
+      .field-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .field-group label {
+        font-weight: 600;
+        color: #4b5563;
+      }
+
+      .field-group span {
+        padding: 0.5rem;
+        background-color: #f3f4f6;
+        border-radius: 0.375rem;
+        color: #1f2937;
+      }
     </style>
     <script>
       function toggleForm(formId) {
@@ -945,10 +970,8 @@
             };
 
             actionsCell.innerHTML = `
-              <button class="btn-icon" title="عرض" onclick='openViewModal(${JSON.stringify(storeData).replace(/'/g, "\\'")}, "facilities")'>
-                <i class="fas fa-eye"></i>
-              </button>
-              <button class="btn-icon" title="حذف" onclick="deleteStore(this)"><i class="fas fa-trash"></i></button>
+              <button class="btn-icon view-btn" title="عرض" onclick="FacilitiesManagement.openViewModal(${JSON.stringify(storeData).replace(/"/g, '&quot;')}, 'facilities')"><i class="fas fa-eye"></i></button>
+              <button class="btn-icon" title="حذف" onclick="facilitiesManagement.deleteFacility(${facility.id})"><i class="fas fa-trash"></i></button>
             `;
           }
         });
@@ -968,10 +991,7 @@
             };
 
             actionsCell.innerHTML = `
-              <button class="btn-icon" title="عرض" onclick='openViewModal(${JSON.stringify(tenantData).replace(/'/g, "\\'")}, "tenants")'>
-                <i class="fas fa-eye"></i>
-              </button>
-              <button class="btn-icon" title="حذف" onclick="deleteStore(this)"><i class="fas fa-trash"></i></button>
+              <button class="btn-icon view-btn" title="عرض" onclick="StoreOwnerManagement.openOwnerViewModal(${JSON.stringify(tenantData).replace(/"/g, '&quot;')}, 'tenants')"><i class="fas fa-eye"></i></button>
             `;
           }
         });
@@ -990,111 +1010,109 @@
             };
 
             actionsCell.innerHTML = `
-              <button class="btn-icon" title="عرض" onclick='openViewModal(${JSON.stringify(storeData).replace(/'/g, "\\'")}, "stores")'>
-                <i class="fas fa-eye"></i>
-              </button>
-              <button class="btn-icon" title="حذف" onclick="deleteStore(this)"><i class="fas fa-trash"></i></button>
+              <button class="btn-icon view-btn" title="عرض" onclick="StoreManagement.openViewModal(${JSON.stringify(storeData).replace(/"/g, '&quot;')}, 'stores')"><i class="fas fa-eye"></i></button>
+              <button class="btn-icon" title="حذف" onclick="storeManagement.deleteStore(${store.id})"><i class="fas fa-trash"></i></button>
             `;
           }
         });
       });
 
       // فتح نافذة عرض التفاصيل بيانات المرفق
-      function openViewModal(data, type) {
-        const modal = document.getElementById('viewEditModal');
-        const title = document.getElementById('viewEditModalTitle');
-        const fieldsContainer = document.getElementById('viewEditFields');
-        fieldsContainer.innerHTML = '';
+      // function openViewModal(data, type) {
+      //   const modal = document.getElementById('viewEditModal');
+      //   const title = document.getElementById('viewEditModalTitle');
+      //   const fieldsContainer = document.getElementById('viewEditFields');
+      //   fieldsContainer.innerHTML = '';
 
-        let fields = [];
-        if (type === 'facilities') {
-          title.textContent = 'بيانات المرفق';
-          fields = [
-            {label: 'مبلغ الإيجار', key: 'rent', type: 'number', group: 'rent-floor'},
-            {label: 'الدور', key: 'floor', type: 'text', group: 'rent-floor'},
-            {label: 'رقم عداد الماء', key: 'waterMeter', type: 'text', group: 'meters'},
-            {label: 'رقم عداد الكهرباء', key: 'electricityMeter', type: 'text', group: 'meters'},
-            {label: 'الموقع X', key: 'x', type: 'number', group: 'location'},
-            {label: 'الموقع Y', key: 'y', type: 'number', group: 'location'},
-            {label: 'العرض', key: 'width', type: 'number', group: 'dimensions'},
-            {label: 'الطول', key: 'height', type: 'number', group: 'dimensions'}
-          ];
-        } else if (type === 'tenants') {
-          title.textContent = 'بيانات صاحب المحل';
-          fields = [
-            {label: 'الاسم', key: 'name', type: 'text'},
-            {label: 'رقم الجوال', key: 'phone', type: 'tel'},
-            {label: 'البريد الإلكتروني', key: 'email', type: 'email'},
-            {label: 'المحلات المستأجرة', key: 'stores', type: 'text'},
-            {label: 'النوع', key: 'gender', type: 'select', options: [{value:'male',label:'ذكر'},{value:'female',label:'أنثى'}]},
-            {label: 'تاريخ الميلاد', key: 'birthdate', type: 'date'}
-          ];
-        } else if (type === 'stores') {
-          title.textContent = 'بيانات المحل';
-          fields = [
-            {label: 'اسم المالك', key: 'owner', type: 'text'},
-            {label: 'اسم المحل', key: 'storeName', type: 'text'},
-            {label: 'النشاط', key: 'activity', type: 'text'},
-            {label: 'تاريخ بدء العقد', key: 'contractStart', type: 'date'},
-            {label: 'أوقات الدوام', key: 'workingHours', type: 'text'}
-          ];
-        }
+      //   let fields = [];
+      //   if (type === 'facilities') {
+      //     title.textContent = 'بيانات المرفق';
+      //     fields = [
+      //       {label: 'مبلغ الإيجار', key: 'rent', type: 'number', group: 'rent-floor'},
+      //       {label: 'الدور', key: 'floor', type: 'text', group: 'rent-floor'},
+      //       {label: 'رقم عداد الماء', key: 'waterMeter', type: 'text', group: 'meters'},
+      //       {label: 'رقم عداد الكهرباء', key: 'electricityMeter', type: 'text', group: 'meters'},
+      //       {label: 'الموقع X', key: 'x', type: 'number', group: 'location'},
+      //       {label: 'الموقع Y', key: 'y', type: 'number', group: 'location'},
+      //       {label: 'العرض', key: 'width', type: 'number', group: 'dimensions'},
+      //       {label: 'الطول', key: 'height', type: 'number', group: 'dimensions'}
+      //     ];
+      //   } else if (type === 'tenants') {
+      //     title.textContent = 'بيانات صاحب المحل';
+      //     fields = [
+      //       {label: 'الاسم', key: 'name', type: 'text'},
+      //       {label: 'رقم الجوال', key: 'phone', type: 'tel'},
+      //       {label: 'البريد الإلكتروني', key: 'email', type: 'email'},
+      //       {label: 'المحلات المستأجرة', key: 'stores', type: 'text'},
+      //       {label: 'النوع', key: 'gender', type: 'select', options: [{value:'male',label:'ذكر'},{value:'female',label:'أنثى'}]},
+      //       {label: 'تاريخ الميلاد', key: 'birthdate', type: 'date'}
+      //     ];
+      //   } else if (type === 'stores') {
+      //     title.textContent = 'بيانات المحل';
+      //     fields = [
+      //       {label: 'اسم المالك', key: 'owner', type: 'text'},
+      //       {label: 'اسم المحل', key: 'storeName', type: 'text'},
+      //       {label: 'النشاط', key: 'activity', type: 'text'},
+      //       {label: 'تاريخ بدء العقد', key: 'contractStart', type: 'date'},
+      //       {label: 'أوقات الدوام', key: 'workingHours', type: 'text'}
+      //     ];
+      //   }
         
-        // إضافة زر التعديل في الزاوية
-        let fieldsHTML = '';
-        if (type === 'facilities') {
-          fieldsHTML = `
-            <button type="button" class="edit-all-btn" title="تعديل جميع الحقول" onclick="enableAllFieldsEdit('${type}')">
-              <i class="fas fa-edit"></i>
-            </button>
-          `;
+      //   // إضافة زر التعديل في الزاوية
+      //   let fieldsHTML = '';
+      //   if (type === 'facilities') {
+      //     fieldsHTML = `
+      //       <button type="button" class="edit-all-btn" title="تعديل جميع الحقول" onclick="enableAllFieldsEdit('${type}')">
+      //         <i class="fas fa-edit"></i>
+      //       </button>
+      //     `;
 
-          // تجميع الحقول حسب المجموعات
-          const groups = {
-            'rent-floor': [],
-            'meters': [],
-            'location': [],
-            'dimensions': []
-          };
+      //     // تجميع الحقول حسب المجموعات
+      //     const groups = {
+      //       'rent-floor': [],
+      //       'meters': [],
+      //       'location': [],
+      //       'dimensions': []
+      //     };
 
-          fields.forEach(field => {
-            if (groups[field.group]) {
-              groups[field.group].push(field);
-            }
-          });
+      //     fields.forEach(field => {
+      //       if (groups[field.group]) {
+      //         groups[field.group].push(field);
+      //       }
+      //     });
 
-          // إنشاء الصفوف المجمعة
-          fieldsHTML += `
-            <div class="fields-row">
-              ${createFieldRow(groups['rent-floor'], data)}
-            </div>
-            <div class="fields-row">
-              ${createFieldRow(groups['meters'], data)}
-            </div>
-            <div class="fields-row">
-              ${createFieldRow(groups['location'], data)}
-            </div>
-            <div class="fields-row">
-              ${createFieldRow(groups['dimensions'], data)}
-            </div>
-          `;
-        } else {
-          // توليد الحقول العادية للأنواع الأخرى
-        fields.forEach(field => {
-          const value = data[field.key] || '';
-          const fieldId = `view-field-${field.key}`;
-            fieldsHTML += `
-              <div class="field-row">
-              <label>${field.label}</label>
-              <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
-              </div>
-            `;
-          });
-        }
+      //     // إنشاء الصفوف المجمعة
+      //     fieldsHTML += `
+      //       <div class="fields-row">
+      //         ${createFieldRow(groups['rent-floor'], data)}
+      //       </div>
+      //       <div class="fields-row">
+      //         ${createFieldRow(groups['meters'], data)}
+      //       </div>
+      //       <div class="fields-row">
+      //         ${createFieldRow(groups['location'], data)}
+      //       </div>
+      //       <div class="fields-row">
+      //         ${createFieldRow(groups['dimensions'], data)}
+      //       </div>
+      //     `;
+      //   } else {
+      //     // توليد الحقول العادية للأنواع الأخرى
+      //   fields.forEach(field => {
+      //     const value = data[field.key] || '';
+      //     const fieldId = `view-field-${field.key}`;
+      //       fieldsHTML += `
+      //         <div class="field-row">
+      //         <label>${field.label}</label>
+      //         <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
+      //         </div>
+      //       `;
+      //     });
+      //   }
         
-        fieldsContainer.innerHTML = fieldsHTML;
-        modal.style.display = 'block';
-      }
+      //   fieldsContainer.innerHTML = fieldsHTML;
+      //   modal.style.display = 'block';
+      // }
 
       // دالة مساعدة لإنشاء صف من الحقول
       function createFieldRow(fields, data) {
@@ -1373,15 +1391,10 @@
       }
 
       // Run authorization check when page loads
-<<<<<<< HEAD
       $(document).ready(function() {
-        // checkAuthorization();
+        checkAuthorization();
       });
-=======
-      // $(document).ready(function() {
-      //   checkAuthorization();
-      // });
->>>>>>> 5608c021ee61b17f2977baf540ab84dfd5e8dc38
+
     </script>
 
       <!-- Header Section -->
@@ -1464,11 +1477,11 @@
               </button>
             </div>
             <div class="action-buttons">
-                <button class="btn-green bar-btn" onclick="setActiveBarBtn(this); toggleForm('newStoreForm')">
+                <button class="btn-green bar-btn" onclick="setActiveBarBtn(this); toggleForm('newFacilityFormContainer')">
                   <i class="fas fa-plus"></i>
                   إضافة مرفق جديد
                 </button>
-                <button class="btn-green bar-btn" onclick="setActiveBarBtn(this); toggleForm('newTenantForm')">
+                <button class="btn-green bar-btn" onclick="setActiveBarBtn(this); toggleForm('newStoreFormContainer')">
                   <i class="fas fa-user-plus"></i>
                   إضافة صاحب محل
                 </button>
@@ -1498,7 +1511,7 @@
               </form>
 
           <!-- نموذج إضافة صاحب محل -->
-          <div id="newTenantForm" class="form-container" style="display:none;">
+          <form id="newStoreFormContainer" class="form-container" style="display:none;">
                   <div class="form card">
                     <h3>إضافة صاحب محل</h3>
                     
@@ -1506,13 +1519,10 @@
                     <div class="form-section">
                       <h4>بيانات المحل</h4>
                       <div class="form-grid">
-                        <input type="text" placeholder="اسم المحل" required />
-                        <input type="text" placeholder="أوقات المحل" required />
-                        <select required>
+                        <input type="text" name="shop_name" placeholder="اسم المحل" required />
+                        <input type="text" name="work_times" placeholder="أوقات المحل" required />
+                        <select name="facility_id" required>
                           <option value="">اختر المرفق</option>
-                          <option value="electricity">كهرباء</option>
-                          <option value="water">ماء</option>
-                          <option value="both">كهرباء وماء</option>
                         </select>
                       </div>
                     </div>
@@ -1521,26 +1531,26 @@
                     <div class="form-section">
                       <h4>بيانات صاحب المحل</h4>
                       <div class="form-grid">
-                        <input type="text" placeholder="اسم المستأجر الثنائي" required />
-                        <select required>
+                        <input type="text" name="owner_name" placeholder="اسم المستأجر الثنائي" required />
+                        <select name="sex" required>
                           <option value="">اختر النوع</option>
                           <option value="male">ذكر</option>
                           <option value="female">أنثى</option>
                         </select>
-                        <input type="email" placeholder="البريد الإلكتروني" required />
-                        <input type="tel" placeholder="رقم الهاتف" required />
-                        <input type="password" placeholder="كلمة السر" required />
-                        <input type="password" placeholder="تأكيد كلمة السر" required />
-                        <input type="date" placeholder="تاريخ الميلاد" required />
+                        <input type="email" name="email" placeholder="البريد الإلكتروني" required />
+                        <input type="tel" name="phone" placeholder="رقم الهاتف" required />
+                        <input type="password" name="password" placeholder="كلمة السر" required />
+                        <input type="password" name="password_confirmation" placeholder="تأكيد كلمة السر" required />
+                        <input type="date" name="birth_date" placeholder="تاريخ الميلاد" required />
                       </div>
                     </div>
                 
               <div class="form-actions">
                     <button class="btn-green">حفظ</button>
-                <button type="button" class="btn-secondary" onclick="toggleForm('newTenantForm')">إلغاء</button>
+                <button type="button" class="btn-secondary" onclick="toggleForm('newStoreFormContainer')">إلغاء</button>
               </div>
             </div>
-          </div>
+          </form>
 
           <!-- جداول البيانات -->
           <div class="tables-container" id="tables-view">
@@ -1582,23 +1592,8 @@
                         <th>الإجراءات</th>
                       </tr>
                     </thead>
-                    <tbody>
-                      <tr><td>A101</td><td>الأرضي</td><td>120 م²</td><td>مؤجر</td><td>أحمد محمد</td><td>زمن التوفير</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف" onclick="deleteStore(this)"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>A102</td><td>الأرضي</td><td>85 م²</td><td>متاح</td><td>-</td><td>-</td><td><button class="btn-green btn-sm">تعيين مستأجر</button></td></tr>
-                      <tr><td>A103</td><td>الأرضي</td><td>150 م²</td><td>مؤجر</td><td>محمد علي</td><td>مطعم الأصالة</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف" onclick="deleteStore(this)"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>B101</td><td>الأول</td><td>100 م²</td><td>مؤجر</td><td>سارة أحمد</td><td>صالون الجمال</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف" onclick="deleteStore(this)"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>B102</td><td>الأول</td><td>90 م²</td><td>متاح</td><td>-</td><td>-</td><td><button class="btn-green btn-sm">تعيين مستأجر</button></td></tr>
-                      <tr><td>B103</td><td>الأول</td><td>110 م²</td><td>مؤجر</td><td>خالد عبدالله</td><td>محل الأزياء</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف" onclick="deleteStore(this)"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>C101</td><td>الثاني</td><td>130 م²</td><td>مؤجر</td><td>فاطمة محمد</td><td>مكتبة المعرفة</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف" onclick="deleteStore(this)"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>C102</td><td>الثاني</td><td>95 م²</td><td>متاح</td><td>-</td><td>-</td><td><button class="btn-green btn-sm">تعيين مستأجر</button></td></tr>
-                      <tr><td>C103</td><td>الثاني</td><td>140 م²</td><td>مؤجر</td><td>عبدالرحمن سعيد</td><td>مطعم الشرق</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف" onclick="deleteStore(this)"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>C103</td><td>الثاني</td><td>140 م²</td><td>مؤجر</td><td>عبدالرحمن سعيد</td><td>مطعم الشرق</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>D101</td><td>الثالث</td><td>160 م²</td><td>مؤجر</td><td>نورة خالد</td><td>صالون السيدات</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>D102</td><td>الثالث</td><td>120 م²</td><td>متاح</td><td>-</td><td>-</td><td><button class="btn-green btn-sm">تعيين مستأجر</button></td></tr>
-                      <tr><td>D103</td><td>الثالث</td><td>145 م²</td><td>مؤجر</td><td>عمر محمد</td><td>محل الإلكترونيات</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>E101</td><td>الرابع</td><td>180 م²</td><td>مؤجر</td><td>ريم عبدالله</td><td>صالون التجميل</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
-                      <tr><td>E102</td><td>الرابع</td><td>150 م²</td><td>متاح</td><td>-</td><td>-</td><td><button class="btn-green btn-sm">تعيين مستأجر</button></td></tr>
-                      <tr><td>E103</td><td>الرابع</td><td>170 م²</td><td>مؤجر</td><td>عبدالله محمد</td><td>مطعم البحر</td><td><button class="btn-icon" title="عرض"><i class="fas fa-eye"></i></button><button class="btn-icon" title="حذف"><i class="fas fa-trash"></i></button></td></tr>
+                    <tbody class="facilities-table">
+                      
                     </tbody>
                   </table>
                 </div>
@@ -1624,10 +1619,8 @@
                       <th>الإجراءات</th>
                     </tr>
                   </thead>
-
                   <tbody class="owner-table">
-
-                    </tbody>
+                  </tbody>
                   </table>
                 </div>
               </div>
@@ -1735,6 +1728,88 @@
               <button type="button" class="btn-green" onclick="closeDeleteModal()">إلغاء</button>
             </div>
           </div>
+        </div>
+
+        <!-- View Modal -->
+        <div id="viewModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">تفاصيل المحل</h3>
+                    <button class="close-modal" onclick="document.getElementById('viewModal').style.display='none'">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Store Fields -->
+                    <div id="store-fields" class="view-fields">
+                        <div class="field-group">
+                            <label>اسم المحل</label>
+                            <span id="store-name">-</span>
+                        </div>
+                        <div class="field-group">
+                            <label>رقم المحل</label>
+                            <span id="store-number">-</span>
+                        </div>
+                        <div class="field-group">
+                            <label>المساحة</label>
+                            <span id="store-area">-</span>
+                        </div>
+                        <div class="field-group">
+                            <label>الحالة</label>
+                            <span id="store-status">-</span>
+                        </div>
+                        <div class="field-group">
+                            <label>الإيجار</label>
+                            <span id="store-rent">-</span>
+                        </div>
+                    </div>
+
+                    <!-- Facility Fields -->
+                    <div id="facility-fields" class="view-fields" style="display: none;">
+                        <div class="field-group">
+                            <label>اسم المرفق</label>
+                            <span id="facility-name">-</span>
+                        </div>
+                        <div class="field-group">
+                            <label>نوع المرفق</label>
+                            <span id="facility-type">-</span>
+                        </div>
+                        <div class="field-group">
+                            <label>الحالة</label>
+                            <span id="facility-status">-</span>
+                        </div>
+                        <div class="field-group">
+                            <label>الوصف</label>
+                            <span id="facility-description">-</span>
+                        </div>
+                    </div>
+
+                    <!-- Tenant Fields -->
+                    <div id="tenant-fields" class="view-fields" style="display: none;">
+                        <div class="field-group">
+                            <label>اسم المستأجر</label>
+                            <span id="tenant-name">-</span>
+                        </div>
+                        <div class="field-group">
+                            <label>رقم الهاتف</label>
+                            <span id="tenant-phone">-</span>
+                        </div>
+                        <div class="field-group">
+                            <label>البريد الإلكتروني</label>
+                            <span id="tenant-email">-</span>
+                        </div>
+                        <div class="field-group">
+                            <label>الحالة</label>
+                            <span id="tenant-status">-</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-secondary" onclick="document.getElementById('viewModal').style.display='none'">
+                        إغلاق
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 <script src="../views/js/mall-management/index.js"></script>

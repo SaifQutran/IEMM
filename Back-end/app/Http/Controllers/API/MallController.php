@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use App\Models\MoneyLog;
+use DateTime;
 
 class MallController extends Controller
 {
@@ -280,7 +281,6 @@ class MallController extends Controller
     public function money_logs(Request $request, $id)
     {
         $mall = Mall::find($id);
-
         if (!$mall) {
             return response()->json([
                 'status' => 'error',
@@ -290,60 +290,88 @@ class MallController extends Controller
             ], 404);
         }
 
-        // Get all shop IDs for this mall
         $shopIds = $mall->shops()->pluck('id');
 
         // Get money logs for these shops
-        $moneyLogs = MoneyLog::with(['shop.facility'])
+        $moneyLogs = MoneyLog::with(['shop.facility', 'shop.owner'])
             ->whereIn('shop_id', $shopIds)
             ->orderBy('date', 'desc')
-            ->get()
-            ->groupBy(function ($log) {
-                return $log->shop_id . '-' . date('Y-m', strtotime($log->date));
-            })
-            ->map(function ($logs) {
-                $firstLog = $logs->first();
-                $rentLog = $logs->where('type_id', 1)->first();
-                $electricityLog = $logs->where('type_id', 2)->first();
-                $waterLog = $logs->where('type_id', 3)->first();
+            ->get();
 
-                return [
-                    'shop_id' => $firstLog->shop_id,
-                    'shop_name' => $firstLog->shop ? $firstLog->shop->name : null,
-                    'shop_owner_name' => $firstLog->shop->owner->f_name . ' ' . $firstLog->shop->owner->l_name,
-                    'month' => date('Y-m', strtotime($firstLog->date)),
+        // Group logs by shop and month
+        $organizedLogs = [];
+        
+        foreach ($shopIds as $shopId) {
+            $shop = Shop::with(['facility', 'owner'])->find($shopId);
+            if (!$shop) continue;
+
+            // Get rent begin date
+            $rentBeginDate = new DateTime($shop->rent_begin_at);
+            $currentDate = new DateTime();
+            // Create array for each month from rent_begin_at to current date
+            $monthlyLogs = [];
+            
+            while ($rentBeginDate <= $currentDate) {
+                $yearMonth = $rentBeginDate->format('Y-m');
+                
+                // Get logs for this month
+                $monthLogs = $moneyLogs->where('shop_id', $shopId)
+                    ->filter(function($log) use ($yearMonth) {
+                        return date('Y-m', strtotime($log->date)) === $yearMonth;
+                    });
+                
+                // Get specific type logs
+                $rentLog = $monthLogs->where('type_id', 1)->first();
+                $electricityLog = $monthLogs->where('type_id', 2)->first();
+                $waterLog = $monthLogs->where('type_id', 3)->first();
+
+                // Calculate totals for this month
+                $monthlyLogs[$yearMonth] = [
+                    'shop_id' => $shopId,
+                    'shop_name' => $shop->name,
+                    'shop_owner_name' => $shop->owner ? $shop->owner->f_name . ' ' . $shop->owner->l_name : null,
+                    'month' => $yearMonth,
 
                     // Electricity details
                     'electricity_log_id' => $electricityLog ? $electricityLog->id : null,
-                    'facility_electricity_id' => $electricityLog ? $firstLog->shop->facility->electricity_id_number : null,
-                    'electricity_month' => $logs->where('type_id', 2)->sum('amount'),
-                    'electricity_total_remaining' => $logs->where('type_id', 2)->sum('amount') - $logs->where('type_id', 2)->sum('paid_amount'),
+                    'facility_electricity_id' => $shop->facility ? $shop->facility->electricity_id_number : null,
+                    'electricity_month' => $monthLogs->where('type_id', 2)->sum('amount'),
+                    'electricity_total_remaining' => $monthLogs->where('type_id', 2)->sum('amount') - 
+                                                   $monthLogs->where('type_id', 2)->sum('paid_amount'),
 
                     // Water details
                     'water_log_id' => $waterLog ? $waterLog->id : null,
-                    'facility_water_id' => $waterLog ? $firstLog->shop->facility->water_id_number : null,
-                    'water_month' => $logs->where('type_id', 3)->sum('amount'),
-                    'water_total_remaining' => $logs->where('type_id', 3)->sum('amount') - $logs->where('type_id', 3)->sum('paid_amount'),
+                    'facility_water_id' => $shop->facility ? $shop->facility->water_id_number : null,
+                    'water_month' => $monthLogs->where('type_id', 3)->sum('amount'),
+                    'water_total_remaining' => $monthLogs->where('type_id', 3)->sum('amount') - 
+                                             $monthLogs->where('type_id', 3)->sum('paid_amount'),
 
                     // Rent details
                     'rent_log_id' => $rentLog ? $rentLog->id : null,
-                    'facility_id' => $firstLog->shop->facility->id,
-                    'rent_month' => $logs->where('type_id', 1)->sum('amount'),
-                    'rent_total_remaining' => $logs->where('type_id', 1)->sum('amount') - $logs->where('type_id', 1)->sum('paid_amount'),
+                    'facility_id' => $shop->facility ? $shop->facility->id : null,
+                    'rent_month' => $monthLogs->where('type_id', 1)->sum('amount'),
+                    'rent_total_remaining' => $monthLogs->where('type_id', 1)->sum('amount') - 
+                                            $monthLogs->where('type_id', 1)->sum('paid_amount'),
 
                     // Totals
-                    'remaining_total' => $logs->sum('amount') - $logs->sum('paid_amount'),
-                    'paid_total' => $logs->sum('paid_amount'),
-                    'total' => $logs->sum('amount')
+                    'remaining_total' => $monthLogs->sum('amount') - $monthLogs->sum('paid_amount'),
+                    'paid_total' => $monthLogs->sum('paid_amount'),
+                    'total' => $monthLogs->sum('amount')
                 ];
-            })
-            ->values();
 
+
+                // Move to next month
+                $rentBeginDate->modify('+1 month');
+            }
+
+            $organizedLogs[$shopId] = $monthlyLogs;
+        }
+        
         return response()->json([
             'status' => 'success',
             'code' => 200,
             'message' => 'تم استرجاع السجلات المالية بنجاح',
-            'data' => $moneyLogs
+            'data' => $organizedLogs
         ]);
     }
 

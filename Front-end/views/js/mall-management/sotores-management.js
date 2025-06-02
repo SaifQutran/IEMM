@@ -120,6 +120,9 @@ class StoreManagement {
         $.ajax({
             url: facility_API_URL,
             method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
             success: (response) => {
                 const facilitySelect = $('select[name="facility_id"]');
                 facilitySelect.empty();
@@ -343,71 +346,71 @@ class StoreOwnerManagement {
         });
     }
 // <<<<<<< HEAD
-//     static openOwnerViewModal(data) {
-//         const modal = document.getElementById('viewEditModal');
-//         if (!modal) {
-//             console.error('Modal element not found! Make sure you have an element with id="viewEditModal"');
-//             return;
-//         }
+    static openOwnerViewModal(data) {
+        const modal = document.getElementById('viewEditModal');
+        if (!modal) {
+            console.error('Modal element not found! Make sure you have an element with id="viewEditModal"');
+            return;
+        }
 
-//         const title = document.getElementById('viewEditModalTitle');
-//         if (!title) {
-//             console.error('Modal title element not found! Make sure you have an element with id="viewEditModalTitle"');
-//             return;
-//         }
+        const title = document.getElementById('viewEditModalTitle');
+        if (!title) {
+            console.error('Modal title element not found! Make sure you have an element with id="viewEditModalTitle"');
+            return;
+        }
 
-//         const fieldsContainer = document.getElementById('viewEditFields');
-//         if (!fieldsContainer) {
-//             console.error('Fields container not found! Make sure you have an element with id="viewEditFields"');
-//             return;
-//         }
+        const fieldsContainer = document.getElementById('viewEditFields');
+        if (!fieldsContainer) {
+            console.error('Fields container not found! Make sure you have an element with id="viewEditFields"');
+            return;
+        }
 
-//         fieldsContainer.innerHTML = '';
+        fieldsContainer.innerHTML = '';
 
-//         // تعريف الحقول حسب النوع
-//         let fields = [];
-//         title.textContent = 'بيانات صاحب المحل';
-//         fields = [
-//             {label: 'الاسم', key: 'owner_name', type: 'text'},
-//             {label: 'رقم الجوال', key: 'phone', type: 'tel'},
-//             {label: 'البريد الإلكتروني', key: 'owner_email', type: 'email'},
-//             {label: 'المحلات المستأجرة', key: 'facilities', type: 'text'},
-//             {label: 'النوع', key: 'owner_sex', type: 'select', options: [{value:'male',label:'ذكر'},{value:'female',label:'أنثى'}]},
-//             {label: 'تاريخ الميلاد', key: 'owner_birth_date', type: 'date'}
-//           ];
-//         // توليد الحقول
-//         fields.forEach(field => {
-//             const value = data[field.key] || '';
-//             const fieldId = `view-field-${field.key}`;
-//             const fieldDiv = document.createElement('div');
-//             fieldDiv.className = 'form-group';
-//             fieldDiv.style.position = 'relative';
-//             fieldDiv.innerHTML = `
-//                 <label>${field.label}</label>
-//                 <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
+        // تعريف الحقول حسب النوع
+        let fields = [];
+        title.textContent = 'بيانات صاحب المحل';
+        fields = [
+            {label: 'الاسم', key: 'owner_name', type: 'text'},
+            {label: 'رقم الجوال', key: 'phone', type: 'tel'},
+            {label: 'البريد الإلكتروني', key: 'owner_email', type: 'email'},
+            {label: 'المحلات المستأجرة', key: 'facilities', type: 'text'},
+            {label: 'النوع', key: 'owner_sex', type: 'select', options: [{value:'male',label:'ذكر'},{value:'female',label:'أنثى'}]},
+            {label: 'تاريخ الميلاد', key: 'owner_birth_date', type: 'date'}
+          ];
+        // توليد الحقول
+        fields.forEach(field => {
+            const value = data[field.key] || '';
+            const fieldId = `view-field-${field.key}`;
+            const fieldDiv = document.createElement('div');
+            fieldDiv.className = 'form-group';
+            fieldDiv.style.position = 'relative';
+            fieldDiv.innerHTML = `
+                <label>${field.label}</label>
+                <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
                 
-//             `;
-//             fieldsContainer.appendChild(fieldDiv);
-//         });
+            `;
+            fieldsContainer.appendChild(fieldDiv);
+        });
 
-//         // Show the modal
-//         modal.style.display = 'block';
+        // Show the modal
+        modal.style.display = 'block';
         
-//         // Add close button functionality if not already present
-//         const closeBtn = modal.querySelector('.close-modal');
-//         if (closeBtn) {
-//             closeBtn.onclick = function() {
-//                 modal.style.display = 'none';
-//             };
-//         }
+        // Add close button functionality if not already present
+        const closeBtn = modal.querySelector('.close-modal');
+        if (closeBtn) {
+            closeBtn.onclick = function() {
+                modal.style.display = 'none';
+            };
+        }
 
-//         // Close modal when clicking outside
-//         window.onclick = function(event) {
-//             if (event.target === modal) {
-//                 modal.style.display = 'none';
-//             }
-//         };
-//     }
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        };
+    }
 //     static enableFieldEdit(fieldId, fieldKey, fieldType) {
 //         // Add your field editing logic here
 //         console.log('Editing field:', fieldId, fieldKey, fieldType);
@@ -434,7 +437,6 @@ class StoreOwnerManagement {
 //                 console.error(error);
 //             }
 //         });
-//     }
 
 
 //     // Delete store owner
@@ -546,7 +548,8 @@ class FacilitiesManagement {
                             <td>${facility.owner_name}</td>
                             <td>${facility.shop_name}</td>
                             <td>
-                                <button class="btn-icon view-btn" title="عرض" onclick="FacilitiesManagement.openViewModal(${JSON.stringify(facility).replace(/"/g, '&quot;')})"><i class="fas fa-eye"></i></button>
+                                <button class="btn-icon view-btn" title="عرض" 
+                                onclick="FacilitiesManagement.openViewModal(${JSON.stringify(facility).replace(/"/g, '&quot;')})"><i class="fas fa-eye"></i></button>
                                 <button class="btn-icon" title="حذف" onclick="facilitiesManagement.deleteFacility(${facility.id})"><i class="fas fa-trash"></i></button>
                             </td>
                         </tr>
@@ -617,11 +620,17 @@ class FacilitiesManagement {
     }
 
 
-    static openViewModal(data) {
+    static openViewModal(data, type = 'facilities') {
         const modal = document.getElementById('viewEditModal');
         if (!modal) {
             console.error('Modal element not found! Make sure you have an element with id="viewEditModal"');
             return;
+        }
+
+        // Store the facility ID in the modal's data attribute
+        if (type === 'facilities' && data.id) {
+            modal.setAttribute('data-facility-id', data.id);
+            console.log('Stored facility ID:', data.id); // Debug log
         }
 
         const title = document.getElementById('viewEditModalTitle');
@@ -640,51 +649,93 @@ class FacilitiesManagement {
         title.textContent = 'بيانات المرفق';
 
         // تعريف الحقول حسب النوع
-        const fields = [
-            {label: 'رقم المرفق', key: 'id', type: 'text', group: 'rent-floor'},
-            {label: 'الدور', key: 'floor_number', type: 'number', group: 'rent-floor'},
-            {label: 'المساحة', key: 'space', type: 'text', group: 'meters'},
-            {label: 'الحالة', key: 'facility_state', type: 'text', group: 'location'},
-            {label: 'اسم المالك', key: 'owner_name', type: 'text', group: 'location'},
-            {label: 'اسم المحل', key: 'shop_name', type: 'text', group: 'location'}
-        ];
+        let fields = [];
+        if (type === 'facilities') {
+            title.textContent = 'بيانات المرفق';
+            fields = [
+                {label: 'مبلغ الإيجار', key: 'rent_price', type: 'number', group: 'rent-floor'},
+                {label: 'الدور', key: 'floor_number', type: 'text', group: 'rent-floor'},
+                {label: 'رقم عداد الماء', key: 'water_id_number', type: 'text', group: 'meters'},
+                {label: 'رقم عداد الكهرباء', key: 'electricity_id_number', type: 'text', group: 'meters'},
+                {label: 'الموقع X', key: 'X_Coordinates', type: 'number', group: 'location'},
+                {label: 'الموقع Y', key: 'Y_Coordinates', type: 'number', group: 'location'},
+                {label: 'العرض', key: 'width', type: 'number', group: 'dimensions'},
+                {label: 'الطول', key: 'length', type: 'number', group: 'dimensions'}
+            ];
+        } else if (type === 'tenants') {
+            title.textContent = 'بيانات صاحب المحل';
+            fields = [
+                {label: 'الاسم', key: 'name', type: 'text'},
+                {label: 'رقم الجوال', key: 'phone', type: 'tel'},
+                {label: 'البريد الإلكتروني', key: 'email', type: 'email'},
+                {label: 'المحلات المستأجرة', key: 'stores', type: 'text'},
+                {label: 'النوع', key: 'gender', type: 'select', options: [{value:'male',label:'ذكر'},{value:'female',label:'أنثى'}]},
+                {label: 'تاريخ الميلاد', key: 'birthdate', type: 'date'}
+            ];
+        } else if (type === 'stores') {
+            title.textContent = 'بيانات المحل';
+            fields = [
+                {label: 'اسم المالك', key: 'owner', type: 'text'},
+                {label: 'اسم المحل', key: 'storeName', type: 'text'},
+                {label: 'النشاط', key: 'activity', type: 'text'},
+                {label: 'تاريخ بدء العقد', key: 'contractStart', type: 'date'},
+                {label: 'أوقات الدوام', key: 'workingHours', type: 'text'}
+            ];
+        }
+        
+        // إضافة زر التعديل في الزاوية
+        let fieldsHTML = '';
+        if (type === 'facilities') {
+            fieldsHTML = `
+                <button type="button" class="edit-all-btn" title="تعديل جميع الحقول" 
+                onclick="FacilitiesManagement.enableAllFieldsEdit('${type}')">
+                    <i class="fas fa-edit"></i>
+                </button>
+            `;
 
-        let fieldsHTML = `
-            <button type="button" class="edit-all-btn" title="تعديل جميع الحقول" onclick="FacilitiesManagement.enableAllFieldsEdit('facility')">
-              <i class="fas fa-edit"></i>
-            </button>
-        `;
+            // تجميع الحقول حسب المجموعات
+            const groups = {
+                'rent-floor': [],
+                'meters': [],
+                'location': [],
+                'dimensions': []
+            };
 
-        // تجميع الحقول حسب المجموعات
-        const groups = {
-            'rent-floor': [],
-            'meters': [],
-            'location': [],
-            'dimensions': []
-        };
+            fields.forEach(field => {
+                if (groups[field.group]) {
+                    groups[field.group].push(field);
+                }
+            });
 
-        fields.forEach(field => {
-            if (groups[field.group]) {
-                groups[field.group].push(field);
-            }
-        });
-
-        // إنشاء الصفوف المجمعة
-        fieldsHTML += `
-            <div class="fields-row">
-                ${this.createFieldRow(groups['rent-floor'], data)}
-            </div>
-            <div class="fields-row">
-                ${this.createFieldRow(groups['meters'], data)}
-            </div>
-            <div class="fields-row">
-                ${this.createFieldRow(groups['location'], data)}
-            </div>
-            <div class="fields-row">
-                ${this.createFieldRow(groups['dimensions'], data)}
-            </div>
-        `;
-
+            // إنشاء الصفوف المجمعة
+            fieldsHTML += `
+                <div class="fields-row">
+                    ${this.createFieldRow(groups['rent-floor'], data)}
+                </div>
+                <div class="fields-row">
+                    ${this.createFieldRow(groups['meters'], data)}
+                </div>
+                <div class="fields-row">
+                    ${this.createFieldRow(groups['location'], data)}
+                </div>
+                <div class="fields-row">
+                    ${this.createFieldRow(groups['dimensions'], data)}
+                </div>
+            `;
+        } else {
+            // توليد الحقول العادية للأنواع الأخرى
+            fields.forEach(field => {
+                const value = data[field.key] || '';
+                const fieldId = `view-field-${field.key}`;
+                fieldsHTML += `
+                    <div class="field-row">
+                        <label>${field.label}</label>
+                        <span id="${fieldId}" class="field-value">${field.type === 'date' && value ? value.split('T')[0] : value}</span>
+                    </div>
+                `;
+            });
+        }
+        
         fieldsContainer.innerHTML = fieldsHTML;
 
         // Show the modal
@@ -706,23 +757,8 @@ class FacilitiesManagement {
         };
     }
 
-    // static createFieldRow(fields, data) {
-    //     if (!fields || fields.length === 0) return '';
-        
-    //     return fields.map(field => {
-    //         const value = data[field.key] || '';
-    //         const fieldId = `view-field-${field.key}`;
-    //         return `
-    //             <div class="form-group">
-    //                 <label>${field.label}</label>
-    //                 <span id="${fieldId}" class="field-value">${value}</span>
-    //             </div>
-    //         `;
-    //     }).join('');
-    // }
     static createFieldRow(fields, data) {
         return fields.map(field => {
-            console.log(field)
           const value = data[field.key] || '';
           const fieldId = `view-field-${field.key}`;
           return `
@@ -732,11 +768,25 @@ class FacilitiesManagement {
             </div>
             `;
         }).join('');
+    }
+    static getFieldType(key, type) {
+          const fieldTypes = {
+              facilities: {
+                  rent: 'number',
+                  waterMeter: 'text',
+                  electricityMeter: 'text',
+                  floor: 'text',
+                  x: 'number',
+                  y: 'number',
+                  width: 'number',
+                  height: 'number'
+              }
+          };
+          return fieldTypes[type][key] || 'text';
       }
-
-    static enableAllFieldsEdit(type, forceCancel = false) {
+    static enableAllFieldsEdit(type, forceCancel = false, fieldId = null) {
         const editBtn = document.querySelector('.edit-all-btn');
-        const fields = document.querySelectorAll('#viewEditFields .form-group');
+        const fields = document.querySelectorAll('#viewEditFields .field-row');
         const fieldsContainer = document.getElementById('viewEditFields');
         let actionBtns = document.getElementById('edit-actions-bottom');
 
@@ -744,76 +794,212 @@ class FacilitiesManagement {
         if (editBtn.classList.contains('editing') || forceCancel) {
             editBtn.classList.remove('editing');
             editBtn.style.display = '';
+            
+            // إلغاء التعديل لجميع الحقول أو حقل محدد
             fields.forEach(field => {
                 const valueSpan = field.querySelector('.field-value');
-                if (valueSpan) {
-                    const originalValue = valueSpan.getAttribute('data-original-value');
-                    if (originalValue !== null) {
-                        valueSpan.textContent = originalValue;
-                        valueSpan.removeAttribute('data-original-value');
-                        valueSpan.contentEditable = false;
-                        valueSpan.style.border = 'none';
-                        valueSpan.style.padding = '0';
-                        valueSpan.style.backgroundColor = 'transparent';
+                if (!valueSpan) {
+                    const input = field.querySelector('.edit-input');
+                    if (input && (!fieldId || input.id === `edit-${fieldId}`)) {
+                        const fieldId = input.id.replace('edit-', '');
+                        const originalValue = input.getAttribute('data-original-value') || '';
+                        const span = document.createElement('span');
+                        span.id = fieldId;
+                        span.className = 'field-value';
+                        span.textContent = originalValue;
+                        field.querySelector('.edit-container').parentNode.replaceChild(span, field.querySelector('.edit-container'));
                     }
                 }
             });
-            if (actionBtns) actionBtns.remove();
-        } else {
-            // تفعيل وضع التعديل
-            editBtn.classList.add('editing');
-            editBtn.style.display = 'none';
-            fields.forEach(field => {
-                const valueSpan = field.querySelector('.field-value');
-                if (valueSpan) {
-                    const fieldId = valueSpan.id;
-                    const fieldKey = fieldId.replace('view-field-', '');
-                    valueSpan.setAttribute('data-original-value', valueSpan.textContent);
-                    valueSpan.contentEditable = true;
-                    valueSpan.style.border = '1px solid #ccc';
-                    valueSpan.style.padding = '5px';
-                    valueSpan.style.backgroundColor = '#fff';
-                    valueSpan.style.borderRadius = '4px';
-                    valueSpan.style.minWidth = '200px';
-                    valueSpan.style.display = 'inline-block';
-                    valueSpan.focus();
-                }
-            });
 
-            if (!document.getElementById('edit-actions-bottom')) {
-                actionBtns = document.createElement('div');
-                actionBtns.id = 'edit-actions-bottom';
-                actionBtns.style = 'display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;';
-                actionBtns.innerHTML = `
-                    <button type="button" class="btn-save btn-green" onclick="FacilitiesManagement.saveAllFieldsEdit('${type}')">
-                        <i class="fas fa-check"></i>
-                    </button>
-                    <button type="button" class="btn-cancel btn-secondary" onclick="FacilitiesManagement.enableAllFieldsEdit('${type}', true)">
-                        <i class="fas fa-times"></i>
-                    </button>
-                `;
-                fieldsContainer.appendChild(actionBtns);
+            if (actionBtns) actionBtns.remove();
+            return;
+        }
+
+        // تفعيل وضع التعديل
+        editBtn.classList.add('editing');
+        editBtn.style.display = 'none';
+
+        // تحويل الحقول إلى وضع التعديل
+        fields.forEach(field => {
+            const valueSpan = field.querySelector('.field-value');
+            if (valueSpan && (!fieldId || valueSpan.id === fieldId)) {
+                const currentFieldId = valueSpan.id;
+                const fieldKey = currentFieldId.replace('view-field-', '');
+                const fieldType = this.getFieldType(fieldKey, type);
+                const currentValue = valueSpan.textContent.trim();
+
+                // حفظ القيمة الأصلية
+                valueSpan.setAttribute('data-original-value', currentValue);
+
+                // إنشاء عنصر الإدخال المناسب
+                let inputElement;
+                if (fieldType === 'select') {
+                    inputElement = document.createElement('select');
+                    if (fieldKey === 'gender') {
+                        inputElement.innerHTML = `
+                            <option value="male" ${currentValue === 'ذكر' ? 'selected' : ''}>ذكر</option>
+                            <option value="female" ${currentValue === 'أنثى' ? 'selected' : ''}>أنثى</option>
+                        `;
+                    }
+                } else {
+                    inputElement = document.createElement('input');
+                    inputElement.type = fieldType;
+                    inputElement.value = currentValue;
+
+                    // إضافة خصائص إضافية حسب نوع الحقل
+                    if (fieldType === 'number') {
+                        inputElement.min = '0';
+                        inputElement.step = 'any';
+                    }
+                    if (fieldType === 'tel') {
+                        inputElement.pattern = '[0-9]{10}';
+                        inputElement.placeholder = '05XXXXXXXX';
+                    }
+                    if (inputElement.type === 'email') {
+                        inputElement.placeholder = 'example@domain.com';
+                    }
+                }
+
+                // تعيين الخصائص المشتركة
+                inputElement.className = 'edit-input';
+                inputElement.id = `edit-${currentFieldId}`;
+                inputElement.setAttribute('data-original-value', currentValue);
+                inputElement.setAttribute('data-field-key', fieldKey);
+
+                // إنشاء حاوية التعديل
+                const container = document.createElement('div');
+                container.className = 'edit-container';
+                container.appendChild(inputElement);
+
+                // استبدال عنصر العرض بحاوية التعديل
+                valueSpan.parentNode.replaceChild(container, valueSpan);
             }
+        });
+
+        // إضافة أزرار الحفظ والإلغاء إذا لم تكن موجودة
+        if (!actionBtns && !fieldId) {
+            actionBtns = document.createElement('div');
+            actionBtns.id = 'edit-actions-bottom';
+            actionBtns.style = 'display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;';
+            actionBtns.innerHTML = `
+                <button type="button" class="btn-save btn-green" onclick="FacilitiesManagement.saveAllFieldsEdit('${type}')">
+                    <i class='fas fa-check'></i>
+                </button>
+                <button type="button" class="btn-cancel btn-secondary" onclick="FacilitiesManagement.enableAllFieldsEdit('${type}', true)">
+                    <i class='fas fa-times'></i>
+                </button>
+            `;
+            fieldsContainer.appendChild(actionBtns);
         }
     }
 
     static saveAllFieldsEdit(type) {
-        const fields = document.querySelectorAll('#viewEditFields .form-group');
+        const fields = document.querySelectorAll('#viewEditFields .field-row');
         const updatedData = {};
+        let valid = true;
 
+        // Get facility ID from the modal data attribute
+        const modal = document.getElementById('viewEditModal');
+        const facilityId = modal.getAttribute('data-facility-id');
+
+        console.log('Retrieved facility ID:', facilityId); // Debug log
+
+        if (!facilityId) {
+            alert('خطأ: لم يتم العثور على معرف المرفق');
+            return;
+        }
+
+        // Collect all field values
         fields.forEach(field => {
-            const valueSpan = field.querySelector('.field-value');
-            if (valueSpan) {
-                const fieldKey = valueSpan.id.replace('view-field-', '');
-                updatedData[fieldKey] = valueSpan.textContent;
+            const input = field.querySelector('.edit-input');
+            if (input) {
+                const fieldKey = input.getAttribute('data-field-key');
+                let newValue = input.value.trim();
+
+                // Validate input based on type
+                if (input.type === 'number' && isNaN(newValue)) {
+                    alert('الرجاء إدخال رقم صحيح');
+                    valid = false;
+                    return;
+                }
+                if (input.type === 'tel' && !/^[0-9]{10}$/.test(newValue)) {
+                    alert('الرجاء إدخال رقم جوال صحيح مكون من 10 أرقام');
+                    valid = false;
+                    return;
+                }
+                if (input.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newValue)) {
+                    alert('الرجاء إدخال بريد إلكتروني صحيح');
+                    valid = false;
+                    return;
+                }
+
+                // Map the field keys to match the API expectations
+                switch(fieldKey) {
+                    case 'rent_price':
+                        updatedData.rent_price = parseFloat(newValue).toFixed(2);
+                        break;
+                    case 'floor_number':
+                        updatedData.floor_number = parseInt(newValue);
+                        updatedData.floor_id = parseInt(newValue); // Add floor_id
+                        break;
+                    case 'water_id_number':
+                        updatedData.water_id_number = newValue;
+                        break;
+                    case 'electricity_id_number':
+                        updatedData.electricity_id_number = newValue;
+                        break;
+                    case 'X_Coordinates':
+                        updatedData.X_Coordinates = newValue;
+                        break;
+                    case 'Y_Coordinates':
+                        updatedData.Y_Coordinates = newValue;
+                        break;
+                    case 'width':
+                        updatedData.width = parseFloat(newValue).toFixed(2);
+                        break;
+                    case 'length':
+                        updatedData.length = parseFloat(newValue).toFixed(2);
+                        break;
+                    default:
+                        updatedData[fieldKey] = newValue;
+                }
             }
         });
 
-        // Here you would typically make an API call to save the changes
-        console.log('Saving updated data:', updatedData);
-        
-        // Disable editing mode
-        this.enableAllFieldsEdit(type, true);
+        if (!valid) return;
+
+        // Add required fields that are not editable
+        updatedData.id = parseInt(facilityId);
+        updatedData.mall_id = 1; // or get from localStorage if needed
+        updatedData.status = true; // Maintain the status
+
+        console.log('Sending update data:', updatedData); // Debug log
+
+        // Make API call to update facility
+        $.ajax({
+            url: `http://localhost/IEMM/Back-end/public/api/facilities/${facilityId}`,
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify(updatedData),
+            success: (response) => {
+                alert('تم تحديث بيانات المرفق بنجاح');
+                // Refresh the facilities list
+                if (window.facilitiesManagement) {
+                    window.facilitiesManagement.loadFacilities();
+                }
+                // Close the modal
+                modal.style.display = 'none';
+            },
+            error: (xhr, status, error) => {
+                console.error('Error response:', xhr.responseText); // Debug log
+                alert('حدث خطأ أثناء تحديث بيانات المرفق');
+                console.error('Error updating facility:', error);
+            }
+        });
     }
 }
 
@@ -830,8 +1016,6 @@ $(document).ready(() => {
         
         if ($(this).closest('table').hasClass('stores-table')) {
             window.storeManagement.deleteStore(id);
-        } else if ($(this).closest('table').hasClass('owner-table')) {
-            window.storeOwnerManagement.deleteStoreOwner(id);
         } else if ($(this).closest('table').hasClass('facilities-table')) {
             window.facilitiesManagement.deleteFacility(id);
         }
@@ -917,3 +1101,21 @@ window.showStoreModal = function(data) {
     });
     modal.style.display = 'block';
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

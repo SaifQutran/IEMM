@@ -1,6 +1,6 @@
 // Dashboard API endpoint
 const ADMIN_DASHBOARD_API = 'http://localhost/IEMM/Back-end/public/api/malls';
-
+// alert("test");
 // Mapping of API keys to card titles (Arabic)
 const dashboardCards = [
   { 
@@ -156,8 +156,8 @@ async function initializeDashboard() {
         'Authorization': 'Bearer ' + localStorage.getItem('token')
       },
       success: function(response) {
-        // console.log(response.data);
-        if (response && response.success && response.data) {
+        console.log(response.data);
+        if (response.data) {
           renderDashboardCards(response.data);
         } else {
           showError(response?.message || 'Error loading dashboard data');

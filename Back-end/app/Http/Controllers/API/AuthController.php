@@ -62,7 +62,7 @@ class AuthController extends Controller
             'login' => 'required|string',
             'password' => 'required|string',
         ]);
-
+        
         $user = User::where('email', $request->login)
             ->orWhere('username', $request->login)
             ->first();

@@ -10,27 +10,27 @@ class MoneyLogController extends Controller
 {
     public function index()
     {
-        $moneyLogs = MoneyLog::with('shop')
-            ->orderBy('date', 'desc')
-            ->get()
-            ->groupBy(function ($log) {
-                return $log->shop_id . '-' . date('Y-m', strtotime($log->date));
-            })
-            ->map(function ($logs) {
-                $firstLog = $logs->first();
-                return [
-                    'shop_id' => $firstLog->shop_id,
-                    'shop_name' => $firstLog->shop ? $firstLog->shop->name : null,
-                    'shop_owner_name' => $firstLog->shop->owner->f_name . ' ' . $firstLog->shop->owner->l_name,
-                    'month' => date('Y-m', strtotime($firstLog->date)),
-                    'electricity' => $logs->where('type_id', 1)->sum('amount'),
-                    'water' => $logs->where('type_id', 2)->sum('amount'),
-                    'rent' => $logs->where('type_id', 3)->sum('amount'),
-                    'remaining_total' => $logs->sum('amount') - $logs->sum('paid_amount'),
-                    'total' => $logs->sum('amount')
-                ];
-            })
-            ->values();
+        $moneyLogs = MoneyLog::all();
+            // ->orderBy('date', 'desc')
+            // ->get()
+            // ->groupBy(function ($log) {
+            //     return $log->shop_id . '-' . date('Y-m', strtotime($log->date));
+            // })
+            // ->map(function ($logs) {
+            //     $firstLog = $logs->first();
+            //     return [
+            //         'shop_id' => $firstLog->shop_id,
+            //         'shop_name' => $firstLog->shop ? $firstLog->shop->name : null,
+            //         'shop_owner_name' => $firstLog->shop->owner->f_name . ' ' . $firstLog->shop->owner->l_name,
+            //         'month' => date('Y-m', strtotime($firstLog->date)),
+            //         'electricity' => $logs->where('type_id', 1)->sum('amount'),
+            //         'water' => $logs->where('type_id', 2)->sum('amount'),
+            //         'rent' => $logs->where('type_id', 3)->sum('amount'),
+            //         'remaining_total' => $logs->sum('amount') - $logs->sum('paid_amount'),
+            //         'total' => $logs->sum('amount')
+            //     ];
+            // })
+            // ->values();
 
         return response()->json([
             'status' => 'success',
@@ -63,8 +63,33 @@ class MoneyLogController extends Controller
 
     public function store(Request $request)
     {
+
         try {
-            $moneyLog = MoneyLog::create($request->all());
+            $moneyLog = MoneyLog::create(
+                [
+                    'amount' => $request['water_amount'],
+                    'paid_amount' => 0
+                ,'type_id'=> 3,
+                'shop_id'=>$request['shop_id'],
+                'date'=>$request['date']
+            ]);
+            $moneyLog = MoneyLog::create(
+                [
+                    'amount' => $request['rent_amount'],
+                    'paid_amount' => 0
+                ,'type_id'=> 1,
+                'shop_id'=>$request['shop_id'],
+                'date'=>$request['date']
+            ]);
+            $moneyLog = MoneyLog::create(
+                [
+                    'amount' => $request['electricity_amount'],
+                    'paid_amount' => 0
+                ,'type_id'=> 2,
+                'shop_id'=>$request['shop_id'],
+                'date'=>$request['date']
+            ]);
+            // $moneyLog = MoneyLog::create($request->all());
 
             return response()->json([
                 'status' => 'success',
@@ -84,8 +109,47 @@ class MoneyLogController extends Controller
 
     public function update(Request $request, $id)
     {
-        $moneyLog = MoneyLog::find($id);
+        // $moneyLog = MoneyLog::find($id);
+         $shopId = $request['shop_id'];
+        $date = $request['date'];
+         // Water Log
+    $moneyLog=MoneyLog::updateOrCreate(
+        [
+            'shop_id' => $shopId,
+            'date' => $date,
+            'type_id' => 3, // Water
+        ],
+        [
+            'amount' => $request['water_amount'],
+            'paid_amount' => 0
+        ]
+    );
 
+    // Rent Log
+    $moneyLog=MoneyLog::updateOrCreate(
+        [   
+            'shop_id' => $shopId,
+            'date' => $date,
+            'type_id' => 1, // Rent
+        ],
+        [
+            'amount' => $request['rent_amount'],
+            'paid_amount' => 0
+        ]
+    );
+
+    // Electricity Log
+    $moneyLog=MoneyLog::updateOrCreate(
+        [
+            'shop_id' => $shopId,
+            'date' => $date,
+            'type_id' => 2, // Electricity
+        ],
+        [
+            'amount' => $request['electricity_amount'],
+            'paid_amount' => 0
+        ]
+    );
         if (!$moneyLog) {
             return response()->json([
                 'status' => 'error',
