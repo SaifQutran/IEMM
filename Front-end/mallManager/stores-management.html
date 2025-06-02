@@ -30,6 +30,7 @@
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         border: 1px solid #e2e8f0;
       }
+      
 
       .view-toggle-buttons, .action-buttons {
         display: flex;
@@ -861,6 +862,7 @@
         font-size: 1.05rem;
       }
 
+
       .view-fields {
         display: grid;
         gap: 1rem;
@@ -883,6 +885,252 @@
         background-color: #f3f4f6;
         border-radius: 0.375rem;
         color: #1f2937;
+      }
+      /* تنسيقات الوضع الليلي */
+      body.dark {
+        background-color: var(--dark-bg);
+        color: var(--dark-text);
+      }
+
+      body.dark .header-bar {
+        background-color: var(--dark-card);
+        border-color: var(--dark-chart);
+      }
+
+      body.dark .list-toggle-bar {
+        background: var(--dark-card);
+        border-color: var(--dark-chart);
+      }
+
+      body.dark .list-toggle-bar .btn-dark {
+        background: var(--dark-bg);
+        color: var(--dark-text);
+        border-color: var(--dark-chart);
+      }
+
+      body.dark .list-toggle-bar .btn-dark:hover {
+        background: var(--dark-chart);
+        color: var(--dark-text);
+      }
+
+      body.dark .list-toggle-bar .btn-dark.active {
+        background: var(--primary-green);
+        color: white;
+        border: none;
+      }
+
+      body.dark .list-section {
+        background-color: var(--dark-card);
+        border-color: var(--dark-chart);
+      }
+
+      body.dark .search-input {
+        background-color: var(--dark-bg);
+        border-color: var(--dark-chart);
+        color: var(--dark-text);
+      }
+
+      body.dark .search-input:focus {
+        border-color: var(--primary-green);
+        box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+      }
+
+      body.dark .search-icon {
+        color: var(--dark-text);
+      }
+
+      body.dark .table-header {
+        background: var(--dark-card);
+        border-color: var(--dark-chart);
+      }
+
+      body.dark .table-header h3 {
+        color: var(--dark-text);
+      }
+
+      body.dark .table-wrapper th {
+        background-color: var(--dark-card);
+        border-color: var(--dark-chart);
+        color: var(--dark-text);
+      }
+
+      body.dark .table-wrapper td {
+        border-color: var(--dark-chart);
+        color: var(--dark-text);
+      }
+
+      body.dark .table-wrapper tr:hover {
+        background-color: var(--dark-bg);
+      }
+
+      body.dark .btn-icon {
+        color: var(--dark-text);
+      }
+
+      body.dark .btn-icon:hover {
+        background-color: var(--dark-chart);
+        color: var(--primary-green);
+      }
+
+      body.dark .table-wrapper::-webkit-scrollbar-track {
+        background: var(--dark-bg);
+      }
+
+      body.dark .table-wrapper::-webkit-scrollbar-thumb {
+        background: var(--dark-chart);
+      }
+
+      body.dark .table-wrapper::-webkit-scrollbar-thumb:hover {
+        background: var(--dark-text);
+      }
+
+      body.dark .form.card {
+        background: var(--dark-card);
+        border-color: var(--dark-chart);
+      }
+
+      body.dark .form h3,
+      body.dark .form-section h4 {
+        color: var(--dark-text);
+      }
+
+      body.dark .form-group label {
+        color: var(--dark-text);
+      }
+
+      body.dark .form-group input,
+      body.dark .form-group select {
+        background-color: var(--dark-bg);
+        border-color: var(--dark-chart);
+        color: var(--dark-text);
+      }
+
+      body.dark .form-group input:focus,
+      body.dark .form-group select:focus {
+        border-color: var(--primary-green);
+        box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+      }
+
+      body.dark .btn-secondary {
+        background: var(--dark-bg);
+        color: var(--dark-text);
+        border-color: var(--dark-chart);
+      }
+
+      body.dark .btn-secondary:hover {
+        background-color: var(--dark-chart);
+      }
+
+      body.dark .modal-content {
+        background-color: var(--dark-card);
+        border-color: var(--dark-chart);
+      }
+
+      body.dark .modal h3 {
+        color: var(--dark-text);
+      }
+
+      body.dark #viewEditModal .form-grid {
+        background: var(--dark-bg);
+      }
+
+      body.dark #viewEditModal .field-row {
+        background: var(--dark-card);
+        border-color: var(--dark-chart);
+      }
+
+      body.dark #viewEditModal .field-row:hover {
+        border-color: var(--primary-green);
+      }
+
+      body.dark #viewEditModal .field-row label {
+        color: var(--primary-green);
+      }
+
+      body.dark #viewEditModal .field-value {
+        color: var(--dark-text);
+      }
+
+      body.dark #viewEditModal .edit-container {
+        background: var(--dark-bg);
+        border-color: var(--dark-chart);
+      }
+
+      body.dark #viewEditModal .edit-input {
+        background: var(--dark-card);
+        border-color: var(--dark-chart);
+        color: var(--dark-text);
+      }
+
+      body.dark #viewEditModal .edit-input:focus {
+        border-color: var(--primary-green);
+        box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.1);
+      }
+
+      body.dark #viewEditModal .edit-all-btn {
+        background: var(--dark-card);
+        border-color: var(--dark-chart);
+        color: var(--dark-text);
+      }
+
+      body.dark #viewEditModal .edit-all-btn:hover {
+        border-color: var(--primary-green);
+        color: var(--primary-green);
+      }
+
+      body.dark .owner-view-grid {
+        background: var(--dark-bg);
+      }
+
+      body.dark .owner-view-card {
+        background: var(--dark-card);
+        border-color: var(--dark-chart);
+      }
+
+      body.dark .owner-view-label {
+        color: var(--primary-green);
+      }
+
+      body.dark .owner-view-value {
+        color: var(--dark-text);
+      }
+
+      body.dark #viewEditModalTitle {
+        color: var(--primary-green) !important;
+      }
+
+      body.dark .delete-message p {
+        color: var(--dark-text);
+      }
+
+      body.dark .delete-message i {
+        color: var(--primary-green);
+      }
+
+      /* تنسيقات إضافية للوضع الليلي */
+      body.dark .header-bar .bar-btn.active-bar-btn {
+        background: var(--dark-chart);
+        color: var(--primary-green);
+        border-color: var(--primary-green);
+      }
+
+      body.dark .header-bar .bar-btn.btn-green.active-bar-btn {
+        background: var(--dark-chart);
+        color: var(--primary-green);
+        border-color: var(--primary-green);
+      }
+
+      body.dark .table-wrapper::after,
+      body.dark .table-wrapper::before {
+        background: linear-gradient(to bottom, rgba(30, 41, 59, 0), var(--dark-card));
+      }
+
+      body.dark .table-wrapper::before {
+        background: linear-gradient(to top, rgba(30, 41, 59, 0), var(--dark-card));
+      }
+
+      body.dark select.edit-input {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23e2e8f0' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
       }
     </style>
     <script>
@@ -1465,7 +1713,7 @@
         <div class="section active" id="stores-section">
           <div class="section-header">
             <h2 class="section-title"><i class="fas fa-store"></i> إدارة المحلات</h2>
-            <div class="header-bar">
+          <div class="header-bar">
             <div class="view-toggle-buttons">
               <button class="btn-dark bar-btn active-bar-btn" id="table-view-btn" onclick="setActiveBarBtn(this); toggleView('table')">
                 <i class="fas fa-table"></i>

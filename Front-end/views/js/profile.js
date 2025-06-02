@@ -83,12 +83,12 @@ class ProfileManager {
     }
 
     // إذا كان الحقل هو كلمة السر، لا تستخدم prompt بل اعتمد على نافذة التغيير المخصصة
-    if (field === 'password') {
-      if (typeof openPasswordModal === 'function') {
-        openPasswordModal();
-      }
-      return;
-    }
+    // if (field === 'password') {
+    //   if (typeof openPasswordModal === 'function') {
+    //     openPasswordModal();
+    //   }
+    //   return;
+    // }
 
     // إذا كان الحقل هو رقم الهاتف، فعّل التعديل المباشر في نفس الحقل
     if (field === 'phone') {
@@ -143,10 +143,10 @@ class ProfileManager {
     }
 
     // باقي الحقول تستخدم prompt
-    newValue = prompt(`تعديل ${field}:`, currentValue);
-    if (newValue && newValue !== currentValue) {
-      this.updateField(field, newValue);
-    }
+    // newValue = prompt(`تعديل ${field}:`, currentValue);
+    // if (newValue && newValue !== currentValue) {
+    //   this.updateField(field, newValue);
+    // }
   }
 
   updateField(field, value) {
