@@ -16,6 +16,436 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
+    <style>
+      /* تنسيقات الوضع الليلي للفواتير */
+      body.dark .table.card {
+        background: var(--dark-card);
+        border-color: var(--dark-chart);
+      }
+
+      body.dark .table-header {
+        background: var(--dark-bg);
+        border-color: var(--dark-chart);
+      }
+
+      body.dark .table-header h3 {
+        color: var(--dark-text);
+      }
+
+      body.dark .filter-controls {
+        background: var(--dark-bg);
+        border-color: var(--dark-chart);
+      }
+
+      body.dark .search-input {
+        background: var(--dark-bg);
+        color: var(--dark-text);
+        border-color: var(--dark-chart);
+      }
+
+      body.dark .search-input:focus {
+        border-color: var(--primary-green);
+        box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+      }
+
+      body.dark .search-icon {
+        color: var(--dark-text);
+      }
+
+      body.dark .table-wrapper {
+        background: var(--dark-card);
+      }
+
+      body.dark .table-wrapper table {
+        background: var(--dark-card);
+      }
+
+      body.dark .table-wrapper th {
+        background: var(--dark-bg);
+        color: var(--dark-text);
+        border-bottom-color: var(--dark-chart);
+      }
+
+      body.dark .table-wrapper td {
+        color: var(--dark-text);
+        border-bottom-color: var(--dark-chart);
+      }
+
+      body.dark .table-wrapper tr:hover {
+        background: var(--dark-bg);
+      }
+
+      /* تنسيقات أيقونات الجدول */
+      body.dark .table-wrapper .btn-icon {
+        background: var(--dark-bg);
+        color: var(--dark-text);
+        border: 1px solid var(--dark-chart);
+        transition: all 0.3s ease;
+      }
+
+      body.dark .table-wrapper .btn-icon:hover {
+        background: var(--dark-chart);
+        color: var(--primary-green);
+        border-color: var(--primary-green);
+      }
+
+      body.dark .table-wrapper .btn-icon .fa-eye {
+        color: var(--dark-text);
+      }
+
+      body.dark .table-wrapper .btn-icon:hover .fa-eye {
+        color: var(--primary-green);
+      }
+
+      body.dark .table-wrapper .btn-icon .fa-envelope {
+        color: var(--dark-text);
+      }
+
+      body.dark .table-wrapper .btn-icon:hover .fa-envelope {
+        color: var(--primary-green);
+      }
+
+      /* تنسيقات أيقونات التعديل في نافذة عرض البيانات */
+      body.dark .bill-section .btn-icon {
+        background: var(--dark-bg);
+        color: var(--dark-text);
+        border: 1px solid var(--dark-chart);
+        transition: all 0.3s ease;
+      }
+
+      body.dark .bill-section .btn-icon:hover {
+        background: var(--dark-chart);
+        color: var(--primary-green);
+        border-color: var(--primary-green);
+      }
+
+      body.dark .bill-section .btn-icon .fa-edit {
+        color: var(--dark-text);
+      }
+
+      body.dark .bill-section .btn-icon:hover .fa-edit {
+        color: var(--primary-green);
+      }
+
+      body.dark .bill-section .btn-icon.save-btn {
+        background: var(--dark-bg);
+        color: var(--dark-text);
+        border: 1px solid var(--dark-chart);
+      }
+
+      body.dark .bill-section .btn-icon.save-btn:hover {
+        background: var(--dark-chart);
+        color: var(--primary-green);
+        border-color: var(--primary-green);
+      }
+
+      body.dark .bill-section .btn-icon.save-btn .fa-save {
+        color: var(--dark-text);
+      }
+
+      body.dark .bill-section .btn-icon.save-btn:hover .fa-save {
+        color: var(--primary-green);
+      }
+
+      body.dark .bill-section .btn-icon.cancel-btn {
+        background: var(--dark-bg);
+        color: var(--dark-text);
+        border: 1px solid var(--dark-chart);
+      }
+
+      body.dark .bill-section .btn-icon.cancel-btn:hover {
+        background: var(--dark-chart);
+        color: #ef4444;
+        border-color: #ef4444;
+      }
+
+      body.dark .bill-section .btn-icon.cancel-btn .fa-times {
+        color: var(--dark-text);
+      }
+
+      body.dark .bill-section .btn-icon.cancel-btn:hover .fa-times {
+        color: #ef4444;
+      }
+
+      /* تنسيقات إضافية للجدول والنوافذ المنبثقة */
+      body.dark .filter-row {
+        background: var(--dark-bg) !important;
+      }
+
+      body.dark .filter-row td {
+        border-bottom-color: var(--dark-chart);
+      }
+
+      body.dark .table-filter-input {
+        background: var(--dark-card) !important;
+        color: var(--dark-text) !important;
+        border-color: var(--dark-chart) !important;
+      }
+
+      body.dark .table-filter-input:focus {
+        border-color: var(--primary-green) !important;
+        box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.1) !important;
+      }
+
+      body.dark .table-filter-input:hover {
+        border-color: var(--dark-text) !important;
+        background: var(--dark-bg) !important;
+      }
+
+      body.dark .table-filter-input option {
+        background: var(--dark-card);
+        color: var(--dark-text);
+      }
+
+      body.dark .modal {
+        background-color: rgba(0, 0, 0, 0.7);
+      }
+
+      body.dark .modal-content {
+        background: var(--dark-card);
+        border-color: var(--dark-chart);
+      }
+
+      body.dark .modal-header {
+        border-bottom-color: var(--dark-chart);
+      }
+
+      body.dark .modal-header h3 {
+        color: var(--dark-text);
+      }
+
+      body.dark .btn-close {
+        color: var(--dark-text);
+      }
+
+      body.dark .btn-close:hover {
+        color: #ef4444;
+      }
+
+      body.dark .form-group label {
+        color: var(--dark-text);
+      }
+
+      body.dark .form-group textarea {
+        background: var(--dark-bg);
+        color: var(--dark-text);
+        border-color: var(--dark-chart);
+      }
+
+      body.dark .form-group textarea:focus {
+        border-color: var(--primary-green);
+        box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+      }
+
+      body.dark .bill-section {
+        background: var(--dark-card);
+        border-color: var(--dark-chart);
+      }
+
+      body.dark .bill-section.editing {
+        background: var(--dark-bg);
+        border-color: var(--primary-green);
+      }
+
+      body.dark .detail-row {
+        background: var(--dark-bg);
+      }
+
+      body.dark .detail-row:hover {
+        background: var(--dark-chart);
+      }
+
+      body.dark .detail-label {
+        color: var(--dark-text);
+      }
+
+      body.dark .detail-value {
+        color: var(--dark-text);
+      }
+
+      body.dark .detail-row.total {
+        background: var(--dark-bg);
+        border-color: var(--dark-chart);
+      }
+
+      body.dark .detail-row.total:hover {
+        background: var(--dark-chart);
+      }
+
+      body.dark .detail-row.grand-total {
+        background: var(--primary-green);
+        color: var(--dark-text);
+      }
+
+      body.dark .detail-row.grand-total:hover {
+        background: #16a34a;
+      }
+
+      body.dark .section-header h4 {
+        color: var(--dark-text);
+      }
+
+      body.dark .edit-input {
+        background: var(--dark-bg);
+        color: var(--dark-text);
+        border-color: var(--dark-chart);
+      }
+
+      body.dark .edit-input:focus {
+        border-color: var(--primary-green);
+        box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+      }
+
+      /* تنسيقات الطباعة */
+      @media print {
+        body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 20px;
+          color: #333;
+        }
+
+        .invoice-print {
+          max-width: 800px;
+          margin: 0 auto;
+          padding: 20px;
+        }
+
+        .invoice-header {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 30px;
+          padding-bottom: 20px;
+          border-bottom: 2px solid #eee;
+        }
+
+        .mall-info {
+          text-align: right;
+        }
+
+        .mall-info h1 {
+          margin: 0 0 10px 0;
+          color: #1e40af;
+          font-size: 24px;
+        }
+
+        .mall-info p {
+          margin: 5px 0;
+          color: #666;
+          font-size: 14px;
+        }
+
+        .invoice-info {
+          text-align: left;
+        }
+
+        .invoice-info h2 {
+          margin: 0 0 15px 0;
+          color: #1e40af;
+          font-size: 20px;
+        }
+
+        .info-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 10px;
+        }
+
+        .info-item {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+        }
+
+        .info-item .label {
+          font-size: 12px;
+          color: #666;
+        }
+
+        .info-item .value {
+          font-size: 14px;
+          font-weight: bold;
+          color: #333;
+        }
+
+        .bill-details-table {
+          width: 100%;
+          border-collapse: collapse;
+          margin: 20px 0;
+        }
+
+        .bill-details-table th,
+        .bill-details-table td {
+          padding: 10px;
+          text-align: right;
+          border: 1px solid #ddd;
+          font-size: 14px;
+        }
+
+        .bill-details-table th {
+          background-color: #f8fafc;
+          font-weight: bold;
+          color: #1e40af;
+        }
+
+        .bill-details-table tr:nth-child(even) {
+          background-color: #f8fafc;
+        }
+
+        .invoice-summary {
+          margin-top: 20px;
+          padding: 15px;
+          background-color: #f8fafc;
+          border-radius: 8px;
+        }
+
+        .summary-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 10px;
+        }
+
+        .summary-item {
+          display: flex;
+          justify-content: space-between;
+          padding: 8px;
+          border-bottom: 1px solid #eee;
+        }
+
+        .summary-item.total {
+          grid-column: 1 / -1;
+          background-color: #1e40af;
+          color: white;
+          border-radius: 4px;
+          margin-top: 10px;
+          padding: 12px;
+        }
+
+        .summary-item.total .label,
+        .summary-item.total .value {
+          color: white;
+          font-weight: bold;
+        }
+
+        .invoice-footer {
+          margin-top: 30px;
+          text-align: center;
+          padding-top: 20px;
+          border-top: 2px solid #eee;
+        }
+
+        .invoice-footer p {
+          margin: 5px 0;
+          color: #666;
+          font-size: 14px;
+        }
+
+        @page {
+          size: A4;
+          margin: 0;
+        }
+      }
+    </style>
   </head>
   <body>
     <script>
@@ -1805,6 +2235,587 @@
         document.getElementById('filter-overdue').addEventListener('change', applyTableFilters);
         document.getElementById('filter-total').addEventListener('change', applyTableFilters);
       });
+    </script>
+
+    <script>
+      // دالة طباعة الفاتورة
+      function printBill(billId) {
+        const billData = getBillData(billId);
+        if (billData) {
+          const invoiceContent = `
+            <div class="invoice-print">
+              <div class="invoice-header">
+                <div class="mall-info">
+                  <h1>اسم المول</h1>
+                  <p>العنوان: شارع الرئيسي، المدينة</p>
+                  <p>هاتف: 0123456789</p>
+                  <p>البريد الإلكتروني: mall@example.com</p>
+                </div>
+                <div class="invoice-info">
+                  <h2>فاتورة إيجار</h2>
+                  <div class="info-grid">
+                    <div class="info-item">
+                      <span class="label">رقم الفاتورة:</span>
+                      <span class="value">${billData.id}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="label">التاريخ:</span>
+                      <span class="value">${billData.date}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="label">اسم المستأجر:</span>
+                      <span class="value">${billData.tenantName}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="label">رقم المحل:</span>
+                      <span class="value">${billData.storeNumber}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="label">الحالة:</span>
+                      <span class="value">${billData.status}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="invoice-body">
+                <table class="bill-details-table">
+                  <thead>
+                    <tr>
+                      <th>البند</th>
+                      <th>التفاصيل</th>
+                      <th>المبلغ</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>إيجار المحل</td>
+                      <td>إيجار شهر ${billData.month}</td>
+                      <td>${billData.rent} ريال</td>
+                    </tr>
+                    <tr>
+                      <td>استهلاك الكهرباء</td>
+                      <td>${billData.electricityUsage} كيلوواط</td>
+                      <td>${billData.electricityBill} ريال</td>
+                    </tr>
+                    <tr>
+                      <td>استهلاك الماء</td>
+                      <td>${billData.waterUsage} متر مكعب</td>
+                      <td>${billData.waterBill} ريال</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="invoice-summary">
+                <div class="summary-grid">
+                  <div class="summary-item">
+                    <span class="label">إجمالي الإيجار:</span>
+                    <span class="value">${billData.rent} ريال</span>
+                  </div>
+                  <div class="summary-item">
+                    <span class="label">إجمالي الكهرباء:</span>
+                    <span class="value">${billData.electricityBill} ريال</span>
+                  </div>
+                  <div class="summary-item">
+                    <span class="label">إجمالي الماء:</span>
+                    <span class="value">${billData.waterBill} ريال</span>
+                  </div>
+                  <div class="summary-item total">
+                    <span class="label">الإجمالي النهائي:</span>
+                    <span class="value">${billData.total} ريال</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="invoice-footer">
+                <p>شكراً لتعاملكم معنا</p>
+                <p>للاستفسارات يرجى التواصل مع إدارة المول</p>
+              </div>
+            </div>
+          `;
+
+          const printWindow = window.open("", "_blank");
+          printWindow.document.write(`
+            <html dir="rtl">
+              <head>
+                <title>فاتورة إيجار - ${billData.id}</title>
+                <style>
+                  @media print {
+                    body {
+                      font-family: Arial, sans-serif;
+                      margin: 0;
+                      padding: 20px;
+                      color: #333;
+                    }
+
+                    .invoice-print {
+                      max-width: 800px;
+                      margin: 0 auto;
+                      padding: 20px;
+                    }
+
+                    .invoice-header {
+                      display: flex;
+                      justify-content: space-between;
+                      margin-bottom: 30px;
+                      padding-bottom: 20px;
+                      border-bottom: 2px solid #eee;
+                    }
+
+                    .mall-info {
+                      text-align: right;
+                    }
+
+                    .mall-info h1 {
+                      margin: 0 0 10px 0;
+                      color: #1e40af;
+                      font-size: 24px;
+                    }
+
+                    .mall-info p {
+                      margin: 5px 0;
+                      color: #666;
+                      font-size: 14px;
+                    }
+
+                    .invoice-info {
+                      text-align: left;
+                    }
+
+                    .invoice-info h2 {
+                      margin: 0 0 15px 0;
+                      color: #1e40af;
+                      font-size: 20px;
+                    }
+
+                    .info-grid {
+                      display: grid;
+                      grid-template-columns: repeat(2, 1fr);
+                      gap: 10px;
+                    }
+
+                    .info-item {
+                      display: flex;
+                      flex-direction: column;
+                      gap: 2px;
+                    }
+
+                    .info-item .label {
+                      font-size: 12px;
+                      color: #666;
+                    }
+
+                    .info-item .value {
+                      font-size: 14px;
+                      font-weight: bold;
+                      color: #333;
+                    }
+
+                    .bill-details-table {
+                      width: 100%;
+                      border-collapse: collapse;
+                      margin: 20px 0;
+                    }
+
+                    .bill-details-table th,
+                    .bill-details-table td {
+                      padding: 10px;
+                      text-align: right;
+                      border: 1px solid #ddd;
+                      font-size: 14px;
+                    }
+
+                    .bill-details-table th {
+                      background-color: #f8fafc;
+                      font-weight: bold;
+                      color: #1e40af;
+                    }
+
+                    .bill-details-table tr:nth-child(even) {
+                      background-color: #f8fafc;
+                    }
+
+                    .invoice-summary {
+                      margin-top: 20px;
+                      padding: 15px;
+                      background-color: #f8fafc;
+                      border-radius: 8px;
+                    }
+
+                    .summary-grid {
+                      display: grid;
+                      grid-template-columns: repeat(2, 1fr);
+                      gap: 10px;
+                    }
+
+                    .summary-item {
+                      display: flex;
+                      justify-content: space-between;
+                      padding: 8px;
+                      border-bottom: 1px solid #eee;
+                    }
+
+                    .summary-item.total {
+                      grid-column: 1 / -1;
+                      background-color: #1e40af;
+                      color: white;
+                      border-radius: 4px;
+                      margin-top: 10px;
+                      padding: 12px;
+                    }
+
+                    .summary-item.total .label,
+                    .summary-item.total .value {
+                      color: white;
+                      font-weight: bold;
+                    }
+
+                    .invoice-footer {
+                      margin-top: 30px;
+                      text-align: center;
+                      padding-top: 20px;
+                      border-top: 2px solid #eee;
+                    }
+
+                    .invoice-footer p {
+                      margin: 5px 0;
+                      color: #666;
+                      font-size: 14px;
+                    }
+
+                    @page {
+                      size: A4;
+                      margin: 0;
+                    }
+                  }
+                </style>
+              </head>
+              <body>
+                ${invoiceContent}
+              </body>
+            </html>
+          `);
+          printWindow.document.close();
+          printWindow.print();
+        }
+      }
+
+      // دالة للحصول على بيانات الفاتورة
+      function getBillData(billId) {
+        // هنا يمكنك استبدال هذا بالكود الفعلي للحصول على بيانات الفاتورة من قاعدة البيانات
+        return {
+          id: billId,
+          date: new Date().toLocaleDateString('ar-SA'),
+          tenantName: "أحمد محمد",
+          storeNumber: "A101",
+          status: "مدفوعة",
+          month: "يناير 2024",
+          rent: 5000,
+          electricityUsage: 500,
+          electricityBill: 250,
+          waterUsage: 100,
+          waterBill: 150,
+          total: 5400
+        };
+      }
+    </script>
+
+    <!-- إضافة مكتبة html2pdf.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+      // ... existing code ...
+
+      // دالة تحميل PDF
+      function downloadPDF(billId) {
+        const billData = getBillData(billId);
+        if (billData) {
+          const invoiceContent = `
+            <div class="invoice-print">
+              <div class="invoice-header">
+                <div class="store-info">
+                  <h1>اسم المول</h1>
+                  <p>العنوان: شارع الرئيسي، المدينة</p>
+                  <p>هاتف: 0123456789</p>
+                  <p>البريد الإلكتروني: mall@example.com</p>
+                </div>
+                <div class="invoice-info">
+                  <h2>فاتورة الخدمات </h2>
+                  <div class="info-grid">
+                    <div class="info-item">
+                      <span class="label">رقم الفاتورة:</span>
+                      <span class="value">${billData.id}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="label">التاريخ:</span>
+                      <span class="value">${billData.date}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="label">اسم المستأجر:</span>
+                      <span class="value">${billData.tenantName}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="label">رقم المحل:</span>
+                      <span class="value">${billData.storeNumber}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="label">الحالة:</span>
+                      <span class="value">${billData.status}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="invoice-body">
+                <table class="products-table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>البند</th>
+                      <th>التفاصيل</th>
+                      <th>المبلغ</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>إيجار المحل</td>
+                      <td>إيجار شهر ${billData.month}</td>
+                      <td>${billData.rent} ريال</td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>استهلاك الكهرباء</td>
+                      <td>فاتورة شهر ${billData.month}</td>
+                      <td>${billData.electricityBill} ريال</td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td>استهلاك الماء</td>
+                      <td>فاتورة شهر ${billData.month}</td>
+                      <td>${billData.waterBill} ريال</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="invoice-summary">
+                <div class="summary-grid">
+                  <div class="summary-item total">
+                    <span class="label">الإجمالي النهائي:</span>
+                    <span class="value">${billData.total} ريال</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="invoice-footer">
+                <p>شكراً لتعاملكم معنا</p>
+                <p>للاستفسارات يرجى التواصل مع إدارة المول</p>
+              </div>
+            </div>
+          `;
+
+          // إنشاء عنصر مؤقت لتحويله إلى PDF
+          const tempElement = document.createElement('div');
+          tempElement.innerHTML = invoiceContent;
+          document.body.appendChild(tempElement);
+
+          // خيارات تحويل PDF
+          const options = {
+            margin: 10,
+            filename: `فاتورة_${billData.id}.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { 
+              scale: 2,
+              useCORS: true,
+              logging: true,
+              letterRendering: true
+            },
+            jsPDF: { 
+              unit: 'mm', 
+              format: 'a4', 
+              orientation: 'portrait',
+              direction: 'rtl'
+            }
+          };
+
+          // تحويل المحتوى إلى PDF وتحميله
+          html2pdf().from(tempElement).set(options).save().then(() => {
+            document.body.removeChild(tempElement);
+          });
+        }
+      }
+
+      // دالة للحصول على بيانات الفاتورة
+      function getBillData(billId) {
+        // هنا يمكنك استبدال هذا بالكود الفعلي للحصول على بيانات الفاتورة من قاعدة البيانات
+        return {
+          id: billId,
+          date: new Date().toLocaleDateString('ar-SA'),
+          tenantName: "أحمد محمد",
+          storeNumber: "A101",
+          status: "مدفوعة",
+          month: "يناير 2024",
+          rent: 5000,
+          electricityUsage: 500,
+          electricityBill: 250,
+          waterUsage: 100,
+          waterBill: 150,
+          total: 5400
+        };
+      }
+
+      // تنسيقات الطباعة
+      const printStyles = `
+        @media print {
+          body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+          }
+
+          .invoice-print {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+          }
+
+          .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+          }
+
+          .store-info {
+            text-align: right;
+          }
+
+          .store-info h1 {
+            margin: 0 0 10px 0;
+            color: #1e40af;
+            font-size: 24px;
+          }
+
+          .store-info p {
+            margin: 5px 0;
+            color: #666;
+            font-size: 14px;
+          }
+
+          .invoice-info {
+            text-align: left;
+          }
+
+          .invoice-info h2 {
+            margin: 0 0 15px 0;
+            color: #1e40af;
+            font-size: 20px;
+          }
+
+          .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+          }
+
+          .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+          }
+
+          .info-item .label {
+            font-size: 12px;
+            color: #666;
+          }
+
+          .info-item .value {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+          }
+
+          .products-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+          }
+
+          .products-table th,
+          .products-table td {
+            padding: 10px;
+            text-align: right;
+            border: 1px solid #ddd;
+            font-size: 14px;
+          }
+
+          .products-table th {
+            background-color: #f8fafc;
+            font-weight: bold;
+            color: #1e40af;
+          }
+
+          .products-table tr:nth-child(even) {
+            background-color: #f8fafc;
+          }
+
+          .invoice-summary {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8fafc;
+            border-radius: 8px;
+          }
+
+          .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+          }
+
+          .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+          }
+
+          .summary-item.total {
+            grid-column: 1 / -1;
+            background-color: #1e40af;
+            color: white;
+            border-radius: 4px;
+            margin-top: 10px;
+            padding: 12px;
+          }
+
+          .summary-item.total .label,
+          .summary-item.total .value {
+            color: white;
+            font-weight: bold;
+          }
+
+          .invoice-footer {
+            margin-top: 30px;
+            text-align: center;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+          }
+
+          .invoice-footer p {
+            margin: 5px 0;
+            color: #666;
+            font-size: 14px;
+          }
+
+          @page {
+            size: A4;
+            margin: 0;
+          }
+        }
+      `;
     </script>
   </body>
 </html>
